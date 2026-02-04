@@ -108,7 +108,7 @@ onMounted(() => {
                   {{ t('gate.disclaimer') }}
                 </div>
                 <div class="w-[120px] min-[340px]:w-[150px] min-[410px]:w-[180px] lg:w-[200px]">
-                  <img src="@/assets/images/disclaimer_new.png" alt="Disclaimer" class="w-full">
+                  <img src="@/assets/svgs/disclaimer_new.svg" alt="Disclaimer" class="w-full">
                 </div>
               </div>
 

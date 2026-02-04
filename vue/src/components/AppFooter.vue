@@ -65,7 +65,7 @@ const tcUrl = computed(() => {
         <div class="flex flex-row gap-2 grow justify-start items-center">
           <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_3') }}</p>
           <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.disclaimer_2') }}</p>
-          <img src="@/assets/images/disclaimer_new.png" alt="footer" width="19%" class="max-w-[142px]"/>
+          <img src="@/assets/svgs/disclaimer_new.svg" alt="footer" width="19%" class="max-w-[142px]"/>
         </div>
       </div>
     </div>
@@ -137,7 +137,7 @@ const tcUrl = computed(() => {
       </div>
     </div>
     <div class="flex flex-row w-full gap-2 justify-center items-end py-1" style="height:5dvh">
-      <img data-nosnippet src="@/assets/images/disclaimer_new.png" alt="footer" width="100%" class="max-w-[142px]"/>
+      <img data-nosnippet src="@/assets/svgs/disclaimer_new.svg" alt="footer" width="100%" class="max-w-[142px]"/>
     </div>
   </footer>
 </template>
