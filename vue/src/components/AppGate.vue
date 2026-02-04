@@ -86,15 +86,15 @@ onMounted(() => {
             <!-- Spacer 25 -->
             <div class="h-[25px]"></div>
             
-            <div class="flex flex-row mt-[10px] max-w-[97%] items-center cursor-pointer" @click="handleRmbMe">
+            <div class="flex flex-row mt-[10px] max-w-[97%] items-center cursor-pointer gap-2" @click="handleRmbMe">
               <input 
                 id="ageCheck"
                 type="checkbox"
                 :checked="rememberMe"
-                class="rounded-[8px] w-[25px] h-[25px] border-white bg-transparent focus:ring-0"
+                class="rounded-[8px] w-[25px] h-[25px] border-white bg-[#dddddd] focus:ring-0"
                 @click.stop="handleRmbMe"
               >
-              <label class="ml-2 font-black text-[14px] lg:text-[18px] cursor-pointer select-none" for="ageCheck">
+              <label class="ml-3 font-black text-[14px] lg:text-[18px] cursor-pointer select-none" for="ageCheck">
                 {{ t('gate.rememberMe') }}
               </label>
             </div>
@@ -135,6 +135,8 @@ onMounted(() => {
 
 /* Ensure checkbox looks correct in tailwind */
 input[type="checkbox"] {
-  color-scheme: dark;
+  color-scheme: light;
+  accent-color: #006937;
+  background-color: #dddddd;
 }
 </style>
