@@ -1,0 +1,315 @@
+<?php
+
+namespace App\Service;
+
+use App\Entity\WinnerDetails;
+
+class WinnerDetailsFormStructureService
+{
+    public function getFormStructure(): array
+    {
+        return [
+            'personal_group' => [
+                [
+                    'index' => 0,
+                    'name' => 'national_id',
+                    'label' => 'Step 1: Please Enter your NRIC/Passport number',
+                    'placeholder' => 'e.g. 999999-99-9999',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => '',
+                    'prefix_value' => 'NRIC',
+                    'required' => true,
+                    'component' => 'nricppt',
+                    'type' => 'text',
+                    'disabled' => false,
+                    'mask' => '999999-99-9999',
+                    'group' => 'personal_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => [
+                        [
+                            'label' => 'IC No.',
+                            'value' => 'NRIC',
+                            'mask' => '999999-99-9999',
+                            'placeholder' => 'e.g. 999999-99-9999'
+                        ],
+                        [
+                            'label' => 'Passport',
+                            'value' => 'PASSPORT',
+                            'mask' => '',
+                            'placeholder' => 'e.g. A987654321'
+                        ]
+                    ],
+                    'alpine_model' => 'national_id',
+                    'prefix_alpine_model' => 'nric_prefix'
+                ],
+                [
+                    'index' => 1,
+                    'name' => 'confirm_identity',
+                    'label' => 'Step 2: Please select your answer to the following question: Two of the participating products in this contest are Carlsberg Danish Pilsner
+                    and Carlsberg Smooth Draught.',
+                    'placeholder' => '',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => '',
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'radio',
+                    'type' => 'radio',
+                    'disabled' => false,
+                    'mask' => '',
+                    'group' => 'personal_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => [
+                        [
+                            'label' => 'True',
+                            'value' => 'true'
+                        ],
+                        [
+                            'label' => 'False',
+                            'value' => 'false'
+                        ]
+                    ],
+                    'alpine_model' => 'confirm_identity'
+                ],
+                [
+                    'index' => 2,
+                    'name' => 'national_id_attachment',
+                    'label' => 'Step 3: Upload Your National Identification Card/Passport Copy',
+                    'placeholder' => 'Click to upload your NRIC/Passport copy',
+                    'value' => '',
+                    'custom_message' => 'Please upload a clear photo or scan of your NRIC/Passport',
+                    'maxlength' => '',
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'file-upload',
+                    'type' => 'file',
+                    'disabled' => false,
+                    'mask' => '',
+                    'group' => 'personal_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'national_id_attachment',
+                    'accept' => 'image/*',
+                    'max_size' => '5MB'
+                ]
+            ],
+            // Receiver group commented out - not needed for winner details form
+            /*
+            'receiver_group' => [
+                [
+                    'index' => 0,
+                    'name' => 'receiver_full_name',
+                    'label' => 'Receiver Full Name <span class="text-xs">(if different from above)</span>',
+                    'placeholder' => 'Enter receiver full name...',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 350,
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'input',
+                    'type' => 'text',
+                    'disabled' => false,
+                    'mask' => '',
+                    'group' => 'receiver_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'receiver_full_name'
+                ],
+                [
+                    'index' => 1,
+                    'name' => 'receiver_mobile_no',
+                    'label' => 'Receiver Mobile Number <span class="text-xs">(if different from above)</span>',
+                    'placeholder' => 'E.g. 127654321',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 11,
+                    'prefix_value' => '60',
+                    'required' => true,
+                    'component' => 'mobile-prefix',
+                    'type' => 'text',
+                    'disabled' => false,
+                    'mask' => '1999999999',
+                    'group' => 'receiver_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => [
+                        ['label' => '60', 'value' => '60']
+                    ],
+                    'alpine_model' => 'receiver_mobile_no',
+                    'prefix_alpine_model' => 'receiver_mobile_prefix'
+                ]
+            ],
+            */
+            // Address group commented out - not needed for winner details form  
+            /*
+            'address_group' => [
+                [
+                    'index' => 0,
+                    'name' => 'address_1',
+                    'label' => 'Address Line 1',
+                    'placeholder' => 'Enter your address...',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 350,
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'input',
+                    'type' => 'text',
+                    'disabled' => false,
+                    'mask' => '',
+                    'group' => 'address_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'address_1'
+                ],
+                [
+                    'index' => 1,
+                    'name' => 'address_2',
+                    'label' => 'Address Line 2 (Optional)',
+                    'placeholder' => 'Enter additional address details...',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 350,
+                    'prefix_value' => '',
+                    'required' => false,
+                    'component' => 'input',
+                    'type' => 'text',
+                    'disabled' => false,
+                    'mask' => '',
+                    'group' => 'address_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'address_2'
+                ],
+                [
+                    'index' => 2,
+                    'name' => 'postcode',
+                    'label' => 'Postcode',
+                    'placeholder' => 'Postcode Here...',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 5,
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'adv-select',
+                    'type' => 'text',
+                    'disabled' => false,
+                    'mask' => '99999',
+                    'group' => 'address_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'postcode'
+                ],
+                [
+                    'index' => 3,
+                    'name' => 'city',
+                    'label' => 'City',
+                    'placeholder' => 'City Here...',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 50,
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'input',
+                    'type' => 'text',
+                    'disabled' => true,
+                    'mask' => '',
+                    'group' => 'address_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'city'
+                ],
+                [
+                    'index' => 4,
+                    'name' => 'state',
+                    'label' => 'State',
+                    'placeholder' => 'State Here...',
+                    'value' => '',
+                    'custom_message' => '',
+                    'maxlength' => 50,
+                    'prefix_value' => '',
+                    'required' => true,
+                    'component' => 'input',
+                    'type' => 'text',
+                    'disabled' => true,
+                    'mask' => '',
+                    'group' => 'address_group',
+                    'validation' => '',
+                    'custom_class' => '',
+                    'toggle' => false,
+                    'toggleKB' => false,
+                    'search' => '',
+                    'search_message' => '',
+                    'error_message' => '',
+                    'data_url' => '',
+                    'options' => null,
+                    'alpine_model' => 'state'
+                ]
+            ]
+            */
+        ];
+    }
+}

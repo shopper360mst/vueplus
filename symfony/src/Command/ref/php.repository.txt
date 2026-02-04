@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Repository;
+
+use App\Entity\<ENTITY_NAME>;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+use App\AppBundle\Util\SQLExtraHelper;
+use App\AppBundle\DevExtremePlus\QuerySetter;
+use App\AppBundle\DevExtremePlus\DataSourceLoader;
+use App\AppBundle\AppParams;
+use Psr\Log\LoggerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Service\CipherService;
+
+class <ENTITY_NAME>Repository extends ServiceEntityRepository
+{
+    private $TABLE_NAME = '<TABLE_NAME>';
+    private $KEY_COLUMN = 'id';
+
+    /* NO SEMICOLON CAN BE USED FOR STARTER QUERY */
+    private $STARTER_QUERY = '
+        SELECT * from <TABLE_NAME>
+    ';
+
+    public function __construct(ManagerRegistry $registry, CipherService $cs) {
+        /* FOR ENCRYPTION */
+        $this->KEY = $_SERVER['APP_SECRET'];
+        $this->SALT = $_SERVER['SALT_KEY'];
+        parent::__construct($registry, <ENTITY_NAME>::class);
+    }
+
+    <PRODUCT_LOGIC>
+
+    public function getAll($params) {
+         /****************************** SAMPLE DG GET PARAMS PAYLOAD ************************
+        Array (
+            [querystring1] => query_string_value1
+            [querystring2] => query_string_value2
+            [skip] => 0
+            [take] => 20
+            [requireTotalCount] => 1
+            [filter] => Array (             
+                [0] => Array ( 
+                    [0] => dx_col_name1                     
+                    [1] => contains                     
+                    [2] => value1                 
+                )              
+                [1] => and             
+                [2] => Array (
+                    [0] => dx_col_name2
+                    [1] => contains
+                    [2] => value2
+                )
+            )      
+            [_] => <RUNNING_HASHES#>
+        )
+        ****************************** SAMPLE DG GET PARAMS PAYLOAD ************************/
+        $conn = $this->getEntityManager()->getConnection();
+        $this->dbSet = new QuerySetter($conn, $this->STARTER_QUERY, $this->TABLE_NAME);
+
+        /*********** REST OF PARAM LIKE [FILTER] WILL BE PROCESSED HERE ********************/
+        $result = DataSourceLoader::Load($this->dbSet, $params);
+        return $result;
+    }
+
+    public function getExport() {
+        $conn = $this->getEntityManager()->getConnection();
+       
+        $stmt = $conn->prepare($this->STARTER_QUERY);
+        $query = $stmt->executeQuery();
+        $result = $query->fetchAllAssociative();  
+        return $result;
+    }
+
+    public function findAndUpdate($params) {
+        $processed = QuerySetter::GetParamsFromInput($params);
+        $id = $processed['key'];
+        $conn = $this->getEntityManager()->getConnection();
+        $incomingData = $processed['values'];
+        $setterStmts = SQLExtraHelper::convertArrayToSet($incomingData);
+        $sql = "UPDATE $this->TABLE_NAME SET $setterStmts WHERE id = ?";
+
+        $stmt = $conn->prepare($sql);
+        $i = 1;
+        foreach ($incomingData as $key => $value) {
+            if ( ($key == "mobile_no") || ($key == "full_name") || ($key == "email") || ($key == "national_id") || ($key == "address1") || ($key == "address2") || ($key == "receiver_full_name") || ($key == "receiver_mobile_no") ) {
+                // STANDARD ENCRYPTION FIELDS.
+                $encryptedValue = $this->cs->encrypt($value);                    
+            } else {
+                if($value === true){
+                    $value = 1;
+                }
+                else if($value === false){
+                    $value = 0;
+                }
+                $encryptedValue = $value;
+            }
+            $stmt->bindValue($i, $encryptedValue);
+            $i++;
+        }
+        $stmt->bindParam(count($incomingData) + 1, $id );
+        $result = $stmt->executeQuery();
+
+        return $result->fetchAllAssociative(); 
+    }
+
+    public function findAndDelete($params) {
+        $id = QuerySetter::GetParamsFromInput($params)['key'];
+        $resEnt = $this->find($id);
+        $this->getEntityManager()->remove($resEnt);
+        $this->getEntityManager()->flush();
+        return true;
+    }
+}

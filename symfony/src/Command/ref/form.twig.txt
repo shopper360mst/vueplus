@@ -1,0 +1,33 @@
+<section>
+    <div class="container mx-auto">
+        <form class="px-8 pt-6 pb-8 mb-4 flex flex-col align-center justify-center" x-data="<FORM_XDATA>" @submit.prevent="handleProcessForm" novalidate>
+            {% include "input/confirm.html.twig" with {'field_param': 'field'} %}
+            {% include "input/helper.html.twig" %}
+            <div class="form-container mx-auto mb-3">
+                <h1 class="text-2xl text-slate-700 font-bold mb-5">{{title|default("")}}</h1>
+                <template x-for="field in (form_fields[0].form_group)">
+                    <content>
+                        {#
+                            NOTE in twig inputs are included only once, each component will managed its duplicate 
+                            self meaning if there is 3 of password type it will manifest by itself via the alpine form 
+                            controllers.
+                        #}
+                        {% include "input/forminput.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/password.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/mobileprefix.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/fileupload.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/nricppt.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/advselect.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/dualswitch.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/select.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/checkbox.html.twig" with {'field_param': 'field'} %}
+                        {% include "input/hidden.html.twig" with {'field_param': 'field'} %}
+                    </content>
+                </template>
+                {% include "component/spacer.html.twig" with {'size': 50} %}
+                <button type="submit" class="btn-primary w-full mt-3 ">SUBMIT</button>                
+            </div>
+        </form>        
+    </div>
+</section>
+{% include "component/secret.html.twig" %}

@@ -1,0 +1,252 @@
+<?php
+
+namespace App\Controller\Admin;
+use Aws\S3\S3Client;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use App\AppBundle\Util\SQLExtraHelper;
+use App\Service\CipherService;
+use App\AppBundle\DevExtremePlus\QuerySetter;
+use App\AppBundle\DevExtremePlus\DataSourceLoader;
+use App\AppBundle\AppParams;
+use App\AppBundle\Util\GenUniqueFiller;
+use App\Entity\<ENTITY_NAME>;
+
+class <ENTITY_NAME>Controller extends AbstractController
+{
+    public function __construct(private EntityManagerInterface $em, private LoggerInterface $logger, private ManagerRegistry $doctrine, private CipherService $cs){
+    }
+   
+    #[Route('/admin/<ROUTE_NAME>', name: 'app_<ROUTE_NAME>_index')]
+    public function index(): Response
+    {
+        return $this->render('admin/vue/index.html.twig', [
+            'title' => '<ENTITY_NAME>',
+            'route_name' => '<ROUTE_NAME>'
+        ]);
+    }
+
+    #[Route('/admin/<ROUTE_NAME>/export', name: 'app_<ROUTE_NAME>_export')]
+    public function fnExport(Request $request): Response
+    {
+        $params = QuerySetter::GetParseParams( $request->query->all() );
+        /* YOU CAN DECLARE ANOTHER CONNECTION STRING AS PARAMETER */
+        /* E.G. $conn = $this->doctrine->getConnection('info'); */
+        $result = $this->em->getRepository(<ENTITY_NAME>::class)->getExport();
+        return $this->createCsvResponse($result, 'export_data.'.time().'.csv');
+    }
+
+    #[Route('/admin/<ROUTE_NAME>/upload/{column}', name: 'app_<ROUTE_NAME>_upload')]
+    #[Route('/admin/<ROUTE_NAME>/upload/{column}/{id}', name: 'app_<ROUTE_NAME>_upload_w_id')]
+    public function fnUpload(Request $request, $column, $id=null): Response
+    {
+        $params = QuerySetter::GetParseParams( $request->query->all() );
+        
+        if ($id !== 'undefined' && $id != null) {
+            $entity = $this->em->getRepository(<ENTITY_NAME>::class)->findOneBy(['id' => $id]);
+            $getter = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $column)));        
+            $fileName = $entity->$getter();        
+        }
+        if (isset($fileName)) {
+            $_FILENAME = explode('.',$fileName)[0];
+        }else{
+            $_FILENAME = "fl-".time()."-".GenUniqueFiller::generate(5)."-".uniqid();
+        }
+
+        $file = $request->files->all();
+        foreach ($file['files'] as $key => $value) {
+            if (strpos($value->getMimeType(), 'image/') === 0) {
+                $uploadedFile = $value;
+                if(stristr($value->getMimeType(),'image/png')){
+                    $fileType = '.png';
+                } else if(stristr($value->getMimeType(),'image/jpg')){
+                    $fileType = '.jpg';
+                } else if(stristr($value->getMimeType(),'image/jpeg')){
+                    $fileType = '.jpeg';
+                }
+
+                if($this->getParameter('app.s3_secret_key') != ""){
+                    try {            
+                        $s3 = new S3Client([
+                            'region'  => $this->getParameter('app.s3_region_name'),
+                            'version' => 'latest',
+                            'credentials' => [
+                                'key'    => $this->getParameter('app.s3_secret_access'),
+                                'secret' => $this->getParameter('app.s3_secret_key'),
+                            ]
+                        ]);
+                        
+                        $result = $s3->putObject([
+                            'Bucket' => $this->getParameter('app.s3_bucket_name'),
+                            'Key'    => 'images/uploaded/<ROUTE_NAME>/'.$_FILENAME.$fileType,
+                            'Body'   => '',
+                            'SourceFile' => $value
+                        ]);
+                        if($result) {
+                            return new JsonResponse($_FILENAME.$fileType, Response::HTTP_OK);
+                        }
+                        else {
+                            return new JsonResponse('Fail to upload.', Response::HTTP_BAD_REQUEST);
+                        }
+            
+                    } catch(\Exception $e) {
+                        $this->logger->error($e->getMessage());
+                        return new JsonResponse('Something wrong with S3 Uploader.', Response::HTTP_BAD_REQUEST);
+                    }
+                }
+                else{
+                    $_TARGETFOLDER = $this->getParameter('kernel.project_dir')."//public//images//uploaded//<ROUTE_NAME>";
+
+                    if ($uploadedFile->move($_TARGETFOLDER, $_FILENAME.$fileType)) {
+                        return new JsonResponse($_FILENAME.$fileType, Response::HTTP_OK);
+                    } else {
+                        return new JsonResponse('Fail to upload.', Response::HTTP_BAD_REQUEST);
+                    }
+                }
+            } else {
+                return new JsonResponse('The file is not an image.', Response::HTTP_BAD_REQUEST);
+            }
+        }
+    }
+
+
+    #[Route('/admin/<ROUTE_NAME>/dg', name: 'app_<ROUTE_NAME>_get', methods: ['GET'])]
+    public function dgGet(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        try {
+            $conn = $this->doctrine->getConnection();
+            $params = QuerySetter::GetParseParams( $request->query->all() );            
+            /* YOU CAN DECLARE ANOTHER CONNECTION STRING AS PARAMETER */
+            /* E.G. $conn = $this->doctrine->getConnection('info'); */
+            $result = $this->em->getRepository(<ENTITY_NAME>::class)->getAll($params);
+            return new JsonResponse($result, Response::HTTP_OK);
+        } catch(\Exception $e){
+
+           if ($this->getParameter('app.dx_error_display')) {
+                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST );
+           } else {
+                return new JsonResponse('Error in SQL', Response::HTTP_BAD_REQUEST );
+           }
+        }
+    }
+
+    #[Route('/admin/<ROUTE_NAME>/dg', name: 'app_<ROUTE_NAME>_insert', methods: ['POST'])]
+    public function dgInsert(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $param = $request->getContent();
+        try {
+            $processed = QuerySetter::GetParamsFromInput($param);
+            $incomingValues = $processed['values'];
+            
+            $newEnt = new <ENTITY_NAME>();
+            // Do your entity based set method as needed here 
+            
+            $this->em->persist($newEnt);     
+            $this->em->flush(); 
+
+            return new JsonResponse($result, Response::HTTP_OK);
+        } catch(\Exception $e){
+
+           if ($this->getParameter('app.dx_error_display')) {
+                return new JsonResponse("Error : Most likely insert controller need to be completed", Response::HTTP_BAD_REQUEST );
+           } else {
+                return new JsonResponse('Error in SQL', Response::HTTP_BAD_REQUEST );
+           }
+        }
+    }
+
+    #[Route('/admin/<ROUTE_NAME>/dg', name: 'app_<ROUTE_NAME>_update', methods: ['PUT'])]
+    public function dgUpdate(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        try {
+            $param = $request->getContent(); 
+            $controllerString = $request->attributes->get('_controller');
+            $controllerParts = explode('::', $controllerString);
+            $controllerName = $controllerParts[0];
+            $result = $this->em->getRepository(<ENTITY_NAME>::class)->findAndUpdate($param);
+            return new JsonResponse($result, Response::HTTP_OK);
+ 
+       } catch(\Exception $e){          
+            if ($this->getParameter('app.dx_error_display')) {
+                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST );
+            } else {
+                return new JsonResponse('Error in SQL', Response::HTTP_BAD_REQUEST );
+            }            
+        }
+    }
+
+    #[Route('/admin/<ROUTE_NAME>/dg', name: 'app_<ROUTE_NAME>_delete', methods: ['DELETE'])]
+    public function dgDelete(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        try {
+            $param = $request->getContent();
+            $res = $this->em->getRepository(<ENTITY_NAME>::class)->findAndDelete($param);
+            return new JsonResponse($res, Response::HTTP_OK);
+        } catch(\Exception $e){
+            if ($this->getParameter('app_dx_error_display')) {
+                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST );
+            } else {
+                return new JsonResponse('Error in SQL', Response::HTTP_BAD_REQUEST );
+            }
+        }
+    }
+
+    /****************************************** FOR CSV EXPORT *******************************************/
+    private function createCsvResponse(array $data, string $filename): Response
+    {
+        $response = new Response();
+        $response->setContent($this->arrayToCsv($data));
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        return $response;
+    }
+
+    private function arrayToCsv(array $data): string
+    {
+        $output = fopen('php://temp', 'r+');
+        fputcsv($output, array_keys(reset($data))); // Add header row
+
+        foreach ($data as $row) {
+            fputcsv($output, $row);
+        }
+
+        rewind($output);
+        $csv = stream_get_contents($output);
+        fclose($output);
+
+        return $csv;
+    }
+
+    private function checkAndCleanUploaded(string $param, string $controllerName)
+    {
+        $processed = QuerySetter::GetParamsFromInput($param);
+        $id = $processed['key'];
+        $entity = $this->em->getRepository(<ENTITY_NAME>::class)->findOneBy(['id' => $id]);
+        $_TARGETFOLDER = $this->getParameter('kernel.project_dir') . "/public/images/uploaded/<ROUTE_NAME>";
+    
+        foreach ($processed['values'] as $key => $value) {
+            $fileType = pathinfo($value, PATHINFO_EXTENSION);
+            if (in_array($fileType, ['png', 'jpg', 'jpeg'])) {
+                $getter = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+                $existingFile = $entity->$getter();
+    
+                if ($existingFile && file_exists($_TARGETFOLDER . '/' . $existingFile)) {
+                    if (!unlink($_TARGETFOLDER . '/' . $existingFile)) {
+                        $this->logger->error("Failed to delete file: {$_TARGETFOLDER}/{$existingFile} at {$controllerName}");
+                    } else {
+                        $this->logger->info("File Deleted: {$_TARGETFOLDER}/{$existingFile} at {$controllerName}");
+                    }
+                } elseif ($existingFile) {
+                    $this->logger->error("File doesn't exist: {$_TARGETFOLDER}/{$existingFile} at {$controllerName}");
+                }
+            }
+        }
+    }
+}

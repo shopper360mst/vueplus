@@ -1,0 +1,238 @@
+<template>
+    <DxDataGrid
+    id="dataGrid"
+    ref="vDataGrid"
+    :showBorders=true
+    :show-column-lines=true
+    :data-source="dataSource"
+    height="auto"
+    :row-alternation-enabled="true"
+    :column-auto-width="false"
+    :allow-column-resizing="true"
+    column-resizing-mode="nextColumn"
+    @editing-start="onEditingStart"    
+    @data-error-occurred="handleDataErrorOccured"
+    @row-validating="handleRowValidation"
+    >
+        <!-- REMOTE Ops meaning props are set in server side -->
+        <DxRemoteOperations 
+            id="removeOperations"
+            :filtering="true"
+            :paging="true"
+            :sorting="true"
+            :summary="true"          
+        />
+        <DxPaging :page-size="20"/>
+        <DxPager
+            :visible="true"          
+        />
+        <DxSelection mode="single" />
+        <DxEditing
+        :allow-adding="true"
+        :allow-updating="true"
+        :allow-deleting="true"
+        :use-icons="true"
+        mode="row"
+        >               
+        </DxEditing>
+        <DxColumnChooser :enabled="true"/>
+        <DxFilterPanel :visible="true"/>
+        <DxFilterRow :visible="true" />
+            <!-- PLACE YOUR YELLOW DXCOLUMN COMPONENTS HERE, USE DxColumnGen To Suggest -->
+            <DxColumn type="buttons" :visible="true" :fixed="false" />
+            <!-- PLACE OPTIONAL BLUE CELLTEMPLATE HERE -->
+    </DxDataGrid>
+<DxLoadPanel :hide-on-outside-click="false" v-model:visible="panelIsLoadPanelVisible" />
+<DxToast v-model:visible="toastIsVisible" v-model:message="toastMessage" v-model:type="toastType" />
+<DxPopup
+    :width="640"
+    :height="480"
+    :show-title="true"
+    title="Preview"
+    :drag-enabled="true"
+    :hide-on-outside-click="true"
+    v-model:visible="popupVisible"
+    :show-close-button="true"
+>
+    <img :src="popupImageSource" width="100%">
+</DxPopup>
+
+</template>
+
+<script>
+import {DxDataGrid, DxForm, DxItem, DxRequiredRule, DxEmailRule, DxPatternRule, DxFilterRow, DxFilterPanel, DxRemoteOperations, DxPaging, DxPager, DxEditing, DxButton, DxLookup, DxColumnChooser, DxSelection, DxColumn} from 'devextreme-vue/data-grid';
+import { DxTextArea } from 'devextreme-vue/text-area';
+import { createStore } from "devextreme-aspnet-data-nojquery";
+import { DxLoadPanel } from "devextreme-vue/load-panel";
+import { DxToast } from "devextreme-vue/toast";
+import DxFileUploader from 'devextreme-vue/file-uploader';
+import DxPopup from 'devextreme-vue/popup';
+// import ImageHelper from "../libs/image_helper.js";
+// import CustomStore from 'devextreme/data/custom_store';
+export default {
+    name:"<VUE_FILE>",
+    components: {
+        DxPopup,
+        DxTextArea,
+        DxDataGrid,
+        DxFilterPanel,
+        DxFilterRow,
+        DxFileUploader,
+        DxPaging, 
+        DxPager,
+        DxRemoteOperations,
+        DxSelection,
+        DxEditing,
+        DxLookup,
+        DxButton,
+        DxLoadPanel,
+        DxToast,
+        DxRequiredRule,
+        DxEmailRule,
+        DxPatternRule,
+        DxColumnChooser,
+        DxColumn,
+        DxForm,
+        DxItem
+    },
+    data() {
+        return {
+            dataSource:null, 
+            selectedId:null,
+            selectedCol:null,
+            apiURL:`${import.meta.env.VITE_ENDPOINT}/dg`,
+            apiUploadURL: `${import.meta.env.VITE_ENDPOINT}/upload`,
+            baseURL:`${import.meta.env.VITE_BASEURL}/images/uploaded/<TABLE_NAME>/`,
+            toastType: "success",
+            toastMessage : "",
+            toastIsVisible : false,
+            panelIsLoadPanelVisible: false,
+            popupVisible: false,
+            popupImageSource: "",
+            /* lookup example; bind them with dxColumn :lookup="sampleLookup" 
+            sampleLookup: {
+                dataSource : [
+                    { value: 'GWP', label: 'GWP' },
+                    { value: 'CVS', label: 'CVS' },            
+                ],
+                valueExpr: 'value',
+                displayExpr: 'label'
+            }
+            */
+        }
+    },
+    mounted() {
+        self = this;
+        this.dataSource = createStore({
+            key: "id",
+            loadUrl: self.apiURL,
+            updateUrl: self.apiURL,
+            insertUrl: self.apiURL,
+            deleteUrl: self.apiURL
+        });
+    },
+    computed: {
+        dataGrid: function() {
+            return this.$refs['vDataGrid'].instance;
+        }
+    },
+    methods:{
+        onProgress(){
+            this.panelIsLoadPanelVisible = true;
+        },
+        checkUrl(e){
+            this.selectedCol = e.column.name;
+            let uploadURL;
+            if (e.data) {
+                this.selectedId = e.data.id;
+                uploadURL = this.apiUploadURL + "/" + this.selectedCol + "/" + this.selectedId;
+            } else {
+                uploadURL = this.apiUploadURL + "/" + this.selectedCol;            
+            }
+
+            return uploadURL;
+        },
+        handlePopup(value) {
+            this.popupVisible = true;
+            this.popupImageSource = this.baseURL + value;
+        },
+        handleDataErrorOccured(evt){
+            this.toastIsVisible = true;
+            this.toastMessage = evt.error.message;
+            this.toastType = "error";
+        },
+        handleRowValidation(evt){
+            if (evt.brokenRules.length > 0) {
+                this.toastIsVisible = true;
+                this.toastMessage = "Please fill up required fields";
+                this.toastType = "error";
+            }
+        },
+        handleFileUploadValueChanged(evt, cellInfo) {
+            /***************************************************************
+             * OPTIONAL IF YOU WANT TO OVERRIDE THE FILE TO DO SOMETHING 
+             ***************************************************************
+            let self = this;
+            let maxSize = 750;
+            this.img_helper = new ImageHelper();
+            this.img_helper.getBase64(
+                evt.value[0],
+                (evt)=> {
+                    self.img_helper.getImageDimensions(evt, maxSize, (res)=>{
+                        cellInfo.setValue ( res.data );                        
+                    });
+                },
+                (evt)=> {
+                    console.log('Process File Invalid');
+                }
+            );
+            ****************************************************************/
+        },
+        onEditingStart(e) {
+            this.selectedId = e.key;
+        },
+        handleFileUploaded(e, cellInfo) {
+            this.panelIsLoadPanelVisible = false;
+            cellInfo.setValue(JSON.parse(e.request.responseText));
+        },
+        handleFileUploadError(evt){
+            this.toastIsVisible = true;
+            this.toastMessage = "Error in receiving file. Make sure file format are jpg, jpeg or png and size within 10 MB.";
+            this.toastType = "error";
+        },
+    }
+}
+</script>
+<style>
+.dx-img-upload {
+    display:flex;
+    height:25px;
+    width:25px;
+    margin-left:10px;
+    margin-right:10px;
+    border:1px solid #eee;
+}
+.dx-fileuploader-input-container{
+    display:none !important;
+}
+.dx-fileuploader-files-container {
+    display: none !important;
+}
+.dx-fileuploader {
+    width:165px;
+    margin-top:2px;
+    display:flex;
+}
+.dx-uploader-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.dx-uploader-custom-button {
+    margin-top:0px !important;
+    width:30px !important;
+    padding:0 !important;
+    background-color: white;
+    text-align: center !important;
+}
+</style>
