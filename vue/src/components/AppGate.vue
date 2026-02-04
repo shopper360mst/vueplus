@@ -13,7 +13,7 @@ const props = defineProps({
 
 const uiStore = useUIStore()
 const sessionStore = useSessionStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const rememberMe = ref(false)
 
@@ -58,10 +58,10 @@ onMounted(() => {
             <!-- Spacer 25 -->
             <div class="h-[25px]"></div>
             
-            <h1 class="mb-[10px] text-center font-black text-[22px] font-medium text-white lg:text-[43px]">
+            <h1 :class="['mb-[10px] text-center text-[22px] font-medium text-white lg:text-[43px]', locale === 'ch' ? 'font-ch' : 'font-black']">
               {{ t('gate.simpleTitle1') }}
             </h1>
-            <h1 class="text-center font-black font-normal text-white mb-2 md:mb-4 lg:text-[20px]">
+            <h1 :class="['text-center font-normal text-white mb-2 md:mb-4 lg:text-[20px]', locale === 'ch' ? 'font-ch' : 'font-black']">
               {{ t('gate.simpleTitle2') }}
             </h1>
             
@@ -94,13 +94,13 @@ onMounted(() => {
                 class="rounded-[8px] w-[25px] h-[25px] border-white bg-[#dddddd] focus:ring-0"
                 @click.stop="handleRmbMe"
               >
-              <label class="ml-3 font-black text-[14px] lg:text-[18px] cursor-pointer select-none" for="ageCheck">
+              <label :class="['ml-3 text-[14px] lg:text-[18px] cursor-pointer select-none', locale === 'ch' ? 'font-ch' : 'font-black']" for="ageCheck">
                 {{ t('gate.rememberMe') }}
               </label>
             </div>
             <footer class="relative bottom-0 left-0 flex w-full flex-col items-center justify-end gap-0 px-3 py-0 h-[150px] lg:h-[190px]">
               <div class="flex flex-row items-center justify-center lg:max-w-[600px] gap-2">
-                <div class="font-black text-[12px] lg:text-[16px] whitespace-nowrap uppercase tracking-wider">
+                <div :class="['text-[12px] lg:text-[16px] whitespace-nowrap uppercase tracking-wider', locale === 'ch' ? 'font-ch' : 'font-black']">
                   {{ t('gate.disclaimer') }}
                 </div>
                 <div class="w-[120px] min-[340px]:w-[150px] min-[410px]:w-[180px] lg:w-[200px]">
@@ -108,11 +108,11 @@ onMounted(() => {
                 </div>
               </div>
 
-              <h3 class="mt-2 font-black text-[12px] text-center min-[360px]:text-center lg:text-[16px] lg:max-w-[920px]">
+              <h3 :class="['mt-2 text-[12px] text-center min-[360px]:text-center lg:text-[16px] lg:max-w-[920px]', locale === 'ch' ? 'font-ch' : 'font-black']">
                 {{ t('gate.subtitle') }}
               </h3>
               
-              <div class="mt-2 font-black text-[11px] lg:text-[14px] lg:max-w-[920px]">
+              <div :class="['mt-2 text-[11px] lg:text-[14px] lg:max-w-[920px]', locale === 'ch' ? 'font-ch' : 'font-black']">
                 <h3 class="text-center font-bold">{{ t('gate.company') }} 198501008089 (140534-M)</h3>
                 <p class="text-center">55, Persiaran Selangor, Seksyen 15,</p>
                 <p class="text-center">40200 Shah Alam, Selangor, Malaysia.</p>

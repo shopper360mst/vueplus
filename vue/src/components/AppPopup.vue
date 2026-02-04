@@ -46,13 +46,19 @@ const getImageUrl = () => {
   <Transition name="fade">
     <div v-if="uiStore.popup.isOpen" class="dialog-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="uiStore.closePopup">
       <Transition name="scale">
-        <div v-if="uiStore.popup.isOpen" class="relative overflow-y-auto rounded-xl shadow-lg max-w-lg w-full bg-white">
-          <div class="flex justify-end p-2 bg-transparent absolute top-0 right-0 z-10">
-            <button type="button" class="popup-close-button text-white font-bold bg-black/20 px-2 py-1 rounded" @click="uiStore.closePopup">
-              {{ t('common.close') }}
+        <div v-if="uiStore.popup.isOpen" class="relative max-w-lg w-full">
+          <!-- Close Button Outside -->
+          <div class="flex justify-end mb-2">
+            <button 
+              type="button" 
+              :class="['text-white text-xs md:text-sm tracking-widest hover:text-secondary transition-colors flex items-center gap-2', locale === 'ch' ? 'font-ch' : 'font-black']" 
+              @click="uiStore.closePopup"
+            >
+              {{ t('common.close') }} | X
             </button>
           </div>
-          <div class="popup-content relative">
+
+          <div class="popup-content relative overflow-hidden rounded-xl shadow-2xl">
             <img :src="getImageUrl()" alt="Popup Content" class="w-full h-auto block" />
             
             <a 
