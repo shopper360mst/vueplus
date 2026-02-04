@@ -11,21 +11,19 @@
 .marque-stripe {
   background-image: url('../assets/images/content_stripe.png');
   background-repeat: repeat-x;
-  background-size: auto 75%; /* 75% of 40px is 30px height */
-  background-position: center;
-  width: calc(100% + 138.8px); /* Container width + one tile width (30px * 620/134) */
+  background-size: 138.806px 30px; /* Exact tile dimensions */
+  background-position: 0 center;
+  width: 100%;
   height: 100%;
-  animation: marque 2s linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
+  animation: marque 3s linear infinite;
 
   @media (min-width: 768px) {
-    animation: marque 4s linear infinite;
+    animation: marque 6s linear infinite;
   }
 }
 
 @keyframes marque {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-138.8px, 0, 0); }
+  from { background-position: 0 center; }
+  to { background-position: -138.806px center; }
 }
 </style>

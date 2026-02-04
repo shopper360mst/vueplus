@@ -28,7 +28,7 @@ const navLinks = [
 
 <template>
   <nav
-    class="w-full flex justify-center bg-secondary border-b border-gray-100 sticky top-0 z-50 transition-all duration-300"
+    class="w-full flex justify-center bg-secondary sticky top-0 z-50 transition-all duration-300"
   >
     <div class="w-full max-w-[1600px] px-6 lg:px-12">
       <div class="flex justify-between h-16 items-center">
