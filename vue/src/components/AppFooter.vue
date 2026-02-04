@@ -34,7 +34,7 @@ const tcUrl = computed(() => {
     <AppMarquee></AppMarquee>
     <div data-nosnippet class="container relative max-w-full flex flex-col items-start justify-center footer-responsive-sizing overflow-hidden bg-primary p-4">
       <div class="flex flex-row gap-2 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start">
-        <div :class="['flex flex-row gap-1 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start', `footer-gap-${locale}`]">
+        <div :class="['flex flex-row gap-1 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start font-black', `footer-gap-${locale}`]">
           <a :href="tcUrl" target="_blank" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
             {{ t('footer.terms_conditions') }}
           </a>
@@ -92,7 +92,7 @@ const tcUrl = computed(() => {
     </div>
     <div class="flex flex-row gap-3 justify-center py-3">
     </div>
-    <div class="flex flex-row gap-2 md:gap-3 items-center justify-center w-full md:max-w-[40%] px-1">
+    <div class="flex flex-row gap-2 md:gap-3 items-center justify-center w-full md:max-w-[40%] px-1 font-black">
       <div class="flex items-start px-2 w-auto justify-center">
         <a :href="tcUrl" target="_blank" data-nosnippet :class="['text-white underline uppercase block', `navbar-${locale}`, `home-footer-new-${locale}`]">
           {{ t('footer.terms_conditions') }}
