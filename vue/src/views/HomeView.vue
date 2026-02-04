@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+import { useUIStore } from '../stores/ui'
+
+const uiStore = useUIStore()
+</script>
 
 <template>
   <div class="flex flex-col items-center justify-center min-h-[calc(100vh-60px)] bg-tertiary">
@@ -26,6 +30,7 @@
                 Sign up
               </button>
               <button
+                @click="uiStore.openPopup('ty')"
                 class="bg-transparent border-2 border-white text-black dark:text-white px-10 py-4 rounded-full text-lg font-bold hover:border-gray transition-all active:scale-95"
               >
                 Documentation
