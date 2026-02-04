@@ -1,0 +1,1618 @@
+<?php
+
+namespace App\Command;
+use PDO;
+
+use App\Entity\Faq;
+use App\Entity\Menu;
+use App\Entity\CampaignConfig;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
+
+#[AsCommand(name: 'app:create-default')]
+class CreateDefault extends Command
+{
+    //protected static $defaultName = 'app:create-default';
+    public function __construct(private EntityManagerInterface $manager, private UserPasswordHasherInterface $passwordEncoder, private ParameterBagInterface $paramBag)
+    {
+        parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $io = new SymfonyStyle($input, $output);
+        $BURL = $this->paramBag->get('app.base_url');
+        $CODE = $this->paramBag->get('app.campaign_code');
+        $PROXY_LINK = $this->paramBag->get('app.proxy_url');
+        
+        $io->warning('This command will TRUNCATE your tables');
+        $confirmed = $io->ask('Type CONFIRM to execute');
+        if($confirmed != 'CONFIRM'){
+            $output->writeln([
+                '',
+                'BYE'
+            ]
+            );
+            return 0;
+        }
+        
+        $_DEFAULTMENU = [
+            array(
+                'label' => "Home",
+                "url" => $PROXY_LINK."en/",
+                "menu_code" => "",
+                "submenu_code" => "",
+                "weight" => 1,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Smooth & Spicy Trail",
+                "url" => $PROXY_LINK."en/spicyfoodtrail",
+                "menu_code" => "",
+                "submenu_code" => "",
+                "weight" => 2,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            // array(
+            //     'label' => "Smoothest Alley",
+            //     "url" => $PROXY_LINK."en/event",
+            //     "menu_code" => "",
+            //     "submenu_code" => "",
+            //     "weight" => 3,
+            //     "menu_index" => 0,
+            //     "is_published" => 1,
+            //     "menu_id" => null,
+            //     "locale" => "en"
+            // ),
+            array(
+                'label' => "Promotions",
+                "url" => "",
+                "menu_code" => "promotions",
+                "submenu_code" => "",
+                "weight" => 4,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Submit Receipt",
+                "url" => $PROXY_LINK."en/promotions",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 41,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Bar, Café & Restaurants",
+                "url" => $PROXY_LINK."en/promotions#MONT",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 411,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Coffee Shop & Food Court",
+                "url" => $PROXY_LINK."en/promotions#TONT",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 412,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Convenience Store & Mini Mart",
+                "url" => $PROXY_LINK."en/promotions#CVSTOFT",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 413,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Supermarket, Hypermarket & 99 Speedmart",
+                "url" => $PROXY_LINK."en/promotions#SHM",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 414,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "Redemption Status",
+                "url" => $PROXY_LINK."en/chk_status",
+                "menu_code" => "promotions",
+                "submenu_code" => "",
+                "weight" => 42,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+
+
+            array(
+                'label' => "Campaigns",
+                "url" => "",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 5,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "FOOTBALL 2025",
+                "url" => "https://bestwithcarlsberg.my/football/",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 501,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "HARVEST 2025",
+                "url" => "https://bestwithcarlsberg.my/harvest/",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 502,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "CNY 2025",
+                "url" => "https://bestwithcarlsberg.my/cny/",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 503,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "en"
+            ),
+            array(
+                'label' => "主页",
+                "url" => $PROXY_LINK."ch/",
+                "menu_code" => "",
+                "submenu_code" => "",
+                "weight" => 1,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+               'label' => "顺顺辣个Go!",
+                "url" => $PROXY_LINK."ch/spicyfoodtrail",
+                "menu_code" => "",
+                "submenu_code" => "",
+                "weight" => 2,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            // array(
+            //     'label' => "Smoothest Alley",
+            //     "url" => $PROXY_LINK."ch/event",
+            //     "menu_code" => "",
+            //     "submenu_code" => "",
+            //     "weight" => 3,
+            //     "menu_index" => 0,
+            //     "is_published" => 1,
+            //     "menu_id" => null,
+            //     "locale" => "ch"
+            // ),
+            array(
+                'label' => "促销活动",
+                "url" => "",
+                "menu_code" => "promotions",
+                "submenu_code" => "",
+                "weight" => 4,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "提交收据",
+                "url" => $PROXY_LINK."ch/promotions",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 41,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "酒吧、咖啡厅和餐厅",
+                "url" => $PROXY_LINK."ch/promotions#MONT",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 411,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "咖啡店和美食广场",
+                "url" => $PROXY_LINK."ch/promotions#TONT",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 412,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "便利店和小超市",
+                "url" => $PROXY_LINK."ch/promotions#CVSTOFT",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 413,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "超市/大卖场和99 Speedmart",
+                "url" => $PROXY_LINK."ch/promotions#SHM",
+                "menu_code" => "promotions",
+                "submenu_code" => "submit_receipt",
+                "weight" => 414,
+                "menu_index" => 2,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "兑换状态",
+                "url" => $PROXY_LINK."ch/chk_status",
+                "menu_code" => "promotions",
+                "submenu_code" => "",
+                "weight" => 42,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+
+
+            array(
+                'label' => "其他活动​",
+                "url" => "",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 5,
+                "menu_index" => 0,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),          
+            array(
+                'label' => "FOOTBALL 2025",
+                "url" => "https://bestwithcarlsberg.my/football/",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 501,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "HARVEST 2025",
+                "url" => "https://bestwithcarlsberg.my/harvest/",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 502,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+            array(
+                'label' => "CNY 2025",
+                "url" => "https://bestwithcarlsberg.my/cny/",
+                "menu_code" => "campaign",
+                "submenu_code" => "",
+                "weight" => 503,
+                "menu_index" => 1,
+                "is_published" => 1,
+                "menu_id" => null,
+                "locale" => "ch"
+            ),
+        ];
+
+        $_FAQDATA_EN = [
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "1. When is the promotion period?",
+                "answer" => "The promotion period is from 1st October 2025 until 30th November 2025, while stocks last, on a first-come, first-served basis.",
+                "locale" => "en",
+                "weight" => 1,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "2. Who is eligible to participate in this promotion?",
+                "answer" => "This promotion is open to all non-Muslims aged 21 years and above who are residents in Malaysia. Employees of the Organiser, its associate agencies, affiliates, distributors, dealers, sponsors, advertising and contest agencies, and members of their immediate families will not be eligible to participate in this promotion.",
+                "locale" => "en",
+                "weight" => 2,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "3. How can I participate in this promotion and redeem the Carlsbeats Mini Speaker?",
+                "answer" => "• Bars, Cafés & Restaurants - Purchase a minimum of Ringgit Malaysia Ninety [RM90] of Carlsberg Smooth Draught in a single receipt to redeem One [1] Carlsbeats Mini Speaker.<br>• Coffee Shops & Food Courts - Purchase Six [6] bottles of Carlsberg Smooth Draught (580ml) in a single receipt to redeem One [1] Carlsbeats Mini Speaker.<br>• Supermarkets, Hypermarkets & 99 Speedmart – Purchase Two [2] units of 6-can packs Carlsberg Smooth Draught 320ml in a single receipt to redeem One [1] Carlsbeats Mini Speaker.<br>• e-commerce - Purchase Two [2] units of 6-can packs Carlsberg Smooth Draught 320ml in a single receipt to redeem One [1] Carlsbeats Mini Speaker.",
+                "locale" => "en",
+                "weight" => 3,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "4. What is the participating Carlsberg product?",
+                "answer" => "Carlsberg Smooth Draught",
+                "locale" => "en",
+                "weight" => 4,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "5. Where can I purchase the Carlsbeats Mini Speaker?",
+                "answer" => "Unfortunately, our Carlsbeats Mini Speaker is not available for sale.",
+                "locale" => "en",
+                "weight" => 5,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "6. Which are the participating outlets for Bars, Cafés & Restaurants?",
+                "answer" => "Selected Bars, Cafés & Restaurants with World of Smooth October 2025 Point-of-Sale Materials displayed in the premises.",
+                "locale" => "en",
+                "weight" => 6,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "7. Which are the participating outlets for Coffee Shops & Food Courts?",
+                "answer" => "Selected Coffee Shops & Food Courts with World of Smooth October 2025 Point-of-Sale Materials displayed in the premises",
+                "locale" => "en",
+                "weight" => 7,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "8. Which are the participating outlets for Supermarkets & Hypermarkets?",
+                "answer" => "Selected Supermarkets & Hypermarkets with World of Smooth October 2025 Point-of-Sale Materials displayed in the premises.",
+                "locale" => "en",
+                "weight" => 8,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "9. What are the participating e-commerce platforms?",
+                "answer" => "• Grab Official Store (powered by TME)<br>• Pandamart<br>• Carlsberg Official Store on Shopee",
+                "locale" => "en",
+                "weight" => 9,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "10. Is Lazada one of the participating e-commerce platforms for the promotion?",
+                "answer" => "No.",
+                "locale" => "en",
+                "weight" => 10,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "11. How do I redeem the Carlsbeats Mini Speaker if I purchase from e-commerce platforms?",
+                "answer" => "You will receive the Carlsbeats Mini Speaker directly with your order when purchasing from participating e-commerce platforms, while stocks last and on a first-come, first-served basis.",
+                "locale" => "en",
+                "weight" => 11,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "12. For participating outlets in Bars, Cafés & Restaurants, where can I find the receipt number?",
+                "answer" => "You may refer to some of the sample receipts (proofs of purchase) below:<br><img src='".$BURL."build/images/mont_receipt_all.png' alt='Sample receipts for Bars, Cafés & Restaurants' style='max-width: 100%; height: auto;' />",
+                "locale" => "en",
+                "weight" => 12,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "13. For participating outlets in Coffee Shops & Food Courts, where can I find the receipt number?",
+                "answer" => "You may refer to some of the sample receipts (proofs of purchase) below:<br><img src='".$BURL."build/images/tont_receipt_all.png' alt='Sample receipts for Coffee Shops & Food Courts' style='max-width: 100%; height: auto;' />",
+                "locale" => "en",
+                "weight" => 13,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "14. For participating outlets in Supermarkets, Hypermarkets & 99 Speedmart, where can I find the receipt number?",
+                "answer" => "You may refer to some of the sample receipts (proofs of purchase) below:<br><img src='".$BURL."build/images/shm_receipt_all.png' alt='Sample receipts for Supermarkets & Hypermarkets 1' style='max-width: 100%; height: auto;' /><br><img src='".$BURL."build/images/shm_receipt_all_2.png' alt='Sample receipts for Supermarkets & Hypermarkets 2' style='max-width: 100%; height: auto;' />",
+                "locale" => "en",
+                "weight" => 14,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "15. What information must be visible on the receipt (proof of purchase) for my entry to be valid?",
+                "answer" => "The receipt (proof of purchase) must clearly display the following details:<br>• Receipt number<br>• Name and/or logo of the outlet where the purchase was made<br>• Date of purchase<br>• Participating products purchased<br>• Correct amount/quantity purchased<br>
+                <img src='".$BURL."build/images/approved_en.png' alt='Receipt validation examples' style='max-width: 100%; height: auto;' />
+                <br>Please note that several examples of rejected receipts (proofs of purchase) are provided for your reference:<br>
+                <img src='".$BURL."build/images/reject_receipt_1.png' alt='Approved receipt examples' style='max-width: 100%; height: auto;' /><br>
+                <img src='".$BURL."build/images/reject_receipt_2.png' alt='Approved receipt examples' style='max-width: 100%; height: auto;' /><br>
+                <img src='".$BURL."build/images/reject_receipt_3.png' alt='Approved receipt examples' style='max-width: 100%; height: auto;' /><br>
+                <br>Examples of rejected receipts (proofs of purchase) from various purchase channels:<br>
+                <img src='".$BURL."build/images/reject_channel.png' alt='Rejected receipt examples' style='max-width: 100%; height: auto;' />",
+                "locale" => "en",
+                "weight" => 15,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "16. Can I combine two receipts to participate in the promotion?",
+                "answer" => "No. Unfortunately, entries can only be made on a SINGLE receipt to be considered as valid for the promotion.",
+                "locale" => "en",
+                "weight" => 16,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "17. Do I need to keep my receipt?",
+                "answer" => "Yes. You are required to keep the original receipt for verification and redemption purposes.",
+                "locale" => "en",
+                "weight" => 17,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "18. How do I submit my entry?",
+                "answer" => "• Step 1: Scan QR code as printed on the World of Smooth October 2025 Point-of-Sale Materials OR visit https://bestwithcarlsberg.my/wos/en/promotions<br>• Step 2: Fill up the required fields. Please ensure the details submitted are accurate.<br>• Step 3: Upload your receipt. Please ensure the proof of purchase is clear and legible for verification purposes.",
+                "locale" => "en",
+                "weight" => 18,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "19. How do I know if my submission is successful?",
+                "answer" => "After completing the required fields and uploading your receipt, a pop-up thank-you message will appear. Additionally, you will receive an email from carlsberg@s360plus.com to notify you that your submission was successful. In the meantime, you can check your redemption status here https://bestwithcarlsberg.my/wos/en/redemption_status by keying in your submitted mobile number.",
+                "locale" => "en",
+                "weight" => 19,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "20. What should I do if my submission entry status is still the same after 7 working days from receiving the email?",
+                "answer" => "You may reach out to us via our customer support email at carlsberg@s360plus.com",
+                "locale" => "en",
+                "weight" => 20,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "21. Is there a limit to the number of entries that can be submitted throughout the promotion period?",
+                "answer" => "No, there is no limit to the number of entries that can be submitted for this promotion. You can submit as many entries as you wish by following the guidelines and requirements set out in the terms and conditions or promotional materials.",
+                "locale" => "en",
+                "weight" => 21,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "22. How do I redeem the Carlsbeats Mini Speaker once my entry is approved?",
+                "answer" => "Once your entry is approved, we will process and deliver your Carlsbeats Mini Speaker to the given delivery address within Sixty [60] working days. You may check your redemption status at https://bestwithcarlsberg.my/wos/en/redemption_status by keying in your submitted mobile number.",
+                "locale" => "en",
+                "weight" => 22,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "23. What is the total number of redemptions throughout the promotion period?",
+                "answer" => "There will be a total of 30,440 redemptions available throughout the promotion period.",
+                "locale" => "en",
+                "weight" => 23,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "24. How many Carlsbeats Mini Speaker can a participant redeem?",
+                "answer" => "One [1] unique mobile number and NRIC may redeem up to a maximum of Four [4] Carlsbeats Mini Speaker.",
+                "locale" => "en",
+                "weight" => 24,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "25. If I participate in the contest, can I still participate in the redemption?",
+                "answer" => "Yes. One [1] unique mobile number and NRIC can win One [1] set of five Carlsbeats Mini Speaker and redeem up to a maximum of Four [4] Carlsbeats Mini Speaker.",
+                "locale" => "en",
+                "weight" => 25,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "26. Can I request to change the design of the Carlsbeats Mini Speaker?",
+                "answer" => "The Carlsbeats Mini Speaker is packed as a blind box, and the design is subject to availability and distributed on a random basis. Requests for specific designs will not be entertained.",
+                "locale" => "en",
+                "weight" => 26,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "27. If I have submitted a total of five [5] different receipts, can I get one [1] set of five Carlsbeats Mini Speakers?",
+                "answer" => "Unfortunately, no. The Carlsbeats Mini Speakers are distributed on a random basis for each submission and are packed as blind boxes. The design is subject to availability and requests for specific designs will not be entertained.",
+                "locale" => "en",
+                "weight" => 27,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "28. What should I do if I receive a damaged or non-functional Carlsbeats Mini Speaker?",
+                "answer" => "If you receive a Carlsbeats Mini Speaker that is damaged or not functioning, please contact our support team via email at carlsberg@s360plus.com within seven [7] days of receiving the item. Kindly provide a clear video of the damaged speaker, along with your full name, mobile number, and delivery address for verification purposes. We will review your case and assist with a replacement, subject to the promotion's terms and conditions.",
+                "locale" => "en",
+                "weight" => 28,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Redemption",
+                "question" => "29. Who do I contact if I have further queries?",
+                "answer" => "You may reach out to us via our customer support email at carlsberg@s360plus.com or PM us at Carlsberg Malaysia Facebook page (https://www.facebook.com/CarlsbergMalaysia).",
+                "locale" => "en",
+                "weight" => 29,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "1. When is the promotion period?",
+                "answer" => "The promotion period is from 1st October 2025 until 30th November 2025.",
+                "locale" => "en",
+                "weight" => 30,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "2. Who is eligible to participate in this promotion?",
+                "answer" => "This promotion is open to all non-Muslims aged 21 years and above who are residents in Malaysia. Employees of the Organiser, its associate agencies, affiliates, distributors, dealers, sponsors, advertising and contest agencies, and members of their immediate families will not be eligible to participate in this promotion.",
+                "locale" => "en",
+                "weight" => 31,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "3. How can I participate in this promotion for a chance to win One [1] set of five Carlsbeats Mini Speaker?",
+                "answer" => "• Convenience Stores & Mini Markets - Purchase One [1] can of Carlsberg Smooth Draught in a single receipt to get One [1] entry.",
+                "locale" => "en",
+                "weight" => 32,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "4. What are the participating Carlsberg product?",
+                "answer" => "Carlsberg Smooth Draught",
+                "locale" => "en",
+                "weight" => 33,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "5. Where can I purchase the Carlsbeats Mini Speaker?",
+                "answer" => "Unfortunately, our Carlsbeats Mini Speaker is not available for sale.",
+                "locale" => "en",
+                "weight" => 34,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "6. Which are the participating outlets for Convenience Stores & Mini Markets?",
+                "answer" => "Selected Convenience Stores & Mini Markets with World of Smooth October 2025 Point-of-Sale Materials displayed in the premises.",
+                "locale" => "en",
+                "weight" => 35,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "7. For participating outlets in Convenience Stores & Mini Markets, where can I find the receipt number?",
+                "answer" => "You may refer to some of the sample receipts (proofs of purchase) below:<br><img src='".$BURL."build/images/cvstoft_receipt_all.png' alt='Sample receipts for Convenience Stores & Mini Markets' style='max-width: 100%; height: auto;' />",
+                "locale" => "en",
+                "weight" => 36,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "8. What information must be visible on the receipt (proof of purchase) for my entry to be valid?",
+                "answer" => "The receipt (proof of purchase) must clearly display the following details:<br>• Receipt number<br>• Name and/or logo of the outlet where the purchase was made<br>• Date of purchase<br>• Participating products purchased<br>• Correct quantity purchased<br><br>Please note that several examples of rejected receipts (proofs of purchase) are provided for your reference:<br><img src='".$BURL."build/images/cvstoft_approved.png' alt='Receipt validation examples' style='max-width: 100%; height: auto;' />",
+                "locale" => "en",
+                "weight" => 37,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "9. Can I combine two receipts to participate in the promotion?",
+                "answer" => "No. Unfortunately, entries can only be made on a SINGLE receipt to be considered as valid for the promotion.",
+                "locale" => "en",
+                "weight" => 38,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "10. Do I need to keep my receipt?",
+                "answer" => "Yes. You are required to keep the original receipt for verification and redemption purposes.",
+                "locale" => "en",
+                "weight" => 39,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "11. How do I submit my entry?",
+                "answer" => "• Step 1: Scan QR code as printed on the World of Smooth October 2025 Point-of-Sale Materials OR visit https://bestwithcarlsberg.my/wos/en/promotions<br>• Step 2: Fill up the required fields. Please ensure the details submitted are accurate.<br>• Step 3: Upload your receipt. Please ensure the proof of purchase is clear and legible for verification purposes.",
+                "locale" => "en",
+                "weight" => 40,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "12. How do I know if my submission is successful?",
+                "answer" => "After completing the required fields and uploading your receipt, a pop-up thank-you message will appear. Additionally, you will receive an email from carlsberg@s360plus.com to notify you that your submission was successful.",
+                "locale" => "en",
+                "weight" => 41,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "13. Is there a limit to the number of entries per receipt for participation in the contest?",
+                "answer" => "No, there is no limit. The number of qualifying entries will be determined based on the purchase criteria and will be allocated accordingly. For example:<br><br><table border='2' style='border-collapse: collapse; width: 100%; margin: 10px 0; border-color: #006937;'><tr><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>Receipt</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>Product</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>Total Cans</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>Total Qualifying Entries</th></tr><tr style='background-color: #d4edda;'><td style='padding: 8px; border: 1px solid #006937;'>Receipt A</td><td style='padding: 8px; border: 1px solid #006937;'>Carlsberg Smooth Draught</td><td style='padding: 8px; border: 1px solid #006937;'>1 Can</td><td style='padding: 8px; border: 1px solid #006937;'>1</td></tr><tr style='background-color: white;'><td style='padding: 8px; border: 1px solid #006937;'>Receipt B</td><td style='padding: 8px; border: 1px solid #006937;'>Carlsberg Smooth Draught</td><td style='padding: 8px; border: 1px solid #006937;'>4 Cans</td><td style='padding: 8px; border: 1px solid #006937;'>4</td></tr><tr style='background-color: #d4edda;'><td style='padding: 8px; border: 1px solid #006937;'>Receipt C</td><td style='padding: 8px; border: 1px solid #006937;'>Carlsberg Smooth Draught</td><td style='padding: 8px; border: 1px solid #006937;'>24 Cans (1 carton)</td><td style='padding: 8px; border: 1px solid #006937;'>24</td></tr></table>",
+                "locale" => "en",
+                "weight" => 42,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "14. Is there a limit to the number of entries that can be submitted throughout the promotion period?",
+                "answer" => "No, there is no limit to the number of entries that can be submitted for this promotion. You can submit as many entries as you wish by following the guidelines and requirements set out in the terms and conditions or promotional materials.",
+                "locale" => "en",
+                "weight" => 43,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "15. How do I know if I'm one of the shortlisted winners for the Carlsbeats Mini Speaker set?",
+                "answer" => "If you are shortlisted as a winner, you will receive a call from the call center (03-7890 5046) and shall be required to answer a question correctly and submit a photo of their ID for verification to be confirmed as a Winner.",
+                "locale" => "en",
+                "weight" => 44,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "16. What will happen if I answer the skill-based question incorrectly?",
+                "answer" => "Failure to answer the question correctly will result in the prize being forfeited by the Organizer.",
+                "locale" => "en",
+                "weight" => 45,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "17. What happens if I feel unsafe and refuse to provide my photo ID for verification if I'm shortlisted as a winner?",
+                "answer" => "Failure to provide a photo ID for verification will result in the prize being forfeited by the Organizer. Please be assured that all personal information will be handled with the utmost confidentiality and will be used solely for verification purposes.",
+                "locale" => "en",
+                "weight" => 46,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "18. When will I receive my winning Carlsbeats Mini Speaker set?",
+                "answer" => "Once the Winners are confirmed, delivery of prizes will be completed within 60 working days from the date of the official winner announcement.",
+                "locale" => "en",
+                "weight" => 47,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "19. What is the total number of contest winners throughout the promotion period?",
+                "answer" => "There will be a total of 100 winners selected during the promotion period.",
+                "locale" => "en",
+                "weight" => 48,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "20. How many Carlsbeats Mini Speaker set can a participant win in contest?",
+                "answer" => "One [1] unique mobile number and NRIC can win One [1] Carlsbeats Mini Speaker set only.",
+                "locale" => "en",
+                "weight" => 49,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "21. If I participate in the redemption, can I still participate in the contest?",
+                "answer" => "Yes. One [1] unique mobile number and NRIC can win One [1] set of five Carlsbeats Mini Speaker and redeem up to a maximum of Four [4] Carlsbeats Mini Speaker.",
+                "locale" => "en",
+                "weight" => 50,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "22. Can I request to change the design of the Carlsbeats Mini Speaker set?",
+                "answer" => "No. One (1) set of five Carlsbeats Mini Speakers consists of five different designs, including the secret design, packed as blind boxes. The designs are fixed and cannot be changed.",
+                "locale" => "en",
+                "weight" => 51,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "23. What should I do if I receive a damaged or non-functional Carlsbeats Mini Speaker?",
+                "answer" => "If you receive a Carlsbeats Mini Speaker that is damaged or not functioning, please contact our support team via email at carlsberg@s360plus.com within seven [7] days of receiving the item. Kindly provide a clear video of the damaged speaker, along with your full name, mobile number, and delivery address for verification purposes. We will review your case and assist with a replacement, subject to the promotion's terms and conditions.",
+                "locale" => "en",
+                "weight" => 52,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "24. Who do I contact if I have further queries?",
+                "answer" => "You may reach out to us via our customer support email at carlsberg@s360plus.com or PM us at Carlsberg Malaysia Facebook page (https://www.facebook.com/CarlsbergMalaysia).",
+                "locale" => "en",
+                "weight" => 53,
+            )
+        ];
+        
+        $_FAQDATA_CH = [
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "1. 促销期间是什么时候？",
+                "answer" => "促销期间为2025年10月1日至2025年11月30日，数量有限，先到先得。",
+                "locale" => "ch",
+                "weight" => 1,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "2. 谁有资格参与此促销活动？",
+                "answer" => "此促销活动面向所有年满21岁及以上的非穆斯林马来西亚居民开放。主办方、其关联机构、附属公司、经销商、分销商、赞助商、广告和竞赛机构的员工及其直系亲属不符合参与此促销活动的资格。",
+                "locale" => "ch",
+                "weight" => 2,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "3. 我如何参与此促销活动并兑换Carlsbeats迷你音响？",
+                "answer" => "• 酒吧、咖啡厅和餐厅 - 在单张收据上购买最少马币九十令吉[RM90]的嘉士伯顺爽啤酒即可兑换一[1]个Carlsbeats迷你音响。<br>• 咖啡店和美食广场 - 在单张收据上购买六[6]瓶嘉士伯顺爽啤酒(580ml)即可兑换一[1]个Carlsbeats迷你音响。<br>• 超市、大卖场和99 Speedmart - 在单张收据上购买两[2]包6罐装嘉士伯顺爽啤酒320ml即可兑换一[1]个Carlsbeats迷你音响。<br>• 电子商务 - 在单张收据上购买两[2]包6罐装嘉士伯顺爽啤酒320ml即可兑换一[1]个Carlsbeats迷你音响。",
+                "locale" => "ch",
+                "weight" => 3,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "4. 参与的嘉士伯产品是什么？",
+                "answer" => "嘉士伯顺爽啤酒",
+                "locale" => "ch",
+                "weight" => 4,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "5. 我在哪里可以购买Carlsbeats迷你音响？",
+                "answer" => "很抱歉，我们的Carlsbeats迷你音响不对外销售。",
+                "locale" => "ch",
+                "weight" => 5,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "6. 酒吧、咖啡厅和餐厅的参与门店有哪些？",
+                "answer" => "在店内展示有World of Smooth October 2025销售点材料的指定酒吧、咖啡厅和餐厅。",
+                "locale" => "ch",
+                "weight" => 6,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "7. 咖啡店和美食广场的参与门店有哪些？",
+                "answer" => "在店内展示有World of Smooth October 2025销售点材料的指定咖啡店和美食广场。",
+                "locale" => "ch",
+                "weight" => 7,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "8. 超市和大卖场的参与门店有哪些？",
+                "answer" => "在店内展示有World of Smooth October 2025销售点材料的指定超市和大卖场。",
+                "locale" => "ch",
+                "weight" => 8,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "9. 参与的电子商务平台有哪些？",
+                "answer" => "• Grab官方商店(由TME提供支持)<br>• Pandamart<br>• Shopee上的嘉士伯官方商店",
+                "locale" => "ch",
+                "weight" => 9,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "10. Lazada是参与促销活动的电子商务平台之一吗？",
+                "answer" => "不是。",
+                "locale" => "ch",
+                "weight" => 10,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "11. 如果我从电子商务平台购买，如何兑换Carlsbeats迷你音响？",
+                "answer" => "当您从参与的电子商务平台购买时，您将直接随订单收到Carlsbeats迷你音响，数量有限，先到先得。",
+                "locale" => "ch",
+                "weight" => 11,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "12. 对于酒吧、咖啡厅和餐厅的参与门店，我在哪里可以找到收据编号？",
+                "answer" => "您可以参考以下一些收据样本(购买凭证)：<br><img src='".$BURL."build/images/mont_receipt_all.png' alt='酒吧、咖啡厅和餐厅收据样本' style='max-width: 100%; height: auto;' />",
+                "locale" => "ch",
+                "weight" => 12,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "13. 对于咖啡店和美食广场的参与门店，我在哪里可以找到收据编号？",
+                "answer" => "您可以参考以下一些收据样本(购买凭证)：<br><img src='".$BURL."build/images/tont_receipt_all.png' alt='咖啡店和美食广场收据样本' style='max-width: 100%; height: auto;' />",
+                "locale" => "ch",
+                "weight" => 13,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "14. 对于超市、大卖场和99 Speedmart的参与门店，我在哪里可以找到收据编号？",
+                "answer" => "您可以参考以下一些收据样本(购买凭证)：<br><img src='".$BURL."build/images/shm_receipt_all.png' alt='超市和大卖场收据样本1' style='max-width: 100%; height: auto;' /><br><img src='".$BURL."build/images/shm_receipt_all_2.png' alt='超市和大卖场收据样本2' style='max-width: 100%; height: auto;' />",
+                "locale" => "ch",
+                "weight" => 14,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "15. 收据(购买凭证)上必须显示哪些信息才能使我的参赛有效？",
+                "answer" => "收据(购买凭证)必须清楚显示以下详细信息：<br>• 收据编号<br>• 购买门店的名称和/或标志<br>• 购买日期<br>• 购买的参与产品<br>• 正确的购买金额/数量<br>
+                <img src='".$BURL."build/images/approved_en.png' alt='收据验证示例' style='max-width: 100%; height: auto;' />
+                <br>请注意，以下提供了一些被拒绝收据(购买凭证)的示例供您参考：<br>
+                <img src='".$BURL."build/images/reject_receipt_1.png' alt='被拒绝收据示例' style='max-width: 100%; height: auto;' /><br>
+                <img src='".$BURL."build/images/reject_receipt_2.png' alt='被拒绝收据示例' style='max-width: 100%; height: auto;' /><br>
+                <img src='".$BURL."build/images/reject_receipt_3.png' alt='被拒绝收据示例' style='max-width: 100%; height: auto;' /><br>
+                <br>来自各种购买渠道的被拒绝收据(购买凭证)示例：<br>
+                <img src='".$BURL."build/images/reject_channel.png' alt='被拒绝收据示例' style='max-width: 100%; height: auto;' />",
+                "locale" => "ch",
+                "weight" => 15,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "16. 我可以合并两张收据来参与促销活动吗？",
+                "answer" => "不可以。很抱歉，只有在单张收据上的参赛才被视为促销活动的有效参赛。",
+                "locale" => "ch",
+                "weight" => 16,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "17. 我需要保留收据吗？",
+                "answer" => "是的。您需要保留原始收据以供验证和兑换之用。",
+                "locale" => "ch",
+                "weight" => 17,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "18. 我如何提交参赛？",
+                "answer" => "• 步骤1：扫描印在World of Smooth October 2025销售点材料上的二维码或访问 https://bestwithcarlsberg.my/wos/ch/promotions<br>• 步骤2：填写必填字段。请确保提交的详细信息准确无误。<br>• 步骤3：上传您的收据。请确保购买凭证清晰可读以供验证之用。",
+                "locale" => "ch",
+                "weight" => 18,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "19. 我如何知道提交是否成功？",
+                "answer" => "完成必填字段填写和收据上传后，将出现感谢弹窗消息。此外，您将收到来自carlsberg@s360plus.com的电子邮件，通知您提交成功。同时，您可以通过输入提交的手机号码在 https://bestwithcarlsberg.my/wos/ch/redemption_status 查看兑换状态。",
+                "locale" => "ch",
+                "weight" => 19,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "20. 如果我的提交参赛状态在收到电子邮件后7个工作日内仍然相同，我应该怎么办？",
+                "answer" => "您可以通过我们的客户支持电子邮件carlsberg@s360plus.com联系我们。",
+                "locale" => "ch",
+                "weight" => 20,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "21. 在整个促销期间可以提交的参赛次数是否有限制？",
+                "answer" => "没有，此促销活动可提交的参赛次数没有限制。您可以按照条款和条件或促销材料中规定的指导原则和要求提交任意次数的参赛。",
+                "locale" => "ch",
+                "weight" => 21,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "22. 一旦我的参赛获得批准，我如何兑换Carlsbeats迷你音响？",
+                "answer" => "一旦您的参赛获得批准，我们将在六十[60]个工作日内处理并将您的Carlsbeats迷你音响送到指定的送货地址。您可以通过输入提交的手机号码在 https://bestwithcarlsberg.my/wos/ch/redemption_status 查看兑换状态。",
+                "locale" => "ch",
+                "weight" => 22,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "23. 整个促销期间的兑换总数是多少？",
+                "answer" => "整个促销期间将有总共30,440个兑换名额。",
+                "locale" => "ch",
+                "weight" => 23,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "24. 参与者可以兑换多少个Carlsbeats迷你音响？",
+                "answer" => "一[1]个唯一手机号码和身份证最多可兑换四[4]个Carlsbeats迷你音响。",
+                "locale" => "ch",
+                "weight" => 24,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "25. 如果我参与竞赛，我还可以参与兑换吗？",
+                "answer" => "可以。一[1]个唯一手机号码和身份证可以赢得一[1]套五个Carlsbeats迷你音响并兑换最多四[4]个Carlsbeats迷你音响。",
+                "locale" => "ch",
+                "weight" => 25,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "26. 我可以要求更改Carlsbeats迷你音响的设计吗？",
+                "answer" => "Carlsbeats迷你音响以盲盒包装，设计视供应情况而定并随机分发。不接受特定设计的要求。",
+                "locale" => "ch",
+                "weight" => 26,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "27. 如果我提交了总共五[5]张不同的收据，我可以得到一[1]套五个Carlsbeats迷你音响吗？",
+                "answer" => "很抱歉，不可以。Carlsbeats迷你音响对每次提交都是随机分发的，并以盲盒包装。设计视供应情况而定，不接受特定设计的要求。",
+                "locale" => "ch",
+                "weight" => 27,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "28. 如果我收到损坏或无法正常工作的Carlsbeats迷你音响，我应该怎么办？",
+                "answer" => "如果您收到损坏或无法正常工作的Carlsbeats迷你音响，请在收到物品后七[7]天内通过电子邮件carlsberg@s360plus.com联系我们的支持团队。请提供损坏音响的清晰视频，以及您的全名、手机号码和送货地址以供验证。我们将审查您的案例并协助更换，但须遵守促销活动的条款和条件。",
+                "locale" => "ch",
+                "weight" => 28,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "兑换",
+                "question" => "29. 如果我有进一步的疑问，我应该联系谁？",
+                "answer" => "您可以通过我们的客户支持电子邮件carlsberg@s360plus.com联系我们，或在嘉士伯马来西亚Facebook页面(https://www.facebook.com/CarlsbergMalaysia)私信我们。",
+                "locale" => "ch",
+                "weight" => 29,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "1. 促销期间是什么时候？",
+                "answer" => "促销期间为2025年10月1日至2025年11月30日。",
+                "locale" => "ch",
+                "weight" => 30,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "2. 谁有资格参与此促销活动？",
+                "answer" => "此促销活动面向所有年满21岁及以上的非穆斯林马来西亚居民开放。主办方、其关联机构、附属公司、经销商、分销商、赞助商、广告和竞赛机构的员工及其直系亲属不符合参与此促销活动的资格。",
+                "locale" => "ch",
+                "weight" => 31,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "3. 我如何参与此促销活动以有机会赢得一[1]套五个Carlsbeats迷你音响？",
+                "answer" => "• 便利店和小超市 - 在单张收据上购买一[1]罐嘉士伯顺爽啤酒即可获得一[1]次参赛机会。",
+                "locale" => "ch",
+                "weight" => 32,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "4. 参与的嘉士伯产品是什么？",
+                "answer" => "嘉士伯顺爽啤酒",
+                "locale" => "ch",
+                "weight" => 33,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "5. 我在哪里可以购买Carlsbeats迷你音响？",
+                "answer" => "很抱歉，我们的Carlsbeats迷你音响不对外销售。",
+                "locale" => "ch",
+                "weight" => 34,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "6. 便利店和小超市的参与门店有哪些？",
+                "answer" => "在店内展示有World of Smooth October 2025销售点材料的指定便利店和小超市。",
+                "locale" => "ch",
+                "weight" => 35,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "7. 对于便利店和小超市的参与门店，我在哪里可以找到收据编号？",
+                "answer" => "您可以参考以下一些收据样本(购买凭证)：<br><img src='".$BURL."build/images/cvstoft_receipt_all.png' alt='便利店和小超市收据样本' style='max-width: 100%; height: auto;' />",
+                "locale" => "ch",
+                "weight" => 36,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "8. 收据(购买凭证)上必须显示哪些信息才能使我的参赛有效？",
+                "answer" => "收据(购买凭证)必须清楚显示以下详细信息：<br>• 收据编号<br>• 购买门店的名称和/或标志<br>• 购买日期<br>• 购买的参与产品<br>• 正确的购买数量<br><br>请注意，以下提供了一些被拒绝收据(购买凭证)的示例供您参考：<br><img src='".$BURL."build/images/cvstoft_approved.png' alt='收据验证示例' style='max-width: 100%; height: auto;' />",
+                "locale" => "ch",
+                "weight" => 37,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "9. 我可以合并两张收据来参与促销活动吗？",
+                "answer" => "不可以。很抱歉，只有在单张收据上的参赛才被视为促销活动的有效参赛。",
+                "locale" => "ch",
+                "weight" => 38,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "10. 我需要保留收据吗？",
+                "answer" => "是的。您需要保留原始收据以供验证和兑换之用。",
+                "locale" => "ch",
+                "weight" => 39,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "11. 我如何提交参赛？",
+                "answer" => "• 步骤1：扫描印在World of Smooth October 2025销售点材料上的二维码或访问 https://bestwithcarlsberg.my/wos/ch/promotions<br>• 步骤2：填写必填字段。请确保提交的详细信息准确无误。<br>• 步骤3：上传您的收据。请确保购买凭证清晰可读以供验证之用。",
+                "locale" => "ch",
+                "weight" => 40,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "12. 我如何知道提交是否成功？",
+                "answer" => "完成必填字段填写和收据上传后，将出现感谢弹窗消息。此外，您将收到来自carlsberg@s360plus.com的电子邮件，通知您提交成功。",
+                "locale" => "ch",
+                "weight" => 41,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "13. 每张收据参与竞赛的参赛次数是否有限制？",
+                "answer" => "没有限制。符合条件的参赛次数将根据购买标准确定并相应分配。例如：<br><br><table border='2' style='border-collapse: collapse; width: 100%; margin: 10px 0; border-color: #006937;'><tr><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>收据</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>产品</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>总罐数</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>符合条件的参赛次数</th></tr><tr style='background-color: #d4edda;'><td style='padding: 8px; border: 1px solid #006937;'>收据 A</td><td style='padding: 8px; border: 1px solid #006937;'>嘉士伯顺爽啤酒</td><td style='padding: 8px; border: 1px solid #006937;'>1 罐</td><td style='padding: 8px; border: 1px solid #006937;'>1</td></tr><tr style='background-color: white;'><td style='padding: 8px; border: 1px solid #006937;'>收据 B</td><td style='padding: 8px; border: 1px solid #006937;'>嘉士伯顺爽啤酒</td><td style='padding: 8px; border: 1px solid #006937;'>4 罐</td><td style='padding: 8px; border: 1px solid #006937;'>4</td></tr><tr style='background-color: #d4edda;'><td style='padding: 8px; border: 1px solid #006937;'>收据 C</td><td style='padding: 8px; border: 1px solid #006937;'>嘉士伯顺爽啤酒</td><td style='padding: 8px; border: 1px solid #006937;'>24 罐 (1箱)</td><td style='padding: 8px; border: 1px solid #006937;'>24</td></tr></table>",
+                "locale" => "ch",
+                "weight" => 42,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "14. 在整个促销期间可以提交的参赛次数是否有限制？",
+                "answer" => "没有，此促销活动可提交的参赛次数没有限制。您可以按照条款和条件或促销材料中规定的指导原则和要求提交任意次数的参赛。",
+                "locale" => "ch",
+                "weight" => 43,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "15. 我如何知道自己是否是Carlsbeats迷你音响套装的入围获奖者之一？",
+                "answer" => "如果您入围为获奖者，您将接到呼叫中心(03-7890 5046)的电话，并需要正确回答一个问题并提交身份证照片以供验证，以确认为获奖者。",
+                "locale" => "ch",
+                "weight" => 44,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "16. 如果我回答技能问题错误会发生什么？",
+                "answer" => "未能正确回答问题将导致主办方没收奖品。",
+                "locale" => "ch",
+                "weight" => 45,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "17. 如果我感到不安全并拒绝提供身份证照片进行验证(如果我入围为获奖者)会发生什么？",
+                "answer" => "未能提供身份证照片进行验证将导致主办方没收奖品。请放心，所有个人信息将得到最严格的保密处理，仅用于验证目的。",
+                "locale" => "ch",
+                "weight" => 46,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "18. 我什么时候会收到获奖的Carlsbeats迷你音响套装？",
+                "answer" => "一旦确认获奖者，奖品的交付将在官方获奖者公布日期起60个工作日内完成。",
+                "locale" => "ch",
+                "weight" => 47,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "19. 整个促销期间的竞赛获奖者总数是多少？",
+                "answer" => "促销期间将选出总共100名获奖者。",
+                "locale" => "ch",
+                "weight" => 48,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "20. 参与者在竞赛中可以赢得多少套Carlsbeats迷你音响？",
+                "answer" => "一[1]个唯一手机号码和身份证只能赢得一[1]套Carlsbeats迷你音响。",
+                "locale" => "ch",
+                "weight" => 49,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "21. 如果我参与兑换，我还可以参与竞赛吗？",
+                "answer" => "可以。一[1]个唯一手机号码和身份证可以赢得一[1]套五个Carlsbeats迷你音响并兑换最多四[4]个Carlsbeats迷你音响。",
+                "locale" => "ch",
+                "weight" => 50,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "22. 我可以要求更改Carlsbeats迷你音响套装的设计吗？",
+                "answer" => "不可以。一(1)套五个Carlsbeats迷你音响包含五种不同的设计，包括秘密设计，以盲盒包装。设计是固定的，无法更改。",
+                "locale" => "ch",
+                "weight" => 51,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "23. 如果我收到损坏或无法正常工作的Carlsbeats迷你音响，我应该怎么办？",
+                "answer" => "如果您收到损坏或无法正常工作的Carlsbeats迷你音响，请在收到物品后七[7]天内通过电子邮件carlsberg@s360plus.com联系我们的支持团队。请提供损坏音响的清晰视频，以及您的全名、手机号码和送货地址以供验证。我们将审查您的案例并协助更换，但须遵守促销活动的条款和条件。",
+                "locale" => "ch",
+                "weight" => 52,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "竞赛",
+                "question" => "24. 如果我有进一步的疑问，我应该联系谁？",
+                "answer" => "您可以通过我们的客户支持电子邮件carlsberg@s360plus.com联系我们，或在嘉士伯马来西亚Facebook页面(https://www.facebook.com/CarlsbergMalaysia)私信我们。",
+                "locale" => "ch",
+                "weight" => 53,
+            )
+                "answer" => "<p><span>步骤一： 请扫描印在店内的促销展示图上的二维码或浏览活动网站www.bestwithcarlsberg.my/football/ch/promotions</span>
+                <p><span>步骤二： 填写所需资料。请确保您所提交的资料准确无误。 </span>
+                <p><span>步骤三： 请上传采购收据作为凭证。请确保收据内容清晰可见以便后续核实用途。</span>
+                <p><span>步骤四： 填写所需资料与上传采购收据完成后，系统将弹出“感谢参与”的提示信息。另外，您也将会收到来自 carlsberg@s360plus.com 发送的电邮，通知您提交已成功。</p>",
+                "locale" => "ch",
+                "weight" => 5,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q6: 我的采购收据上必须显示哪些信息，才符合有效参与本次促销活动？",
+                "answer" => "采购收据上必须清楚展示购买地点商店名称和／或标志、采购收据编号、购买日期以及符合本次促销活动购买要求的产品。
+                <center class='mt-5'>
+                    <img src='".$BURL."build/images/approved_ch.png' class='hidden-for-mobile'/>
+                    <img src='".$BURL."build/images/approvev2_ch.png' class='hidden-for-desktop'/>
+                </center>                
+                <br>
+                <p class='mb-3 w-full text-left'>无效的收据样本</p>
+                <center class='flex flex-col justify-center hidden-for-desktop'>
+                        <img src='".$BURL."build/images/no_outlet_ch.png' class='faq-image-sizing' />
+                        <img src='".$BURL."build/images/no_receipt_ch.png' class='faq-image-sizing' />
+                        <img src='".$BURL."build/images/no_date_ch.png' class='faq-image-sizing' />                
+                        <img src='".$BURL."build/images/duplicate_ch.png' class='faq-image-sizing' />
+                        <img src='".$BURL."build/images/outside_period_ch.png' class='faq-image-sizing' /> 
+                        <img src='".$BURL."build/images/unclear_receipt_ch.png' class='faq-image-sizing' />                   
+                        <img src='".$BURL."build/images/wrong_product_ch.png' class='faq-image-sizing' />
+                </center>
+                <center class='hidden-for-mobile'>
+                    <div class='flex-col justify-center'>
+                        <div class='flex flex-row justify-center'>
+                            <img src='".$BURL."build/images/combine1_ch.png' width='95%' />
+                        </div>
+                        <div class='flex flex-row justify-center mt-3'>
+                            <img src='".$BURL."build/images/combine2_ch.png' width='95%' />
+                        </div>
+                    </div>
+                </center>                
+                ",
+                "locale" => "ch",
+                "weight" => 6,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q7: 请问我能合并两张采购收据以便参加本次促销活动吗?",
+                "answer" => "很抱歉，本次促销活动并不能合拼两张采购收据。只有在单张采购收据上进行的参与才会被视为本次促销活动的有效参与。",
+                "locale" => "ch",
+                "weight" => 7,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q8: 参赛次数是否有限制？", 
+                "answer" => "好消息，只要符合促销活动的条款与条件，您即可无限次参赛！",
+                "locale" => "ch",
+                "weight" => 8,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q9: 参与本次促销活动的超级市场和大型超市有哪些？", 
+                "answer" => "参与活动的商店和连锁店必须位于西马。
+                <ol>
+                <li><span>99 </span><span>Speedmart</span></li>
+                <li><span>Aeon&nbsp;</span></li>
+                <li><span>Aeon Big&nbsp;</span></li>
+                <li><span>BIG&nbsp;</span></li>
+                <li><span>Econsave</span></li>
+                <li><span>Giant&nbsp;</span></li>
+                <li><span>Hero&nbsp;</span></li>
+                <li><span>Jaya Grocer&nbsp;</span></li>
+                <li><span>Lotus&rsquo;s&nbsp;</span></li>
+                <li><span>Nirwana</span></li>
+                <li><span>NSK&nbsp;</span></li>
+                <li><span>Pacific&nbsp;</span></li>
+                <li><span>Redtick</span></li>
+                <li><span>Star Grocer&nbsp;</span></li>
+                <li><span>Sunshine&nbsp;</span></li>
+                <li><span>TF Value&nbsp;</span></li>
+                <li><span>The Store&nbsp;</span></li>
+                <li><span>Village Grocer&nbsp;</span></li>
+                <li><span>其他有售卖指定产品并摆放促销展示图的超级市场和大型超市。</span></li>
+                </ol>",
+                "locale" => "ch",
+                "weight" => 9,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q10: 参与本次促销活动的便利商店和迷你市场有哪些？ ", 
+                "answer" => "
+                参与活动的商店和连锁店必须位于西马。<br>
+                <ol>
+                <li><span>7-Eleven&nbsp;</span></li>
+                <li><span>KK Mart&nbsp;</span></li>
+                <li><span>MyNews</span></li>
+                <li><span>CU Mart&nbsp;</span></li>
+                <li><span>Mix Store&nbsp;</span></li>
+                <li><span>其他有售卖指定产品并摆放促销展示图的便利商店、迷你市场和杂货店。</span></li>
+                </ol>",
+                "locale" => "ch",
+                "weight" => 10,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q11: 参与本次促销活动的电子商务平台有哪些？", 
+                "answer" => "
+                订单必须仅运送至西马​。 <br>
+                <ol>
+                <li><span>Carlsberg Official Store on Shopee&nbsp;</span></li>
+                <li><span>GRAB Official Store (powered by TME)&nbsp;</span></li>
+                <li><span>Foodpanda</span></li>
+                <li></li>
+                </ol>",
+                "locale" => "ch",
+                "weight" => 11,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q12: 请问Lazada是参与本次促销活动的电子商务平台之一吗？", 
+                "answer" => "抱歉. Lazada 并不是参与本次促销活动的电子商务平台之一。",
+                "locale" => "ch",
+                "weight" => 12,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q13: 参与本次促销活动的餐厅，酒吧和酒馆有哪些？", 
+                "answer" => "
+                仅有位于西马指定的酒吧、咖啡厅和餐馆才能参与次促销活动. <br>
+                参与商店必须售卖指定产品并摆放促销展示图。",
+                "locale" => "ch",
+                "weight" => 13,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q14: 参与本次促销活动的咖啡店和美食中心有哪些？", 
+                "answer" => "仅有位于西马的咖啡馆和美食广场能参与次促销活动。 <br>
+                参与商店必须售卖指定产品并摆放促销展示图。",
+                "locale" => "ch",
+                "weight" => 14,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q15: 对于参与次促销活动的超级市场/大型超市、电子商务、便利商店和迷你市场，我可以在哪里找到收据编号？", 
+                "answer" => "<div class='app-table-img-desktop'>
+                <img src='".$BURL."build/images/Q15CH_desktop1.png' />
+                <img src='".$BURL."build/images/Q15CH_desktop2.png' />
+                </div>
+                <div class='app-table-img-mobile'>
+                <img src='".$BURL."build/images/Q15CH_1_lotuss.png' />
+                <img src='".$BURL."build/images/Q15CH_2_aeon.png' />
+                <img src='".$BURL."build/images/Q15CH_3_aeonbig.png' />
+                <img src='".$BURL."build/images/Q15CH_4_giant.png' />
+                <img src='".$BURL."build/images/Q15CH_5_thestore.png' />
+                <img src='".$BURL."build/images/Q15CH_6_stargrocer.png' />
+                <img src='".$BURL."build/images/Q15CH_7_village.png' />
+                <img src='".$BURL."build/images/Q15CH_8_s99.png' />
+                </div>",
+                "locale" => "ch",
+                "weight" => 15,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q16: 对于参与次促销活动的餐厅, 酒吧和酒馆，我可以在哪里找到收据编号？",
+                "answer" => "
+                <div class='app-table-img-desktop'><img src='".$BURL."build/images/Q16CH_desktop.png' /></div>
+                <div class='app-table-img-mobile'>
+                <img src='".$BURL."build/images/Q16CH_2_brewhse.png' />
+                <img src='".$BURL."build/images/Q16CH_3_uncledon.png' />
+                <img src='".$BURL."build/images/Q16CH_4_tsone.png' />
+                </div>
+                ",
+                "locale" => "ch",
+                "weight" => 16,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q17: 我如何确认参赛资料已成功提交？", 
+                "answer" => "在您填写完资料并上传收据后，系统将会弹出“感谢您参与”的提示讯息。此外，您也将收到来自 carlsberg@s360plus.com 的电子邮件通知，确认您已提交成功。",
+                "locale" => "ch",
+                "weight" => 17,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q18: 请问我是否需要保留收据原件", 
+                "answer" => "是的，请您务必妥善保管收据原件，以便后续验证和兑换礼品用途。",
+                "locale" => "ch",
+                "weight" => 18,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q19: 本次促销活动的奖品是什么？", 
+                "answer" => '
+                    <ol type="a">
+                    <li><span data-usefontface="true" data-contrast="none">10名获奖者将获得前往英国利物浦双人之旅。每个旅程价值为50,000令吉(双人行）。每位获奖者可以携带一位朋友一同前往，享受为期5天4夜的旅程。旅程出发日期将在2025/26英超赛季公布后，于六月份宣布。预计旅程出发日期为2025年10月/11月/12月。</span></li>
+                    <li><span data-usefontface="true" data-contrast="none">Liverpool球衣 – 1,300件。</span></li>
+                    </ol>
+                ',
+                "locale" => "ch",
+                "weight" => 19,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q20: 本次促销活动中将会有多少名获奖者？", 
+                "answer" => "本次促销活动会有10名大奖得主赢得前往Liverpool观赛之旅，另外1,300名一等奖得主将获得Liverpool复古球衣。",
+                "locale" => "ch",
+                "weight" => 20,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q21: 请问我如何知道我是否是被选中的获奖者之一？", 
+                "answer" => "促销活动结束后的30个工作日内，入围的获奖者将会收到 WhatsApp (011-6069 7516) 通知。获奖者需要正确回答一道问答题、提供收货地址，和提交身份证照片以供核实用途，就能确认获奖。",
+                "locale" => "ch",
+                "weight" => 21,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q22: 若我被选为获奖者，基于安全因素考量而拒绝提供身份证照片进行验证，那会导致什么后果？", 
+                "answer" => "获奖者必须在72小时内回复。若获奖者未能在规定时间内回复，并提供所需的照片或身份证件，将被视为自动放弃奖品。请放心，所有个人资料将严格保密，且仅用于验证用途。",
+                "locale" => "ch",
+                "weight" => 22,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q23: 请问我能将奖品转让给其他人吗？", 
+                "answer" => "将奖品转让给其他人是不被允许的。除此之外，奖品也不能兑换成现金或其他商品。",
+                "locale" => "ch",
+                "weight" => 23,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q24: 我是否需要为奖品缴付任何税务或其他费用？", 
+                "answer" => "获奖者无需为奖品缴付任何税务或其他费用。按照次促销活动条款与条件，获奖者将免费领取奖品，不会产生任何额外添加费用或扣除费用。",
+                "locale" => "ch",
+                "weight" => 24,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q25: 我可以赢取多少份奖品？", 
+                "answer" => "每位参赛者在整个促销期间（以手机号和身份证号码为准）最多只能赢取一（1）份奖品。",
+                "locale" => "ch",
+                "weight" => 25,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q26: 我的奖品什么时候送达? ", 
+                "answer" => "确认获奖者后，在官方获奖名单公布之日起60个工作日内将完成奖品派送。",
+                "locale" => "ch",
+                "weight" => 26,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "General",
+                "question" => "Q27: 若有更多疑问，请问我可以联系谁？", 
+                "answer" => "<p><span>若有任何疑问或欲了解促销活动相关资讯，请电邮至</span><a href='mailto:carlsberg@s360plus.com' class='underline'><span>carlsberg@s360plus.com</span></a>。</p>",
+                "locale" => "ch",
+                "weight" => 27,
+            ),
+            array(
+                'campaign' => 'default',
+                'category' => "Contest",
+                "question" => "13. 每张收据的参赛次数是否有限制？",
+                "answer" => "没有限制。符合条件的参赛次数将根据购买标准确定并相应分配。例如：<br><br><table border='2' style='border-collapse: collapse; width: 100%; margin: 10px 0; border-color: #006937;'><tr><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>收据</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>产品</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>总罐数</th><th style='padding: 8px; background-color: #006937; color: white; border: 1px solid #006937;'>符合条件的参赛次数</th></tr><tr style='background-color: #d4edda;'><td style='padding: 8px; border: 1px solid #006937;'>收据 A</td><td style='padding: 8px; border: 1px solid #006937;'>嘉士伯顺爽啤酒</td><td style='padding: 8px; border: 1px solid #006937;'>1 罐</td><td style='padding: 8px; border: 1px solid #006937;'>1</td></tr><tr style='background-color: white;'><td style='padding: 8px; border: 1px solid #006937;'>收据 B</td><td style='padding: 8px; border: 1px solid #006937;'>嘉士伯顺爽啤酒</td><td style='padding: 8px; border: 1px solid #006937;'>4 罐</td><td style='padding: 8px; border: 1px solid #006937;'>4</td></tr><tr style='background-color: #d4edda;'><td style='padding: 8px; border: 1px solid #006937;'>收据 C</td><td style='padding: 8px; border: 1px solid #006937;'>嘉士伯顺爽啤酒</td><td style='padding: 8px; border: 1px solid #006937;'>24 罐 (1箱)</td><td style='padding: 8px; border: 1px solid #006937;'>24</td></tr></table>",
+                "locale" => "ch",
+                "weight" => 28,
+            )
+        ];
+
+        $this->truncateTable("menu");
+        $this->truncateTable("faq");
+        for ($i=0; $i < count($_DEFAULTMENU); $i++) { 
+            $feMENU = new Menu();
+        
+            $feMENU->setLabel($_DEFAULTMENU[$i]['label']);
+            $feMENU->setMenuCode($_DEFAULTMENU[$i]['menu_code']);
+            $feMENU->setSubmenuCode($_DEFAULTMENU[$i]['submenu_code']);
+
+            $feMENU->setUrl($_DEFAULTMENU[$i]['url']);
+            $feMENU->setWeight($_DEFAULTMENU[$i]['weight']);
+            $feMENU->setMenuIndex($_DEFAULTMENU[$i]['menu_index']);
+            $feMENU->setLocale($_DEFAULTMENU[$i]['locale']);
+            
+            $feMENU->setPublished($_DEFAULTMENU[$i]['is_published']);
+            $this->manager->persist($feMENU);     
+            $this->manager->flush(); 
+        }
+
+        for ($i=0; $i < count($_FAQDATA_EN); $i++) {
+            $feFAQ = new Faq();
+            $feFAQ->setCampaign($_FAQDATA_EN[$i]['campaign']);
+            $feFAQ->setCategory($_FAQDATA_EN[$i]['category']);
+            $feFAQ->setQuestion($_FAQDATA_EN[$i]['question']);
+            $feFAQ->setAnswer($_FAQDATA_EN[$i]['answer']);
+            $feFAQ->setLocale($_FAQDATA_EN[$i]['locale']);
+            $feFAQ->setWeight($_FAQDATA_EN[$i]['weight']);
+            $this->manager->persist($feFAQ);     
+            $this->manager->flush();
+        }
+
+        for ($i=0; $i < count($_FAQDATA_CH); $i++) {
+            $feFAQ = new Faq();
+            $feFAQ->setCampaign($_FAQDATA_CH[$i]['campaign']);
+            $feFAQ->setCategory($_FAQDATA_CH[$i]['category']);
+            $feFAQ->setQuestion($_FAQDATA_CH[$i]['question']);
+            $feFAQ->setAnswer($_FAQDATA_CH[$i]['answer']);
+            $feFAQ->setLocale($_FAQDATA_CH[$i]['locale']);
+            $feFAQ->setWeight($_FAQDATA_CH[$i]['weight']);
+            $this->manager->persist($feFAQ);     
+            $this->manager->flush();
+        }
+
+        // Create 9 weeks of CampaignConfig starting from August 4, 2025
+        $this->truncateTable("campaign_config");
+        $startDate = new \DateTime('2025-05-01');
+        
+        for ($week = 1; $week <= 9; $week++) {
+            $campaignConfig = new CampaignConfig();
+            $campaignConfig->setWeekNumber($week);
+            
+            // Calculate start date for this week (each week starts on Monday)
+            $weekStartDate = clone $startDate;
+            $weekStartDate->modify('+' . ($week - 1) . ' weeks');
+            
+            // Calculate end date (Sunday of the same week)
+            $weekEndDate = clone $weekStartDate;
+            $weekEndDate->modify('+6 days');
+            $weekEndDate->setTime(23, 59, 59);
+            
+            $campaignConfig->setStartDate($weekStartDate);
+            $campaignConfig->setEndDate($weekEndDate);
+            
+            // Set all SKU limits to 0 as requested
+            $campaignConfig->setSku1Limit(0);
+            $campaignConfig->setSku2Limit(0);
+            $campaignConfig->setSku3Limit(0);
+            $campaignConfig->setSku4Limit(0);
+            $campaignConfig->setSku5Limit(0);
+            
+            $this->manager->persist($campaignConfig);
+            $this->manager->flush();
+        }
+
+        $output->writeln([
+            '',
+            'Menu, FAQ, and Campaign Config generated'
+        ]
+        );
+        return 0;
+    }
+
+    private function truncateTable (string $tableName): bool {
+        $connection = $this->manager->getConnection();
+        try {
+            $sql = "TRUNCATE TABLE ".$tableName;       
+            $stmt = $connection->prepare($sql);
+            $result = $stmt->executeQuery();
+        } catch (\Exception $e) {
+            try {
+                fwrite(STDERR, print_r('Can\'t truncate table ' . $tableName . '. Reason: ' . $e->getMessage(), TRUE));
+                $connection->rollback();
+                return false;
+            } catch (ConnectionException $connectionException) {
+                fwrite(STDERR, print_r('Can\'t rollback truncating table ' . $tableName . '. Reason: ' . $connectionException->getMessage(), TRUE));
+                return false;
+            }
+        }
+        return true;
+    }
+}

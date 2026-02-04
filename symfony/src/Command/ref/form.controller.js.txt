@@ -1,0 +1,228 @@
+import Alpine from "alpinejs";
+import AlpineValidator from "../libs/alpine_validator.js";
+import DataHelper from "@shopper360mst/data_helper";
+import ImageHelper from "../libs/image_helper.js";
+import mask from '@alpinejs/mask';
+import focus from '@alpinejs/focus';
+import collapse from '@alpinejs/collapse';
+import {ENUM} from '../libs/enum.js';
+
+Alpine.plugin(mask);
+Alpine.plugin(focus);
+Alpine.plugin(collapse);
+
+Alpine.data('<FORM_XDATA>', ()=>({
+    unfiltered_result: [],
+    form_toast_open: false,
+    helper_open:false,
+    form_toast_message : "",
+    form_toast_classes : "",
+    confirm_ok: false,
+    confirm_open : false,
+    confirm_fields : [],
+    helper: null,
+    form_fields: [
+        {
+            form_group: [
+               <FORM_ATTRIBUTES>
+            ]
+        }
+    ],
+    init(){
+        this.validator = new AlpineValidator();
+        this.img_helper = new ImageHelper();
+        this.connector = new DataHelper();
+        this.connector.setTimeout(10000);
+        /****** EXAMPLE PLACING OPTION BASED DATA SETS INTO EXISTING CONTENT ******
+        this.$nextTick(() => { 
+            let fieldGroup = "form_group";
+            let target_index = TARGET_INDEX;
+            let FIELD = this.form_fields[0][fieldGroup]; 
+            FIELD[target_index].options = this.unfiltered_result;                             
+        });
+        ***************************************************************************/
+    },
+    handleProcessForm(evt) {
+        let self = this; 
+        let all_selectors = document.querySelectorAll('[x-validate]');
+        this.validator.setIsValidCount(0);
+        Array.from(all_selectors).forEach(function(el) {
+            self.handleValidateFormInput(el);
+        });
+        
+        if (this.validator.getIsValidCount() == 0) {
+            /**** REMOVE if confirm is not needed ****/
+            if (!this.confirm_ok) {
+                this.confirm_fields = this.form_fields[0]['form_group'];
+                this.confirm_open = true;
+               return; 
+            }
+            let payLoad = {
+                /* form fields mapping here */
+<PAYLOAD>
+            };
+            this.connector.broadCast('alpine:loader', true);
+            this.connector.postTo( '/endpoint/submit', payLoad, "form-cmsId" ).then((result) => {
+                // handle error and submission here.
+                if(result.data.message == ENUM.ALLGOOD){
+                    this.form_toast_open = true;
+                    this.form_toast_message = "Form submitted.";
+                    this.form_toast_classes = this.handleDetermineColors("success");                    
+                }              
+                this.connector.broadCast('alpine:loader', false);
+            }).catch((err) => {
+                this.connector.broadCast('alpine:loader', false);                   
+                this.connector.broadCast('alpine:toast', { message:'Error when connecting to server.', type:"error" });                
+            });
+        } else {
+            // error | success | info
+            this.connector.broadCast('alpine:toast', { message:'Oops...there are some field(s) required.', type:"error" });                   
+        }
+        return;
+    },
+    handleValidateFormInput(evt) {
+        let FIELD_GROUP = this.form_fields[0];
+        if (evt.currentTarget === undefined){
+            this.validator.defaultValidate(FIELD_GROUP[evt.getAttribute('data-group')], evt);
+        }else{
+            this.validator.defaultValidate(FIELD_GROUP[evt.currentTarget.getAttribute('data-group')], evt.currentTarget);
+        }
+    },
+    handleRemoveError(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let FIELD_GROUP = this.form_fields[0];
+        FIELD_GROUP[fieldGroup][index].error_message = "";
+    },
+    /************************ ESSENTIALS ************************/ 
+    handleInputForm(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let FIELDS = this.form_fields[0][fieldGroup]; 
+        FIELDS[index].value = dto.value;
+    },
+    // override password
+    handleTogglePassword(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let FIELD_GROUP = this.form_fields[0];
+        if (FIELD_GROUP[fieldGroup][index].toggle) {
+            FIELD_GROUP[fieldGroup][index].type = "password";
+            FIELD_GROUP[fieldGroup][index].toggle = 0;
+        } else {
+            FIELD_GROUP[fieldGroup][index].type = "text";
+            FIELD_GROUP[fieldGroup][index].toggle = 1;
+        }
+    },
+    // override file-upload
+    handleFileConvert(evt) {
+        let self = this;
+        let maxSize = 800;
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let FIELDS = this.form_fields[0][fieldGroup][index];
+        this.img_helper.getBase64(
+            dto.files[0],
+            (evt)=> {
+                self.img_helper.getImageDimensions(evt, maxSize, (res)=>{
+                    FIELDS.data_url = res.data;
+                });
+            },
+            (evt)=> {
+                console.log('Process File Invalid');
+            }
+        );
+    },
+    // override nricppt
+    handleNricPptSwitch(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let optionIndex = dto.getAttribute('data-option-index');
+        let FIELD_GROUP = this.form_fields[0];
+        FIELD_GROUP[fieldGroup][index].placeholder = FIELD_GROUP[fieldGroup][index].options[optionIndex].placeholder;
+        FIELD_GROUP[fieldGroup][index].mask = FIELD_GROUP[fieldGroup][index].options[optionIndex].mask;
+        FIELD_GROUP[fieldGroup][index].value = "";
+    },
+    // override adv-select
+    handleAdvSelectSelected(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let fieldOptionIndex = dto.getAttribute('data-option-index');
+        let FIELDS = this.form_fields[0][fieldGroup];
+        FIELDS[index].prefix_value = FIELDS[index].options[fieldOptionIndex].label;
+        FIELDS[index].toggle = false; 
+        FIELDS[index].value = FIELDS[index].options[fieldOptionIndex].value.toUpperCase();
+    },
+    handleAdvSelectKeydownSearch(evt) {
+        if ((evt.keyCode >= 65 && evt.keyCode <= 90) || (evt.keyCode >= 48 && evt.keyCode <= 57) || evt.keyCode === 8) {
+            this.$refs.advSelectHintSearch.focus(); 
+        }
+    },
+    handleAdvSelectInput(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let FIELDS = this.form_fields[0][fieldGroup]; 
+        FIELDS[index].search = dto.value;
+        let founded = this.unfiltered_result.filter((option) =>
+            option.label.toUpperCase().includes(dto.value.toUpperCase())
+        )
+
+        if (founded.length === 0) {
+            FIELDS[index].search_message = "No matches found";
+            FIELDS[index].options = founded;
+        } else {
+            FIELDS[index].search_message = "";
+            FIELDS[index].options = founded;
+        }
+    },
+    handleAdvSelectOpenHint(evt) {
+        let dto = evt.currentTarget;
+        let index = dto.getAttribute('data-index');
+        let fieldGroup = dto.getAttribute('data-group');
+        let FIELDS = this.form_fields[0][fieldGroup]; 
+        FIELDS[index].toggle = !FIELDS[index].toggle;
+        
+    },
+    // override confirm
+    handleConfirmSubmit(evt) {
+        this.confirm_ok = true;
+        this.confirm_open = false;
+        this.handleProcessForm(evt);
+    },
+    handleConfirmCancel(evt) {
+        this.confirm_ok = false;
+        this.confirm_open = false;
+    },
+    handleFormToastButtonClicked(evt) {        
+        this.form_toast_open = false;
+        /*** HANDLE YOUR OWN CTA HERE ***/
+    },
+    handleDetermineColors(type) {
+        switch(type) {
+            case "error":
+                return "bg-red-600 text-white font-bold ";
+            break;
+            case "info":
+                return "bg-amber-400 text-white font-bold ";
+            break;
+            case "success":
+                return "bg-green-400 text-white font-bold ";
+            break;
+        }
+    },   
+    handleHelper(evt){
+        this.helper_open = true;
+        if(evt == 'upload_receipt'){
+            this.helper = {
+                info : './build/images/example-receipt.jpeg'
+            }
+        }
+    }  
+}));

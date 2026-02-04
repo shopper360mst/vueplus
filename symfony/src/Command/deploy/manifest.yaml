@@ -1,0 +1,30 @@
+# Deploy Manifest
+#  - "/src/Controller/EndPointController.php"
+#  - "/templates/component/gate.html.twig"
+#  - "/templates/component/carousel.html.twig"
+#  - "/assets/alpines/cnycarousel.alpine.js"
+#  - "/assets/images/99SM_mobile_ch.avif"
+#  - "/public/build/"
+#  - "/translations/"
+
+# Maximum deploy manifest example.
+# - "/src/"
+# - "/templates/"
+# - "/translations/"
+# - "/assets/styles/"
+# - "/assets/alpines/"
+# - "/assets/images/"
+# - "/assets/polyfix/"
+# - "/assets/libs/"
+# - "/assets/videos/"
+# - "/assets/vendor/"
+# - "/public/build/"
+# - "/assets/app.js"
+
+files:
+  - "/src/Command/UpdateManifestCommand.php"
+  - "/src/Command/deploy/manifest.yaml"
+  - "/src/Controller/PromotionsController.php"
+  - "/templates/base.html.twig"
+  - "/templates/component/dynamic/navbar.html.twig"
+  - "/templates/promotions/unavailable.html.twig"
