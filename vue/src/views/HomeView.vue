@@ -1,10 +1,10 @@
 <script setup></script>
 
 <template>
-  <div class="bg-white dark:bg-black overflow-hidden">
+  <div class="flex flex-col items-center justify-center min-h-[calc(100vh-60px)] bg-tertiary">
     <!-- Hero Section -->
-    <section class="w-full p-10 flex justify-center relative pt-20 pb-32 lg:pt-32 lg:pb-48">
-      <div class="w-full max-w-[1600px] px-6 lg:px-12">
+    <section class="w-full p-5 flex justify-center relative">
+      <div class="w-full max-w-[1600px] px-5">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div class="lg:col-span-7">
             <h1
@@ -14,19 +14,19 @@
               <span class="text-gray-400 dark:text-gray-600">WITHOUT LIMITS</span>
             </h1>
             <p
-              class="text-xl lg:text-2xl text-gray-500 dark:text-gray-400 max-w-2xl mb-12 leading-relaxed"
+              class="text-xl lg:text-2xl text-gray-600 max-w-2xl p-2 mb-12 leading-relaxed"
             >
               The next generation of developer infrastructure for modern applications. Move fast,
               ship faster, and scale globally with VuePlus.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex flex-col sm:flex-row gap-4 py-3">
               <button
                 class="bg-black dark:bg-white text-white dark:text-black px-10 py-4 rounded-full text-lg font-bold hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95"
               >
                 Sign up
               </button>
               <button
-                class="bg-transparent border-2 border-gray-100 dark:border-white/10 text-black dark:text-white px-10 py-4 rounded-full text-lg font-bold hover:border-black dark:hover:border-white transition-all active:scale-95"
+                class="bg-transparent border-2 border-white text-black dark:text-white px-10 py-4 rounded-full text-lg font-bold hover:border-gray transition-all active:scale-95"
               >
                 Documentation
               </button>
@@ -69,7 +69,7 @@
     >
       <div class="w-full max-w-[1600px] px-6 lg:px-12">
         <p
-          class="text-xs font-bold tracking-[0.3em] uppercase text-gray-400 dark:text-gray-600 mb-12"
+          class="block text-xs font-bold tracking-[0.3em] uppercase text-gray-400 dark:text-gray-600 pb-2"
         >
           Trusted by industry leaders
         </p>
