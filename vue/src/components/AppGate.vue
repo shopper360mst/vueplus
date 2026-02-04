@@ -58,10 +58,10 @@ onMounted(() => {
             <!-- Spacer 25 -->
             <div class="h-[25px]"></div>
             
-            <h1 class="mb-[10px] text-center font-sans text-[22px] font-medium text-white lg:text-[43px]">
+            <h1 class="mb-[10px] text-center font-black text-[22px] font-medium text-white lg:text-[43px]">
               {{ t('gate.simpleTitle1') }}
             </h1>
-            <h1 class="text-center font-sans font-normal text-white mb-2 md:mb-4 lg:text-[20px]">
+            <h1 class="text-center font-black font-normal text-white mb-2 md:mb-4 lg:text-[20px]">
               {{ t('gate.simpleTitle2') }}
             </h1>
             
@@ -94,13 +94,13 @@ onMounted(() => {
                 class="rounded-[8px] w-[25px] h-[25px] border-white bg-transparent focus:ring-0"
                 @click.stop="handleRmbMe"
               >
-              <label class="ml-2 font-sans text-[14px] lg:text-[18px] cursor-pointer select-none" for="ageCheck">
+              <label class="ml-2 font-black text-[14px] lg:text-[18px] cursor-pointer select-none" for="ageCheck">
                 {{ t('gate.rememberMe') }}
               </label>
             </div>
             <footer class="relative bottom-0 left-0 flex w-full flex-col items-center justify-end gap-0 px-3 py-0 h-[150px] lg:h-[190px]">
               <div class="flex flex-row items-center justify-center lg:max-w-[600px] gap-2">
-                <div class="font-sans text-[12px] lg:text-[16px] whitespace-nowrap uppercase tracking-wider">
+                <div class="font-black text-[12px] lg:text-[16px] whitespace-nowrap uppercase tracking-wider">
                   {{ t('gate.disclaimer') }}
                 </div>
                 <div class="w-[120px] min-[340px]:w-[150px] min-[410px]:w-[180px] lg:w-[200px]">
@@ -108,11 +108,11 @@ onMounted(() => {
                 </div>
               </div>
 
-              <h3 class="mt-2 font-sans text-[12px] text-center min-[360px]:text-center lg:text-[16px] lg:max-w-[920px]">
+              <h3 class="mt-2 font-black text-[12px] text-center min-[360px]:text-center lg:text-[16px] lg:max-w-[920px]">
                 {{ t('gate.subtitle') }}
               </h3>
               
-              <div class="mt-2 font-sans text-[11px] lg:text-[14px] lg:max-w-[920px]">
+              <div class="mt-2 font-black text-[11px] lg:text-[14px] lg:max-w-[920px]">
                 <h3 class="text-center font-bold">{{ t('gate.company') }} 198501008089 (140534-M)</h3>
                 <p class="text-center">55, Persiaran Selangor, Seksyen 15,</p>
                 <p class="text-center">40200 Shah Alam, Selangor, Malaysia.</p>
