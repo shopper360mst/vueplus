@@ -1,16 +1,22 @@
 @import "tailwindcss";
+@import './fonts.css';
 
 @theme {
   /* Apple System Colors */
+  --color-carlsberg: #006937;
   --color-apple-blue: #007AFF;
   --color-apple-gray: #8E8E93;
   --color-apple-background: #F5F5F7;
   
   /* Typography */
-  --font-sans: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "NyDisplay", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-chinese: "fzDaHei", "Microsoft YaHei", "PingFang SC", sans-serif;
+  
+  --font-family-sans: var(--font-sans);
+  --font-family-chinese: var(--font-chinese);
   
   /* Overrides */
-  --color-primary: var(--color-apple-blue);
+  --color-primary: var(--color-carlsberg);
   --color-background: var(--color-apple-background);
 }
 

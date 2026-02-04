@@ -1,11 +1,21 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useSessionStore } from '../stores/session'
+import { useI18n } from 'vue-i18n'
 
 const isMenuOpen = ref(false)
+const sessionStore = useSessionStore()
+const { locale } = useI18n()
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
+}
+
+const toggleLocale = () => {
+  const newLocale = sessionStore.locale === 'en' ? 'ch' : 'en'
+  sessionStore.setLocale(newLocale)
+  locale.value = newLocale
 }
 
 const navLinks = [
@@ -41,6 +51,13 @@ const navLinks = [
           >
             {{ link.name }}
           </RouterLink>
+
+          <button 
+            @click="toggleLocale"
+            class="text-xs opacity-80 hover:opacity-100 transition-opacity uppercase font-bold border px-2 py-0.5 rounded"
+          >
+            {{ sessionStore.locale }}
+          </button>
 
           <a href="https://github.com" target="_blank" class="text-xs opacity-80 hover:opacity-100 transition-opacity">
             GitHub
@@ -102,6 +119,12 @@ const navLinks = [
             {{ link.name }}
           </RouterLink>
           <div class="pt-8 w-full border-t border-gray-100 dark:border-gray-900 flex flex-col items-center gap-4">
+            <button 
+              @click="toggleLocale"
+              class="text-xl opacity-90 uppercase font-bold"
+            >
+              Language: {{ sessionStore.locale }}
+            </button>
             <a href="https://github.com" target="_blank" class="text-xl opacity-90">GitHub</a>
             <button class="w-full max-w-xs bg-black dark:bg-white text-white dark:text-black px-6 py-3 rounded-full text-lg font-medium">
               Get Started
