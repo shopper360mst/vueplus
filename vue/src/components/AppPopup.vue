@@ -51,7 +51,7 @@ const getImageUrl = () => {
           <div class="flex justify-end mb-2">
             <button 
               type="button" 
-              class="text-white font-black text-xs md:text-sm tracking-widest hover:text-secondary transition-colors flex items-center gap-2" 
+              :class="['text-white text-xs md:text-sm tracking-widest hover:text-secondary transition-colors flex items-center gap-2', locale === 'ch' ? 'font-ch' : 'font-black']" 
               @click="uiStore.closePopup"
             >
               {{ t('common.close') }} | X

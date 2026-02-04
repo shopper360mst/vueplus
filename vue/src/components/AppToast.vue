@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { onMounted, onUnmounted } from 'vue'
 
 const uiStore = useUIStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 // Keep backward compatibility for window events
 const handleAppearance = (event) => {
@@ -29,7 +29,7 @@ onUnmounted(() => {
       <Transition name="scale">
         <div v-if="uiStore.toast.isOpen" :class="['toast-dialog bg-white rounded-lg shadow-xl max-w-sm w-full mx-4', uiStore.toast.classes]">
           <div class="px-4 py-3 text-center">
-            <p class="m-5 text-gray-800">{{ uiStore.toast.message }}</p>
+            <p :class="['m-5 text-gray-800', locale === 'ch' ? 'font-ch' : 'font-black']">{{ uiStore.toast.message }}</p>
             <button class="btn-primary-alt bg-primary text-white py-2 px-4 rounded-xl w-full flex justify-center hover:opacity-90 transition-opacity" @click="uiStore.hideToast">
               {{ t('common.ok') }}
             </button>
