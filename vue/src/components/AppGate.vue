@@ -33,10 +33,6 @@ const handleRmbMe = () => {
 }
 
 onMounted(() => {
-  if (localStorage.getItem('gate_remembered') === 'true') {
-    uiStore.closeGate()
-  }
-  
   if (props.promoterCode) {
     sessionStore.setItem('promoter_code', props.promoterCode)
   }

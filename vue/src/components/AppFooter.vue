@@ -81,7 +81,7 @@ const tcUrl = computed(() => {
 
   <!-- Mobile Footer -->
   <footer :class="['w-full flex flex-col items-center lg:hidden relative', customClass, 'bg-primary home-mobile-footer-new']">
-    <div class="bg-[#cc2027] w-[2220px] bg-[url('@/assets/images/content_stripe.png')] bg-repeat-x bg-contain h-[25px]"></div>
+    <AppMarquee></AppMarquee>
     <div class="absolute bottom-[6%] right-[1%] flex flex-row gap-2 items-center justify-end w-[100px] h-1/2">
       <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
         <img src="@/assets/images/logo-ig.png" width="18" height="18">

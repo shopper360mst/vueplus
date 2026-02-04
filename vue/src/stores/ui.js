@@ -58,7 +58,7 @@ export const useUIStore = defineStore('ui', () => {
   }
 
   // Gate State
-  const gateOpen = ref(true)
+  const gateOpen = ref(localStorage.getItem('gate_remembered') !== 'true')
 
   const closeGate = () => {
     gateOpen.value = false
