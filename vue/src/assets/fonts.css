@@ -1,16 +1,16 @@
 @font-face {
   font-family: 'NyDisplay';
-  src: url('../fonts/NyCarlsbergDisplay-Regular.woff2') format('woff2'),
-       url('../fonts/NyCarlsbergDisplay-Regular.woff') format('woff');
+  src: url('./fonts/NyCarlsbergDisplay-Regular.woff2') format('woff2'),
+       url('./fonts/NyCarlsbergDisplay-Regular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'NyDisplay';
-  src: url('../fonts/NyCarlsbergDisplay-Bold.woff2') format('woff2'),
-       url('../fonts/NyCarlsbergDisplay-Bold.woff') format('woff');
+  font-family: 'NyDisplayBlack';
+  src: url('./fonts/NyCarlsbergDisplay-Bold.woff2') format('woff2'),
+       url('./fonts/NyCarlsbergDisplay-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -18,8 +18,8 @@
 
 @font-face {
   font-family: 'fzDaHei';
-  src: url('../fonts/fzDaHei.woff2') format('woff2'),
-       url('../fonts/fzDaHei.woff') format('woff');
+  src: url('./fonts/fzDaHei.woff2') format('woff2'),
+       url('./fonts/fzDaHei.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

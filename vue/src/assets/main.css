@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './fonts.css';
 
 @theme {
   /* Standard System Colors */
@@ -7,9 +8,9 @@
   --color-tertiary: #e7cd9b;
 
   /* Typography */
-  --font-sans:
-    'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
+  --font-sans: 'NyDisplay', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-black: 'NyDisplayBlack';
+  --font-ch: 'fzDaHei';
 }
 
 @import './base.css';
