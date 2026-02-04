@@ -28,18 +28,14 @@ const navLinks = [
 
 <template>
   <nav
-    class="w-full flex justify-center bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-100 dark:border-white/10 sticky top-0 z-50 transition-all duration-300"
+    class="w-full flex justify-center bg-secondary border-b border-gray-100 sticky top-0 z-50 transition-all duration-300"
   >
     <div class="w-full max-w-[1600px] px-6 lg:px-12">
       <div class="flex justify-between h-16 items-center">
         <!-- Logo -->
         <div class="flex items-center">
           <RouterLink to="/" class="flex items-center gap-2 group transition-opacity">
-            <span
-              class="text-lg font-extrabold tracking-[0.25em] uppercase text-black dark:text-white"
-            >
-              VuePlus
-            </span>
+            <img src="@/assets/images/carlsberg_logo.png" alt="Carlsberg" class="h-10 w-auto" />
           </RouterLink>
         </div>
 
@@ -50,7 +46,7 @@ const navLinks = [
               v-for="link in navLinks"
               :key="link.path"
               :to="link.path"
-              class="text-[13px] font-semibold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+              class="text-[13px] font-semibold text-white hover:text-tertiary transition-colors"
             >
               {{ link.name }}
             </RouterLink>
@@ -58,7 +54,7 @@ const navLinks = [
 
            <button 
             @click="toggleLocale"
-            class="text-xs opacity-80 hover:opacity-100 transition-opacity uppercase font-bold border px-2 py-0.5 rounded"
+            class="text-xs text-white hover:text-tertiary transition-colors uppercase font-bold border border-white hover:border-tertiary px-2 py-0.5 rounded"
           >
             {{ sessionStore.locale }}
           </button>
@@ -69,7 +65,7 @@ const navLinks = [
         <div class="flex items-center md:hidden">
           <button
             @click="toggleMenu"
-            class="p-2 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors focus:outline-none"
+            class="p-2 text-white hover:text-tertiary transition-colors focus:outline-none"
           >
             <span class="sr-only">Toggle menu</span>
             <svg
@@ -111,7 +107,7 @@ const navLinks = [
   >
     <div
       v-show="isMenuOpen"
-      class="md:hidden fixed inset-x-0 top-16 z-[40] bg-white dark:bg-black border-b border-gray-100 dark:border-white/10 shadow-xl"
+      class="md:hidden fixed inset-x-0 top-16 z-[40] bg-secondary border-b border-white/10 shadow-xl"
     >
       <div class="px-6 py-8 flex flex-col gap-6">
         <RouterLink
@@ -119,13 +115,13 @@ const navLinks = [
           :key="link.path"
           :to="link.path"
           @click="isMenuOpen = false"
-          class="text-xl font-medium text-gray-900 dark:text-white"
+          class="text-xl font-medium text-white hover:text-tertiary transition-colors"
         >
           {{ link.name }}
         </RouterLink>
          <button 
             @click="toggleLocale"
-            class="text-xs opacity-80 hover:opacity-100 transition-opacity uppercase font-bold border px-2 py-0.5 rounded"
+            class="text-xs text-white hover:text-tertiary transition-colors uppercase font-bold border border-white hover:border-tertiary px-2 py-0.5 rounded self-start"
           >
             {{ sessionStore.locale }}
           </button>
