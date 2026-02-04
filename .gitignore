@@ -29,3 +29,4 @@ ehthumbs.db
 Desktop.ini
 *Zone.Identifier
 *.Identifier
+symfony/.env.dev

@@ -1,11 +1,21 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useSessionStore } from '../stores/session'
+import { useI18n } from 'vue-i18n'
 
 const isMenuOpen = ref(false)
+const sessionStore = useSessionStore()
+const { locale } = useI18n()
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
+}
+
+const toggleLocale = () => {
+  const newLocale = sessionStore.locale === 'en' ? 'ch' : 'en'
+  sessionStore.setLocale(newLocale)
+  locale.value = newLocale
 }
 
 const navLinks = [
@@ -46,19 +56,13 @@ const navLinks = [
             </RouterLink>
           </div>
 
-          <div class="flex items-center gap-8">
-            <RouterLink
-              to="/login"
-              class="text-[13px] font-semibold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
-            >
-              Sign in
-            </RouterLink>
-            <button
-              class="bg-black dark:bg-white text-white dark:text-black px-6 py-2.5 rounded-full text-[13px] font-bold hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95"
-            >
-              Get started
-            </button>
-          </div>
+           <button 
+            @click="toggleLocale"
+            class="text-xs opacity-80 hover:opacity-100 transition-opacity uppercase font-bold border px-2 py-0.5 rounded"
+          >
+            {{ sessionStore.locale }}
+          </button>
+
         </div>
 
         <!-- Mobile Menu Button -->
@@ -119,16 +123,13 @@ const navLinks = [
         >
           {{ link.name }}
         </RouterLink>
-        <div class="pt-6 border-t border-gray-100 dark:border-white/10 flex flex-col gap-4">
-          <RouterLink to="/login" class="text-xl font-medium text-gray-900 dark:text-white">
-            Sign in
-          </RouterLink>
-          <button
-            class="w-full bg-black dark:bg-white text-white dark:text-black py-4 rounded-xl text-lg font-medium"
+         <button 
+            @click="toggleLocale"
+            class="text-xs opacity-80 hover:opacity-100 transition-opacity uppercase font-bold border px-2 py-0.5 rounded"
           >
-            Get started
+            {{ sessionStore.locale }}
           </button>
-        </div>
+
       </div>
     </div>
   </Transition>
