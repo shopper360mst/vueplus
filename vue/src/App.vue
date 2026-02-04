@@ -9,11 +9,14 @@ import AppForm from './components/AppForm.vue'
 </script>
 
 <template>
-    <NavBar />
     <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
       <AppGate />
       <NavBar />
+      
+      <!-- PAGES VIEW -->
       <main class="w-full flex-grow"><RouterView /></main>
+      <!-- PAGES VIEW -->
+
       <AppFooter />
       
       <!-- Global Overlays -->
@@ -24,5 +27,4 @@ import AppForm from './components/AppForm.vue'
 </template>
 
 <style>
-/* Global styles if needed, but Tailwind is preferred */
 </style>
