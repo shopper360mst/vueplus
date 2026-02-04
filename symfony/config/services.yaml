@@ -7,7 +7,65 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    app.base_url: "http://localhost:9998/"
+    #app.base_url: "https://cny2026.shopperplus.com.my/"
+    app.campaign_code: "cny"
+    app.proxy_url: "http://localhost:9998/cny/"
+    #app.proxy_url: "https://bestwithcarlsberg.my/cny2026/"
+    app.site_name: "Celebration #BestWithCarlsberg"
+    app.site_description: "Saddle up and gallop into a smooth and prosperous year with Carlsberg! Enjoy festive cheers and irresistible rewards this Lunar New Year, all in the spirit of Brewing Prosperity Together. - #BestWithCarlsberg"
+    app.version: "1.5.2"
+    #app.front_full: true
+    app.front_full: true
+    app.fullbanner_mode: "start"
+    # hidden | coming_soon | start | end
+    app.email_title: "Celebration #BestWithCarlsberg - Thank You For Your Participation"
+    # app.legit_mailer: '1664malaysia@s360plus.com'
+    app.legit_mailer: 'carlsberg@s360plus.com'
+    app.google_captcha: "6LcULycqAAAAANQRx7cl4vdC6OuytzpzgmYXk6_n"
+    app.google_captcha_secret_key : 6LcULycqAAAAADoBMcP3L2Y4orH8oP1oJ12MHhn2
+    app.integration_key: "shopper1100"
+    app.backup_sms_url: "http://localhost:9988/"
+    app.backup_sms_url_key: "shopper1100"
+    # either mobile_no or email
+    app.username_alias: "mobile_no"
+    app.adhoc_feature1: "2026-01-27"
+    app.adhoc_feature2: "false"
+    app.adhoc_feature3: "false"
+    app.dx_error_display: 1
+    app.live_date: '2025-11-22 00:00:00' 
+    # s3_secret_key and access are example only. an instance needed to be setup before secret and access can be used.
+    app.s3_secret_key: "rP+7msZvhH8LKeB+ZjvlfahcHkjcKQbM+grRqLdE"
+    app.s3_secret_access: "WP0MVCDOXS1LBJLZJKAL"
+    app.s3_region_name: "ap-southeast-mys1"
+    app.s3_bucket_name: "cny2026"
+    app.s3_base_url: "https://ap-southeast-mys1.oss.ips1cloud.com/"
+    app.s3_object_storage: 'ipsvr1'
+    app.google_analytics: "G-D99LG9JKRJ"
+    # Intergration DIY below
+    app.to_diy : false
+    # app.to_diy : true
+    app.api_key : 'WDL-9e152a7ec61030aae65298b469427605' #Live - c448de0ce3eb01756e9e599bd03eb076
+    # app.api_key : 'WDL-c448de0ce3eb01756e9e599bd03eb076' #Live
+    app.diy_integration_key: '$2y$10$tR/.9KXjq43PfE9tg90ue.PNEsHhGeC7dTCQ.t6mr.5ru3h.T9.XK'
+    # app.diy_whatsapp_api: 'https://whatsappstg.diy-contest.com/api/contest/
+    app.diy_whatsapp_api: 'https://whatsapp.diy-contest.com/api/contest/' 
+    # MONT = 154
+    # SHM + ECOMM = 152
+    # 99SM = 153
+    # TONT = 155
+    # CVSTOFT = 156
+    app.integration_id1: 154
+    app.integration_id2: 152
+    app.integration_id3: 153
+    app.integration_id4: 155
+    app.integration_id5: 156
+    app.access_mode: 'normal'
+    app.promoter_code: 'APPEAL'
+    # app.promoter_code: 'LOTUS'
+    # app.promoter_code: 'AEON'
+    app.aeon_sheet_url: 'https://docs.google.com/spreadsheets/d/12JgV1ebaRRekJ-AnJTNXZCRlUL889iEg6AJD9Zt9ja0/export?format=csv&gid=1016007762'
+    app.lotus_sheet_url: 'https://docs.google.com/spreadsheets/d/12JgV1ebaRRekJ-AnJTNXZCRlUL889iEg6AJD9Zt9ja0/export?format=csv&gid=0'
 services:
     # default configuration for services in *this* file
     _defaults:
