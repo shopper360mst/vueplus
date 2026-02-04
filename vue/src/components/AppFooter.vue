@@ -30,11 +30,11 @@ const tcUrl = computed(() => {
 
 <template>
   <!-- Desktop Footer -->
-  <footer :class="['w-full flex flex-col items-center home-default-footer hidden md:flex', customClass, 'bg-primary']">
-    <AppMarquee class="home-red-stripe" />
-    <div data-nosnippet class="container max-w-full flex flex-col items-start justify-center footer-responsive-sizing overflow-hidden bg-primary px-4">
-      <div class="flex flex-row gap-2 w-full items-center text-white footer-font justify-start">
-        <div :class="['flex flex-row gap-1 w-full items-center text-white footer-font justify-start', `footer-gap-${locale}`]">
+  <footer :class="['w-full flex flex-col items-center h-[120px] hidden lg:flex relative', customClass, 'bg-primary']">
+    <AppMarquee></AppMarquee>
+    <div data-nosnippet class="container relative max-w-full flex flex-col items-start justify-center footer-responsive-sizing overflow-hidden bg-primary p-4">
+      <div class="flex flex-row gap-2 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start">
+        <div :class="['flex flex-row gap-1 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start', `footer-gap-${locale}`]">
           <a :href="tcUrl" target="_blank" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
             {{ t('footer.terms_conditions') }}
           </a>
@@ -59,40 +59,38 @@ const tcUrl = computed(() => {
       
       <div aria-label="desktop footer" class="flex flex-col w-full md:w-auto justify-between footer-social-icons-container">
         <div class="flex flex-row gap-2 grow justify-start items-center">
-          <p data-nosnippet class="text-white footer-disclaimer-container-text">{{ t('footer.faq_footer_1') }}</p>
-          <p data-nosnippet class="text-white footer-disclaimer-container-text">{{ t('footer.faq_footer_2') }}</p>
+          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_1') }}</p>
+          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_2') }}</p>
         </div>
         <div class="flex flex-row gap-2 grow justify-start items-center">
-          <p data-nosnippet class="text-white footer-disclaimer-container-text">{{ t('footer.faq_footer_3') }}</p>
-          <p data-nosnippet class="text-white footer-disclaimer-container-text">{{ t('footer.disclaimer_2') }}</p>
-          <img src="@/assets/images/disclaimer_new.png" alt="footer" width="19%" class="footer-disclaimer-img"/>
-        </div>
-        <div class="flex flex-row gap-2 footer-social-icons-floater">
-          <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
-            <img src="@/assets/images/logo-ig.png" alt="ig" width="20" height="20" />
-          </a>
-          <a href="https://www.facebook.com/share/18f9GqW8rt/?mibextid=wwXIfr" target="_blank" class="block">
-            <img src="@/assets/images/logo-fb.png" alt="fb" width="20" height="20" />
-          </a>
+          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_3') }}</p>
+          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.disclaimer_2') }}</p>
+          <img src="@/assets/images/disclaimer_new.png" alt="footer" width="19%" class="max-w-[142px]"/>
         </div>
       </div>
+    </div>
+    <div class="absolute bottom-[0%] right-[1%] flex flex-row gap-2 items-center justify-end w-[100px] h-1/2">
+      <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
+        <img src="@/assets/images/logo-ig.png" alt="ig" width="20" height="20" />
+      </a>
+      <a href="https://www.facebook.com/share/18f9GqW8rt/?mibextid=wwXIfr" target="_blank" class="block">
+        <img src="@/assets/images/logo-fb.png" alt="fb" width="20" height="20" />
+      </a>
     </div>
   </footer>
 
   <!-- Mobile Footer -->
-  <footer :class="['w-full flex flex-col items-center md:hidden', customClass, 'bg-primary home-mobile-footer-new']">
-    <AppMarquee class="home-red-stripe" />
+  <footer :class="['w-full flex flex-col items-center lg:hidden relative', customClass, 'bg-primary home-mobile-footer-new']">
+    <div class="bg-[#cc2027] w-[2220px] bg-[url('@/assets/images/content_stripe.png')] bg-repeat-x bg-contain h-[25px]"></div>
+    <div class="absolute bottom-[6%] right-[1%] flex flex-row gap-2 items-center justify-end w-[100px] h-1/2">
+      <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
+        <img src="@/assets/images/logo-ig.png" width="18" height="18">
+      </a>
+      <a href="https://www.facebook.com/share/18f9GqW8rt/?mibextid=wwXIfr" target="_blank" class="block">
+        <img src="@/assets/images/logo-fb.png" width="18" height="18">
+      </a>
+    </div>
     <div class="flex flex-row gap-3 justify-center py-3">
-      <div class="flex">
-        <a href="https://www.facebook.com/share/18f9GqW8rt/?mibextid=wwXIfr" target="_blank" class="block">
-          <img src="@/assets/images/logo-fb.png" width="25">
-        </a>
-      </div>
-      <div class="flex">
-        <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
-          <img src="@/assets/images/logo-ig.png" width="25">
-        </a>
-      </div>
     </div>
     <div class="flex flex-row gap-2 md:gap-3 items-center justify-center w-full md:max-w-[40%] px-1">
       <div class="flex items-start px-2 w-auto justify-center">
@@ -126,20 +124,20 @@ const tcUrl = computed(() => {
       </div>
     </div>
     <div class="flex px-4 md:px-6 pe-1 pt-2">
-      <p data-nosnippet :class="['text-white footer-disclaimer-container-text text-center', `home-footer-new-disclaimer-${locale}`]">
+      <p data-nosnippet :class="['text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] text-center', `home-footer-new-disclaimer-${locale}`]">
         {{ t('footer.faq_footer_1') }}
         <br/>
         {{ t('footer.faq_footer_2') }}
       </p>
     </div>
     <div class="flex flex-row w-full gap-2 justify-center items-start">
-      <div data-nosnippet :class="['text-white footer-disclaimer-container-text', `home-footer-new-disclaimer-${locale}`]">
+      <div data-nosnippet :class="['text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]', `home-footer-new-disclaimer-${locale}`]">
         {{ t('footer.disclaimer_1') }}
         {{ t('footer.disclaimer_2') }}
       </div>
     </div>
     <div class="flex flex-row w-full gap-2 justify-center items-end py-1" style="height:5dvh">
-      <img data-nosnippet src="@/assets/images/disclaimer_new.png" alt="footer" width="100%" style="max-width: 140px"/>
+      <img data-nosnippet src="@/assets/images/disclaimer_new.png" alt="footer" width="100%" class="max-w-[142px]"/>
     </div>
   </footer>
 </template>

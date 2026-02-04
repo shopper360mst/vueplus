@@ -21,3 +21,7 @@
 }
 
 @import './base.css';
+
+.debug{
+  border: 2px dashed pink;
+}
