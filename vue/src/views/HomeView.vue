@@ -7,6 +7,9 @@ const uiStore = useUIStore()
 const { t, locale } = useI18n()
 
 useSEO('seo.home_title', 'seo.home_description')
+// Opens GWP form for a specific channel and product
+uiStore.openCvsForm('CVS', 1) 
+
 </script>
 
 <template>

@@ -67,6 +67,35 @@ export const useUIStore = defineStore('ui', () => {
     gateOpen.value = false
   }
 
+  // GWP Form State
+  const gwpForm = ref({
+    isOpen: false,
+    channel: '',
+    product: 1
+  })
+
+  const openGwpForm = (channel = '', product = 1) => {
+    gwpForm.value = { isOpen: true, channel, product }
+  }
+
+  const closeGwpForm = () => {
+    gwpForm.value.isOpen = false
+  }
+
+  // CVS Form State
+  const cvsForm = ref({
+    isOpen: false,
+    channel: ''
+  })
+
+  const openCvsForm = (channel = '') => {
+    cvsForm.value = { isOpen: true, channel }
+  }
+
+  const closeCvsForm = () => {
+    cvsForm.value.isOpen = false
+  }
+
   return {
     toast,
     showToast,
@@ -78,6 +107,12 @@ export const useUIStore = defineStore('ui', () => {
     openContestForm,
     closeContestForm,
     gateOpen,
-    closeGate
+    closeGate,
+    gwpForm,
+    openGwpForm,
+    closeGwpForm,
+    cvsForm,
+    openCvsForm,
+    closeCvsForm
   }
 })
