@@ -33,6 +33,23 @@ const carouselAutoplayTimer = ref(null)
 const detectedRegion = ref('')
 const showReceiptGuide = ref(false)
 
+const receiptGuideImage = computed(() => {
+  let baseChannel = channel.value
+  if (channel.value.startsWith('SHM_')) {
+    baseChannel = 'SHM'
+  }
+  if (baseChannel === 'CVSTOFT') {
+    baseChannel = 'CVSTOFT'
+  }
+  try {
+    return new URL(`../assets/images/receipt/${baseChannel}/receipt_1.png`, import.meta.url).href
+  } catch (e) {
+    return new URL(`../assets/images/receipt/SHM/receipt_1.png`, import.meta.url).href
+  }
+})
+
+const fallbackReceiptImage = new URL('../assets/images/receipt/SHM/receipt_1.png', import.meta.url).href
+
 const currentStructure = computed(() => {
   return gwpStructure[locale.value] || gwpStructure['en']
 })
@@ -327,6 +344,19 @@ onUnmounted(() => {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Receipt Guide Modal -->
+    <div v-if="showReceiptGuide" class="fixed inset-0 z-[60] bg-black/90 flex flex-col items-center justify-center p-4" @click="showReceiptGuide = false">
+      <div class="relative w-full max-w-lg bg-white rounded-lg overflow-hidden shadow-2xl" @click.stop>
+        <div class="p-4 border-b flex justify-between items-center">
+          <h3 class="font-bold text-gray-800">Receipt Guide</h3>
+          <button @click="showReceiptGuide = false" class="text-gray-500 hover:text-black text-2xl leading-none">&times;</button>
+        </div>
+        <div class="p-4 max-h-[80vh] overflow-y-auto bg-gray-100 flex items-center justify-center">
+          <img :src="receiptGuideImage" class="max-w-full h-auto shadow-sm" alt="Receipt Guide" @error="(e) => e.target.src = fallbackReceiptImage" />
+        </div>
       </div>
     </div>
   </div>

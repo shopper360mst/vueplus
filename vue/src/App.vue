@@ -9,8 +9,8 @@ import AppGate from './components/AppGate.vue'
 import AppForm from './components/AppForm.vue'
 
 const { locale } = useI18n()
-// import GwpForm from './components/GwpForm.vue'
-// import CvsForm from './components/CvsForm.vue'
+import GwpForm from './components/GwpForm.vue'
+import CvsForm from './components/CvsForm.vue'
 </script>
 
 <template>
