@@ -1,0 +1,61 @@
+{
+  "common": {
+    "submit": "SUBMIT",
+    "cancel": "CANCEL",
+    "close": "CLOSE | X",
+    "ok": "OK"
+  },
+  "nav": {
+    "promotions": "Promotions",
+    "winners": "Winners",
+    "blog": "Blog",
+    "company": "Company"
+  },
+  "seo": {
+    "home_title": "VuePlus | Build and Scale Without Limits",
+    "home_description": "The next generation of developer infrastructure for modern applications. Move fast, ship faster, and scale globally with VuePlus.",
+    "about_title": "About Us | VuePlus",
+    "about_description": "Learn more about VuePlus and our mission to empower developers."
+  },
+  "home": {
+    "title": "BUILD AND SCALE",
+    "subtitle": "WITHOUT LIMITS",
+    "description": "The next generation of developer infrastructure for modern applications. Move fast, ship faster, and scale globally with VuePlus.",
+    "signup": "Sign up",
+    "documentation": "Documentation",
+    "trustedBy": "Trusted by industry leaders",
+    "closed": "Registration is currently closed. Please check back later."
+  },
+  "about": {
+    "title": "This is an about page"
+  },
+  "toast": {
+    "success": "Success",
+    "error": "Error"
+  },
+  "gate": {
+    "titleDob": "Enter Year of Birth",
+    "confirmMobile": "I CONFIRM THAT I AM NON-MUSLIM<BR>AGED 21 YEARS OLD AND ABOVE",
+    "confirmDesktop": "I CONFIRM THAT I AM NON-MUSLIM AGED 21 YEARS OLD AND ABOVE",
+    "subtitle": "Please share this site only with individuals aged 21+ and those who are non-Muslims.",
+    "company": "Carlsberg Marketing Sdn Bhd",
+    "simpleTitle1": "This website is strictly for non-Muslims aged 21 and above.",
+    "simpleTitle2": "By entering this website, you agree you are a non-Muslim aged 21 years old and above.",
+    "yes": "Yes, I am",
+    "no": "No, I am not",
+    "rememberMe": "Remember me on this device (don't tick if this is a shared computer)",
+    "disclaimer": "If you drink, don't drive."
+  },
+  "footer": {
+    "terms_conditions": "TERMS & CONDITIONS",
+    "faq": "FAQ",
+    "privacy_policy": "PRIVACY POLICY",
+    "beers_love": "BEERS YOU LOVE",
+    "responsible_drinking": "RESPONSIBLE DRINKING",
+    "faq_footer_1": "Carlsberg Marketing Sdn Bhd 198501008089 (140534-M) ",
+    "faq_footer_2": "55, Persiaran Selangor, Seksyen 15, 40200 Shah Alam, Selangor, Malaysia.",
+    "faq_footer_3": "For 21+ non-Muslims only. Please only share this site to those aged 21+ and non-Muslims.",
+    "disclaimer_1": "",
+    "disclaimer_2": "If you drink, don't drive."
+  }
+}

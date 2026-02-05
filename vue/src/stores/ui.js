@@ -58,7 +58,10 @@ export const useUIStore = defineStore('ui', () => {
   }
 
   // Gate State
-  const gateOpen = ref(localStorage.getItem('gate_remembered') !== 'true')
+  const gateOpen = ref(
+    localStorage.getItem('gate_remembered') !== 'true' && 
+    sessionStorage.getItem('app.camAppGate') !== 'true'
+  )
 
   const closeGate = () => {
     gateOpen.value = false

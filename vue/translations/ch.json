@@ -1,0 +1,61 @@
+{
+  "common": {
+    "submit": "提交",
+    "cancel": "取消",
+    "close": "关闭 | X",
+    "ok": "确定"
+  },
+  "nav": {
+    "promotions": "促销活动",
+    "winners": "得奖者名单",
+    "blog": "博客",
+    "company": "公司"
+  },
+  "seo": {
+    "home_title": "VuePlus | 构建与扩展，无止境",
+    "home_description": "面向现代应用的新一代开发基础设施。通过 VuePlus 快速行动、更早交付并在全球范围内扩展。",
+    "about_title": "关于我们 | VuePlus",
+    "about_description": "详细了解 VuePlus 及其赋能开发者的使命。"
+  },
+  "home": {
+    "title": "构建与扩展",
+    "subtitle": "无止境",
+    "description": "面向现代应用的新一代开发基础设施。通过 VuePlus 快速行动、更早交付并在全球范围内扩展。",
+    "signup": "注册",
+    "documentation": "文档",
+    "trustedBy": "深受行业领导者信赖",
+    "closed": "注册目前已关闭。请稍后再试。"
+  },
+  "about": {
+    "title": "这是关于页面"
+  },
+  "toast": {
+    "success": "成功",
+    "error": "错误"
+  },
+  "gate": {
+    "titleDob": "请输入出生年份",
+    "confirmMobile": "我确认我不是穆斯林<BR>且年龄在21岁或以上",
+    "confirmDesktop": "我确认我不是穆斯林且年龄在21岁或以上",
+    "subtitle": "请仅与21岁及以上的非穆斯林分享此网站。",
+    "company": "皇帽市场有限公司",
+    "simpleTitle1": "本网站仅供21岁及以上的非穆斯林使用。",
+    "simpleTitle2": "进入本网站即表示您同意您是21岁及以上的非穆斯林。",
+    "yes": "是的，我是",
+    "no": "不，我不是",
+    "rememberMe": "在此设备上记住我（如果是共用电脑，请勿勾选）",
+    "disclaimer": "酒后不开车。"
+  },
+  "footer": {
+    "terms_conditions": "条款与条件",
+    "faq": "常见问题",
+    "privacy_policy": "隐私政策",
+    "beers_love": "您喜爱的啤酒",
+    "responsible_drinking": "理性饮酒",
+    "faq_footer_1": "Carlsberg Marketing Sdn Bhd 198501008089 (140534-M) ",
+    "faq_footer_2": "55, Persiaran Selangor, Seksyen 15, 40200 Shah Alam, Selangor, Malaysia.",
+    "faq_footer_3": "仅限于21岁及以上非穆斯林。请仅将此网站分享给21岁以上的非穆斯林人士。",
+    "disclaimer_1": "",
+    "disclaimer_2": "酒后不开车。"
+  }
+}

@@ -33,8 +33,8 @@ const tcUrl = computed(() => {
   <footer :class="['w-full flex flex-col items-center h-[120px] hidden lg:flex relative', customClass, 'bg-primary']">
     <AppMarquee></AppMarquee>
     <div data-nosnippet class="container relative max-w-full flex flex-col items-start justify-center footer-responsive-sizing overflow-hidden bg-primary p-4">
-      <div class="flex flex-row gap-2 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start">
-        <div :class="['flex flex-row gap-1 w-full items-center text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] justify-start', locale === 'ch' ? 'font-ch' : 'font-black', `footer-gap-${locale}`]">
+      <div :class="['flex flex-row gap-2 w-full items-center text-white justify-start', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">
+        <div :class="['flex flex-row gap-1 w-full items-center text-white justify-start', locale === 'ch' ? 'font-ch' : 'font-black', `footer-gap-${locale}`]">
           <a :href="tcUrl" target="_blank" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
             {{ t('footer.terms_conditions') }}
           </a>
@@ -59,12 +59,12 @@ const tcUrl = computed(() => {
       
       <div aria-label="desktop footer" class="flex flex-col w-full md:w-auto justify-between footer-social-icons-container">
         <div class="flex flex-row gap-2 grow justify-start items-center">
-          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_1') }}</p>
-          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_2') }}</p>
+          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.faq_footer_1') }}</p>
+          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.faq_footer_2') }}</p>
         </div>
         <div class="flex flex-row gap-2 grow justify-start items-center">
-          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.faq_footer_3') }}</p>
-          <p data-nosnippet class="text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]">{{ t('footer.disclaimer_2') }}</p>
+          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.faq_footer_3') }}</p>
+          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.disclaimer_2') }}</p>
           <img src="@/assets/svgs/disclaimer_new.svg" alt="footer" width="19%" class="max-w-[142px]"/>
         </div>
       </div>
@@ -124,14 +124,14 @@ const tcUrl = computed(() => {
       </div>
     </div>
     <div class="flex px-4 md:px-6 pe-1 pt-2">
-      <p data-nosnippet :class="['text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px] text-center', `home-footer-new-disclaimer-${locale}`]">
+      <p data-nosnippet :class="['text-white text-center', `home-footer-new-disclaimer-${locale}`, locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">
         {{ t('footer.faq_footer_1') }}
         <br/>
         {{ t('footer.faq_footer_2') }}
       </p>
     </div>
     <div class="flex flex-row w-full gap-2 justify-center items-start">
-      <div data-nosnippet :class="['text-white text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]', `home-footer-new-disclaimer-${locale}`]">
+      <div data-nosnippet :class="['text-white', `home-footer-new-disclaimer-${locale}`, locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">
         {{ t('footer.disclaimer_1') }}
         {{ t('footer.disclaimer_2') }}
       </div>

@@ -1,7 +1,12 @@
 <script setup>
 import { useUIStore } from '../stores/ui'
+import { useI18n } from 'vue-i18n'
+import { useSEO } from '../composables/useSEO'
 
 const uiStore = useUIStore()
+const { t, locale } = useI18n()
+
+useSEO('seo.home_title', 'seo.home_description')
 </script>
 
 <template>
@@ -12,29 +17,28 @@ const uiStore = useUIStore()
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div class="lg:col-span-7">
             <h1
-              class="text-5xl lg:text-[80px] leading-[1.1] font-extrabold tracking-tight text-black dark:text-white mb-8"
+              :class="['text-5xl lg:text-[80px] leading-[1.1] tracking-tight text-black dark:text-white mb-8', locale === 'ch' ? 'font-normal' : 'font-extrabold']"
             >
-              BUILD AND SCALE <br />
-              <span class="text-gray-400 dark:text-gray-600">WITHOUT LIMITS</span>
+              {{ t('home.title') }} <br />
+              <span class="text-gray-400 dark:text-gray-600">{{ t('home.subtitle') }}</span>
             </h1>
             <p
               class="text-xl lg:text-2xl text-gray-600 max-w-2xl p-2 mb-12 leading-relaxed"
             >
-              The next generation of developer infrastructure for modern applications. Move fast,
-              ship faster, and scale globally with VuePlus.
+              {{ t('home.description') }}
             </p>
             <div class="flex flex-col sm:flex-row gap-4 py-3">
               <button
-                @click="uiStore.showToast('Registration is currently closed. Please check back later.', 'bg-white')"
-                class="bg-black dark:bg-white text-white dark:text-black px-10 py-4 rounded-full text-lg font-bold hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95"
+                @click="uiStore.showToast(t('home.closed'), 'bg-white')"
+                :class="['bg-black dark:bg-white text-white dark:text-black px-10 py-4 rounded-full text-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
               >
-                Sign up
+                {{ t('home.signup') }}
               </button>
               <button
                 @click="uiStore.openPopup('ty')"
-                class="bg-transparent border-2 border-white text-black dark:text-white px-10 py-4 rounded-full text-lg font-bold hover:border-gray transition-all active:scale-95"
+                :class="['bg-transparent border-2 border-white text-black dark:text-white px-10 py-4 rounded-full text-lg hover:border-gray transition-all active:scale-95', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
               >
-                Documentation
+                {{ t('home.documentation') }}
               </button>
             </div>
           </div>
@@ -49,15 +53,15 @@ const uiStore = useUIStore()
                 <div class="w-3 h-3 rounded-full bg-green-400"></div>
               </div>
               <pre class="text-sm font-mono text-gray-800 dark:text-gray-200 overflow-x-auto">
-<code>{
-  "project": "VuePlus",
-  "status": "scaling",
-  "nodes": ["us-east", "eu-west", "ap-south"],
-  "metrics": {
-    "latency": "12ms",
-    "uptime": "99.999%"
-  }
-}</code></pre>
+                <code>{
+                  "project": "VuePlus",
+                  "status": "scaling",
+                  "nodes": ["us-east", "eu-west", "ap-south"],
+                  "metrics": {
+                    "latency": "12ms",
+                    "uptime": "99.999%"
+                  }
+                }</code></pre>
             </div>
 
             <!-- Abstract background element -->
@@ -77,7 +81,7 @@ const uiStore = useUIStore()
         <p
           class="block text-xs font-bold tracking-[0.3em] uppercase text-gray-400 dark:text-gray-600 pb-2"
         >
-          Trusted by industry leaders
+          {{ t('home.trustedBy') }}
         </p>
         <div
           class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 items-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500"

@@ -1,52 +1,61 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { useSessionStore } from '../stores/session'
 import { useI18n } from 'vue-i18n'
+import navigation from '../data/navigation.json'
 
 const isMenuOpen = ref(false)
 const sessionStore = useSessionStore()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
+const route = useRoute()
+const router = useRouter()
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
+const currentLocale = computed(() => route.params.locale || locale.value)
+
 const toggleLocale = () => {
-  const newLocale = sessionStore.locale === 'en' ? 'ch' : 'en'
+  const newLocale = currentLocale.value === 'en' ? 'ch' : 'en'
   sessionStore.setLocale(newLocale)
-  locale.value = newLocale
+  
+  // Navigate to the same path but with the new locale
+  const newPath = route.path.replace(`/${currentLocale.value}`, `/${newLocale}`)
+  router.push(newPath)
 }
 
-const navLinks = [
-  { name: 'Products', path: '/products' },
-  { name: 'Developers', path: '/developers' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'Company', path: '/company' },
-]
+const campaignCode = import.meta.env.VITE_CAMPAIGN_CODE || 'cny'
+
+const navLinks = computed(() => navigation.map(link => ({
+  id: link.id,
+  name: t(`nav.${link.id}`),
+  path: `/${campaignCode}/${currentLocale.value}/${link.path}`
+})))
 </script>
 
 <template>
-  <nav
+  <header
     class="w-full flex justify-center bg-secondary sticky top-0 z-50 transition-all duration-300"
   >
     <div class="w-full max-w-[1600px] px-6 lg:px-12">
       <div class="flex justify-between h-16 items-center">
         <!-- Logo -->
         <div class="flex items-center">
-          <RouterLink to="/" class="flex items-center gap-2 group transition-opacity">
-            <img src="@/assets/images/carlsberg_logo.png" alt="Carlsberg" class="h-10 w-auto" />
+          <RouterLink :to="`/${campaignCode}/${currentLocale}`" class="flex items-center gap-2 group transition-opacity">
+            <img src="@/assets/images/carlsberg_logo.png" alt="Carlsberg - Probably the best beer in the world" class="h-10 w-auto" />
           </RouterLink>
         </div>
 
         <!-- Desktop Nav -->
-        <div class="hidden md:flex items-center gap-10">
+        <nav class="hidden md:flex items-center gap-10">
           <div class="flex items-center gap-8">
             <RouterLink
               v-for="link in navLinks"
-              :key="link.path"
+              :key="link.id"
               :to="link.path"
-              class="text-[13px] font-semibold text-white hover:text-tertiary transition-colors"
+              :class="['font-semibold text-white hover:text-tertiary transition-colors', locale === 'ch' ? 'text-[15px]' : 'text-[13px]']"
             >
               {{ link.name }}
             </RouterLink>
@@ -56,10 +65,10 @@ const navLinks = [
             @click="toggleLocale"
             class="text-xs text-white hover:text-tertiary transition-colors uppercase font-bold border border-white hover:border-tertiary px-2 py-0.5 rounded"
           >
-            {{ sessionStore.locale }}
+            {{ currentLocale }}
           </button>
 
-        </div>
+        </nav>
 
         <!-- Mobile Menu Button -->
         <div class="flex items-center md:hidden">
@@ -94,7 +103,7 @@ const navLinks = [
         </div>
       </div>
     </div>
-  </nav>
+  </header>
 
   <!-- Mobile Menu -->
   <Transition
@@ -112,10 +121,10 @@ const navLinks = [
       <div class="px-6 py-8 flex flex-col gap-6">
         <RouterLink
           v-for="link in navLinks"
-          :key="link.path"
+          :key="link.id"
           :to="link.path"
           @click="isMenuOpen = false"
-          class="text-xl font-medium text-white hover:text-tertiary transition-colors"
+          :class="['font-medium text-white hover:text-tertiary transition-colors', locale === 'ch' ? 'text-[22px]' : 'text-xl']"
         >
           {{ link.name }}
         </RouterLink>
@@ -123,7 +132,7 @@ const navLinks = [
             @click="toggleLocale"
             class="text-xs text-white hover:text-tertiary transition-colors uppercase font-bold border border-white hover:border-tertiary px-2 py-0.5 rounded self-start"
           >
-            {{ sessionStore.locale }}
+            {{ currentLocale }}
           </button>
 
       </div>

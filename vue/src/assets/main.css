@@ -11,10 +11,68 @@
   --font-sans: 'NyDisplay', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-black: 'NyDisplayBlack';
   --font-ch: 'fzDaHei';
+
+  /* Breakpoints */
+  --breakpoint-xs: 480px;
+  --breakpoint-3xl: 1920px;
+  --breakpoint-4xl: 2560px;
 }
 
 @import './base.css';
 
-.debug{
-  border: 2px dashed pink;
+[lang="ch"] {
+  font-family: var(--font-ch);
+  /* font-weight: bold; */
+}
+
+.debug {
+  border: 4px solid gray;
+  position: relative;
+}
+
+.debug::after {
+  content: 'DEFAULT';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: gray;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+@media (width >= 480px) {
+  .debug { border-color: #ef4444; }
+  .debug::after { content: 'XS'; background: #ef4444; }
+}
+@media (width >= 640px) {
+  .debug { border-color: #f97316; }
+  .debug::after { content: 'SM'; background: #f97316; }
+}
+@media (width >= 768px) {
+  .debug { border-color: #eab308; }
+  .debug::after { content: 'MD'; background: #eab308; }
+}
+@media (width >= 1024px) {
+  .debug { border-color: #22c55e; }
+  .debug::after { content: 'LG'; background: #22c55e; }
+}
+@media (width >= 1280px) {
+  .debug { border-color: #3b82f6; }
+  .debug::after { content: 'XL'; background: #3b82f6; }
+}
+@media (width >= 1536px) {
+  .debug { border-color: #6366f1; }
+  .debug::after { content: '2XL'; background: #6366f1; }
+}
+@media (width >= 1920px) {
+  .debug { border-color: #a855f7; }
+  .debug::after { content: '3XL'; background: #a855f7; }
+}
+@media (width >= 2560px) {
+  .debug { border-color: #ec4899; }
+  .debug::after { content: '4XL'; background: #ec4899; }
 }

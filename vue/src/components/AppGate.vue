@@ -21,6 +21,7 @@ const handleYesClick = () => {
   if (rememberMe.value) {
     localStorage.setItem('gate_remembered', 'true')
   }
+  sessionStorage.setItem('app.camAppGate', 'true')
   uiStore.closeGate()
 }
 

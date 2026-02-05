@@ -19,6 +19,14 @@
   margin: 0;
 }
 
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  cursor: pointer;
+}
+
 body {
   min-height: 100vh;
   color: var(--color-text);

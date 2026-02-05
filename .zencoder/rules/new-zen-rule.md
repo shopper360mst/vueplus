@@ -10,11 +10,13 @@ Use these rules to guide AI generation or to standardize your Vue 3 project arch
 ## 2. Type Safety & Tooling
 *   **Build Tool:** Follow [Vite-based project structures](https://vitejs.dev) for optimal development performance.
 *   **State Management:** Use [Pinia](https://pinia.vuejs.org) instead of Vuex for global state.
+*   **Vue configuration:** Vue files are meant to be front-end files and have not to be part of symfony project, however it can fetch data from api that originate there.
+
 
 ## 3. Template & Style
 *   **Component Naming:** Use PascalCase for file names and multi-word names (e.g., `TodoList.vue`) to avoid [HTML element conflicts](https://vuejs.org).
 *   **Directives:** Always provide a unique `:key` with `v-for`. Never use `v-if` and `v-for` on the same element.
-*   **Styling:** Use Tailwind 4 CSS utility classes or Scoped CSS (`<style scoped>`) to prevent global style leakage. Dont use max-w-7xl to limit the width for main, footer and navbars.
+*   **Styling:** Use Tailwind 4 CSS utility classes or Scoped CSS (`<style scoped>`) to prevent global style leakage. Dont use max-w-7xl to limit the width for main, footer and navbars. All buttons should have cursor pointer by default unless is disabled.
 *   **Icons:** Shoudl always default to use heroIcons classes.
 
 ## 4. Component Architecture
@@ -23,4 +25,6 @@ Use these rules to guide AI generation or to standardize your Vue 3 project arch
 *   **Events:** Use the `update:modelValue` pattern for custom [v-model bindings](https://vuejs.org).
 *   **API Fetch:** Use `axios` to call API endpoints, with default configurable timeout.
 
+## 5. SEO
+*   **SEO:** Page content that allows SEO data crawling should be restricted to only within views and not components.
 
