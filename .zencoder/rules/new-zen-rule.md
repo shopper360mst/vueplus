@@ -16,7 +16,7 @@ Use these rules to guide AI generation or to standardize your Vue 3 project arch
 ## 3. Template & Style
 *   **Component Naming:** Use PascalCase for file names and multi-word names (e.g., `TodoList.vue`) to avoid [HTML element conflicts](https://vuejs.org).
 *   **Directives:** Always provide a unique `:key` with `v-for`. Never use `v-if` and `v-for` on the same element.
-*   **Styling:** Use Tailwind 4 CSS utility classes or Scoped CSS (`<style scoped>`) to prevent global style leakage. Dont use max-w-7xl to limit the width for main, footer and navbars. All buttons should have cursor pointer by default unless is disabled.
+*   **Styling:** Use Tailwind 4 CSS utility classes or Scoped CSS (`<style scoped>`) to prevent global style leakage. Dont use max-w-7xl to limit the width for main, footer and navbars. All buttons should have cursor pointer by default unless is disabled. Do not override previousely styling unless being told to do so.
 *   **Icons:** Shoudl always default to use heroIcons classes.
 
 ## 4. Component Architecture

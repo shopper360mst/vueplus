@@ -15,8 +15,8 @@ uiStore.openCvsForm('CVS', 1)
 <template>
   <div class="flex flex-col items-center justify-center min-h-[calc(100vh-60px)] bg-tertiary">
     <!-- Hero Section -->
-    <section class="w-full p-5 flex justify-center relative">
-      <div class="w-full max-w-[1600px] px-5">
+    <section class="w-full p-5 flex justify-center relative overflow-hidden">
+      <div class="container px-5">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div class="lg:col-span-7">
             <h1

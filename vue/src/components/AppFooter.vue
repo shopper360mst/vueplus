@@ -11,14 +11,10 @@ const props = defineProps({
   proxyUrl: {
     type: String,
     default: ''
-  },
-  locale: {
-    type: String,
-    default: 'en'
   }
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const tcUrl = computed(() => {
   if (props.proxyUrl.includes('bestwithcarlsberg.my')) {
@@ -29,119 +25,147 @@ const tcUrl = computed(() => {
 </script>
 
 <template>
-  <!-- Desktop Footer -->
-  <footer :class="['w-full flex flex-col items-center h-[120px] hidden lg:flex relative', customClass, 'bg-primary']">
-    <AppMarquee></AppMarquee>
-    <div data-nosnippet class="container relative max-w-full flex flex-col items-start justify-center footer-responsive-sizing overflow-hidden bg-primary p-4">
-      <div :class="['flex flex-row gap-2 w-full items-center text-white justify-start', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">
-        <div :class="['flex flex-row gap-1 w-full items-center text-white justify-start', locale === 'ch' ? 'font-ch' : 'font-black', `footer-gap-${locale}`]">
-          <a :href="tcUrl" target="_blank" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
-            {{ t('footer.terms_conditions') }}
-          </a>
-          |
-          <a :href="`${proxyUrl}${locale}/faq`" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
-            {{ t('footer.faq') }}
-          </a>
-          |
-          <a href="https://carlsbergmalaysia.com.my/privacy-policy/" target="_blank" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
-            {{ t('footer.privacy_policy') }}
-          </a>
-          |
-          <a :href="`${proxyUrl}${locale}/beersyoulove`" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
-            {{ t('footer.beers_love') }}
-          </a>
-          |
-          <a href="https://carlsbergmalaysia.com.my/sustainability/social/zero-irresponsible-drinking/" target="_blank" :class="['text-white underline uppercase block', `navbar-${locale}`, `app-label-font-footer-${locale}`]">
-            {{ t('footer.responsible_drinking') }}
-          </a>
-        </div>
-      </div>
-      
-      <div aria-label="desktop footer" class="flex flex-col w-full md:w-auto justify-between footer-social-icons-container">
-        <div class="flex flex-row gap-2 grow justify-start items-center">
-          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.faq_footer_1') }}</p>
-          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.faq_footer_2') }}</p>
-        </div>
-        <div class="flex flex-row gap-2 grow justify-start items-center">
-          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.faq_footer_3') }}</p>
-          <p data-nosnippet :class="['text-white', locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">{{ t('footer.disclaimer_2') }}</p>
-          <img src="@/assets/svgs/disclaimer_new.svg" alt="footer" width="19%" class="max-w-[142px]"/>
-        </div>
-      </div>
-    </div>
-    <div class="absolute bottom-[0%] right-[1%] flex flex-row gap-2 items-center justify-end w-[100px] h-1/2">
-      <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
-        <img src="@/assets/images/logo-ig.png" alt="ig" width="20" height="20" />
-      </a>
-      <a href="https://www.facebook.com/share/18f9GqW8rt/?mibextid=wwXIfr" target="_blank" class="block">
-        <img src="@/assets/images/logo-fb.png" alt="fb" width="20" height="20" />
-      </a>
-    </div>
-  </footer>
-
-  <!-- Mobile Footer -->
-  <footer :class="['w-full flex flex-col items-center lg:hidden relative', customClass, 'bg-primary home-mobile-footer-new']">
-    <AppMarquee></AppMarquee>
-    <div class="absolute bottom-[6%] right-[1%] flex flex-row gap-2 items-center justify-end w-[100px] h-1/2">
-      <a href="https://www.instagram.com/carlsbergmy?igsh=ZWZmdngybDM3N2x5" target="_blank" class="block">
-        <img src="@/assets/images/logo-ig.png" width="18" height="18">
-      </a>
-      <a href="https://www.facebook.com/share/18f9GqW8rt/?mibextid=wwXIfr" target="_blank" class="block">
-        <img src="@/assets/images/logo-fb.png" width="18" height="18">
-      </a>
-    </div>
-    <div class="flex flex-row gap-3 justify-center py-3">
-    </div>
-    <div :class="['flex flex-row gap-2 md:gap-3 items-center justify-center w-full md:max-w-[40%] px-1', locale === 'ch' ? 'font-ch' : 'font-black']">
-      <div class="flex items-start px-2 w-auto justify-center">
-        <a :href="tcUrl" target="_blank" data-nosnippet :class="['text-white underline uppercase block', `navbar-${locale}`, `home-footer-new-${locale}`]">
+  <footer :class="['w-full flex flex-col items-center relative bg-primary h-[200px] md:h-[120px]', customClass]">
+    <AppMarquee />
+    
+    <!-- MOBILE LINKS (shown only on small screens) -->
+    <div data-nosnippet 
+      class="container 
+      flex 
+      md:hidden 
+      mx-auto 
+      p-2 
+      flex-col 
+      items-center 
+      justify-center 
+      gap-x-1 
+      gap-y-2 
+      max-w-full
+      "
+      :class="[locale === 'ch' ? 'font-ch text-[11px] font-normal' : 'text-[9px] font-bold']"
+    >
+      <div aria-label="mobile links"  class="flex flex-row gap-3 items-center">
+        <a :href="tcUrl" target="_blank" class="text-white underline uppercase text-center">
           {{ t('footer.terms_conditions') }}
         </a>
-      </div>
-      <div data-nosnippet class="flex text-white h-full" style="width:3px;border-left:1px solid currentColor"></div>
-      <div class="flex items-start px-2 w-auto justify-center">
-        <a :href="`${proxyUrl}${locale}/faq`" data-nosnippet :class="['text-white underline uppercase block', `navbar-${locale}`, `home-footer-new-${locale}`]">
+        <div class="w-[1px] bg-white h-[20px] "></div>
+        <a :href="`${proxyUrl}${locale}/faq`" class="text-white underline uppercase text-center">
           {{ t('footer.faq') }}
         </a>
-      </div>
-      <div data-nosnippet class="flex text-white h-full" style="width:3px;border-left:1px solid currentColor"></div>
-      <div class="flex items-start px-2 w-auto justify-center">
-        <a href="https://carlsbergmalaysia.com.my/privacy-policy/" target="_blank" data-nosnippet :class="['text-white underline uppercase block', `navbar-${locale}`, `home-footer-new-${locale}`]">
+        <div class="w-[1px] bg-white h-[20px] "></div>
+        <a href="https://carlsbergmalaysia.com.my/privacy-policy/" target="_blank" class="text-white underline uppercase text-center">
           {{ t('footer.privacy_policy') }}
         </a>
-      </div>
-      <div data-nosnippet class="flex text-white h-full" style="width:3px;border-left:1px solid currentColor"></div>
-      <div class="flex items-start px-2 w-auto justify-center">
-        <a :href="`${proxyUrl}${locale}/beersyoulove`" data-nosnippet :class="['text-white underline uppercase block', `navbar-${locale}`, `home-footer-new-${locale}`]">
+        <div class="w-[1px] bg-white h-[20px] "></div>
+        <a :href="`${proxyUrl}${locale}/beersyoulove`" class="text-white underline uppercase text-center">
           {{ t('footer.beers_love') }}
         </a>
-      </div>
-      <div data-nosnippet class="flex text-white h-full" style="width:3px;border-left:1px solid currentColor"></div>
-      <div class="flex items-start px-2 w-auto justify-center">
-        <a href="https://carlsbergmalaysia.com.my/sustainability/social/zero-irresponsible-drinking/" target="_blank" data-nosnippet :class="['text-white underline uppercase block', `navbar-${locale}`, `home-footer-new-${locale}`]">
+        <div class="w-[1px] bg-white h-[20px] "></div>
+        <a href="https://carlsbergmalaysia.com.my/sustainability/social/zero-irresponsible-drinking/" target="_blank" class="text-white underline uppercase text-center">
           {{ t('footer.responsible_drinking') }}
         </a>
       </div>
-    </div>
-    <div class="flex px-4 md:px-6 pe-1 pt-2">
-      <p data-nosnippet :class="['text-white text-center', `home-footer-new-disclaimer-${locale}`, locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">
-        {{ t('footer.faq_footer_1') }}
-        <br/>
-        {{ t('footer.faq_footer_2') }}
-      </p>
-    </div>
-    <div class="flex flex-row w-full gap-2 justify-center items-start">
-      <div data-nosnippet :class="['text-white', `home-footer-new-disclaimer-${locale}`, locale === 'ch' ? 'text-[7.5px] min-[400px]:text-[9px] lg:text-[14px]' : 'text-[5.5px] min-[400px]:text-[7px] lg:text-[12px]']">
-        {{ t('footer.disclaimer_1') }}
-        {{ t('footer.disclaimer_2') }}
+      <div class="flex py-1">
+        <div class="flex flex-row gap-2 justify-end">
+          <a href="https://www.instagram.com/carlsbergmy" target="_blank" class="transition-transform hover:scale-110">
+            <img src="@/assets/images/logo-ig.png" alt="Instagram" width="24" height="24" />
+          </a>
+          <a href="https://www.facebook.com/share/18f9GqW8rt" target="_blank" class="transition-transform hover:scale-110">
+            <img src="@/assets/images/logo-fb.png" alt="Facebook" width="24" height="24" />
+          </a>
+        </div>
+      </div>
+      <div data-nosnippet
+        class="container flex items-center justify-center text-center gap-3">
+        <p class="text-white">
+          {{ t('footer.faq_footer_1') }} {{ t('footer.faq_footer_2') }}
+        </p>
+      </div>
+      <div class="flex justify-center text-white items-center"
+        :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[10px] font-bold']"
+      >
+        {{ t('footer.disclaimer_2') }} 
+        <img src="@/assets/svgs/disclaimer_new.svg" alt="Celebrate Responsibly" class="px-1 h-[10px] w-auto" />
       </div>
     </div>
-    <div class="flex flex-row w-full gap-2 justify-center items-end py-1" style="height:5dvh">
-      <img data-nosnippet src="@/assets/svgs/disclaimer_new.svg" alt="footer" width="100%" class="max-w-[142px]"/>
+
+    <!-- DESKTOP LINKS (shown from md up) -->
+    <div data-nosnippet class="container hidden md:flex flex-col justify-start">
+        <div 
+          class="flex py-2 flex-row items-center justify-start gap-3"
+          :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"
+        >
+            <div aria-label="desktop links" class="flex flex-row gap-3">
+              <a :href="tcUrl" target="_blank" class="text-white underline uppercase">
+                {{ t('footer.terms_conditions') }}
+              </a>
+              <div class="w-[1px] bg-white h-[15px] "></div>
+              <a :href="`${proxyUrl}${locale}/faq`" class="text-white underline uppercase">
+                {{ t('footer.faq') }}
+              </a>
+              <div class="w-[1px] bg-white h-[15px] "></div>
+              <a href="https://carlsbergmalaysia.com.my/privacy-policy/" target="_blank" class="text-white underline uppercase">
+                {{ t('footer.privacy_policy') }}
+              </a>
+              <div class="w-[1px] bg-white h-[15px] "></div>
+              <a :href="`${proxyUrl}${locale}/beersyoulove`" class="text-white underline uppercase">
+                {{ t('footer.beers_love') }}
+              </a>
+              <div class="w-[1px] bg-white h-[15px] "></div>
+              <a href="https://carlsbergmalaysia.com.my/sustainability/social/zero-irresponsible-drinking/" target="_blank" class="text-white underline uppercase">
+                {{ t('footer.responsible_drinking') }}
+              </a>
+            </div>
+            <div class="flex-grow">
+              <div class="flex flex-row gap-2 justify-end">
+                <a href="https://www.instagram.com/carlsbergmy" target="_blank" class="transition-transform hover:scale-110">
+                  <img src="@/assets/images/logo-ig.png" alt="Instagram" width="20" height="20" />
+                </a>
+                <a href="https://www.facebook.com/share/18f9GqW8rt" target="_blank" class="transition-transform hover:scale-110">
+                  <img src="@/assets/images/logo-fb.png" alt="Facebook" width="20" height="20" />
+                </a>
+              </div>
+            </div>
+        </div>
+        <div class="w-full flex-row justify-center items-center">
+          <div 
+            class="text-white w-auto"
+            :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"
+          >
+            {{ t('footer.faq_footer_1') }} {{ t('footer.faq_footer_2') }}
+          </div>
+          <div class="flex justify-start text-white"
+            :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"
+          >
+            {{ t('footer.disclaimer_2') }} 
+            <img src="@/assets/svgs/disclaimer_new.svg" alt="Celebrate Responsibly" class="px-1 h-[13px] w-auto" />
+          </div>
+        </div>
+         
     </div>
+    
+  
+
+   
+    <!-- Footer Disclaimer Text -->
+    <!-- <div class="w-full bg-primary pb-8 px-4">
+      <div class="container mx-auto text-center flex flex-col gap-2"
+        :class="[locale === 'ch' ? 'font-ch text-[10px]' : 'text-[8px]']"
+      >
+        <p class="text-white opacity-70">
+          {{ t('footer.faq_footer_1') }} {{ t('footer.faq_footer_2') }}
+        </p>
+        <p class="text-white font-bold uppercase tracking-wider">
+          {{ t('footer.disclaimer_2') }}
+        </p>
+        <div class="flex justify-center mt-3">
+          <img src="@/assets/svgs/disclaimer_new.svg" alt="Celebrate Responsibly" class="h-8 w-auto" />
+        </div>
+      </div>
+    </div> -->
   </footer>
 </template>
 
 <style scoped>
-/* Add classes like footer-responsive-sizing if they are not in global tailwind */
+/* Scoped styles removed in favor of Tailwind classes */
 </style>

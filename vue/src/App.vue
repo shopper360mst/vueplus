@@ -9,12 +9,12 @@ import AppGate from './components/AppGate.vue'
 import AppForm from './components/AppForm.vue'
 
 const { locale } = useI18n()
-import GwpForm from './components/GwpForm.vue'
-import CvsForm from './components/CvsForm.vue'
+// import GwpForm from './components/GwpForm.vue'
+// import CvsForm from './components/CvsForm.vue'
 </script>
 
 <template>
-    <div :lang="locale" class="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
+    <div :lang="locale" class="min-h-screen flex flex-col bg-gray-50 dark:bg-black overflow-x-hidden">
       <AppGate />
       <NavBar />
       
