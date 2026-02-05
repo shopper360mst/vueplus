@@ -12,7 +12,7 @@ const { locale } = useI18n()
 </script>
 
 <template>
-    <div :lang="locale" class="min-h-screen flex flex-col bg-gray-50 dark:bg-black">
+    <div :lang="locale" class="min-h-screen flex flex-col bg-gray-50 dark:bg-black overflow-x-hidden">
       <AppGate />
       <NavBar />
       
