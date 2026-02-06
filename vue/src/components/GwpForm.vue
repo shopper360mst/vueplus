@@ -21,12 +21,14 @@ const {
   locale,
   bURL
 } = useBaseForm({
-  formCode: 'GWP'
+  formCode: 'GWP',
+  initialData: {
+    products: []
+  }
 })
 
 const channel = ref('')
 const currentProductIndex = ref(1)
-const selectedProducts = ref([])
 const formImages = reactive({ 1: '', 2: '', 3: '' })
 const imagesLoaded = reactive({ 1: false, 2: false, 3: false })
 const carouselAutoplayTimer = ref(null)
@@ -130,7 +132,7 @@ watch(isOpen, (val) => {
     const data = uiStore.gwpForm
     channel.value = data.channel ? data.channel.trim().toUpperCase() : ''
     currentProductIndex.value = data.product || 1
-    selectedProducts.value = [currentProductIndex.value]
+    formData.products = [currentProductIndex.value]
     
     const regionMatch = channel.value.match(/_(WM|EM)/)
     detectedRegion.value = regionMatch ? regionMatch[1].toLowerCase() : ''
@@ -185,6 +187,24 @@ const carouselPrev = () => {
   currentProductIndex.value = currentProductIndex.value === 1 ? 3 : currentProductIndex.value - 1
 }
 
+const isProductAvailable = (id) => {
+  return true
+}
+
+const selectProduct = (id, event) => {
+  if (event.target.checked) {
+    if (!formData.products.includes(id)) {
+      formData.products.push(id)
+    }
+  } else {
+    formData.products = formData.products.filter((i) => i !== id)
+  }
+}
+
+const getPlacementImage = (i) => {
+  return new URL(`../assets/images/placement_product_${i}.png`, import.meta.url).href
+}
+
 const handleFormClose = () => {
   uiStore.closeGwpForm()
   resetForm()
@@ -194,7 +214,7 @@ const handleSubmit = async () => {
   try {
     const result = await baseSubmit({
       channel: channel.value,
-      product: selectedProducts.value.join(',')
+      product: formData.products.join(',')
     })
     
     if (result && (result.success || result.message === 'ALLGOOD')) {
@@ -241,8 +261,52 @@ onUnmounted(() => {
           </template>
         </div>
         
-        <form @submit.prevent="handleSubmit" autocomplete="off" class="flex flex-col gap-4 p-5">          
+        <form @submit.prevent="handleSubmit" autocomplete="off" class="flex flex-col gap-4 p-5">
           <div class="flex flex-col gap-4">
+            <!-- Product selection component -->
+            <div v-show="channel === 'SHM' || channel.startsWith('SHM_')" class="product-checkbox-group mt-4 mb-6">
+              <span class="text-white font-bold text-center mb-4 block text-left">
+                {{ locale === "ch" ? "请选择您的兑换选项" : "Please select your redemption options:" }}
+              </span>
+
+              <div class="flex flex-col gap-3">
+                <template v-for="i in [1, 2, 3]" :key="i">
+                  <label
+                    class="product-checkbox-label flex items-center gap-3 p-4 rounded-lg transition-all"
+                    :class="
+                      !isProductAvailable(i)
+                        ? 'bg-gray-400 opacity-50 grayscale cursor-not-allowed'
+                        : formData.products.includes(i)
+                          ? 'bg-carlsberg-green ring-2 ring-secondary cursor-pointer'
+                          : 'bg-carlsberg-green hover:bg-carlsberg-green/90 cursor-pointer'
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      name="product_selection"
+                      :value="i"
+                      class="form-checkbox h-5 w-5 text-secondary flex-shrink-0"
+                      :class="!isProductAvailable(i) ? 'cursor-not-allowed' : 'cursor-pointer'"
+                      :checked="formData.products.includes(i)"
+                      :disabled="!isProductAvailable(i)"
+                      @change="isProductAvailable(i) && selectProduct(i, $event)"
+                    />
+                    <img
+                      :src="getPlacementImage(i)"
+                      alt="Product"
+                      class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-md flex-shrink-0"
+                    />
+                    <span class="text-white font-semibold text-sm md:text-base flex-1">
+                      <span v-if="!isProductAvailable(i)">{{
+                        locale === "ch" ? "已全数兑换 - " : "FULLY REDEEMED - "
+                      }}</span>
+                      <span>{{ i === 1 ? t("form.luggage") : i === 2 ? t("form.rummy") : t("form.grill") }}</span>
+                    </span>
+                  </label>
+                </template>
+              </div>
+            </div>
+
             <template v-for="field in currentStructure.form_group" :key="field.name">
               <!-- Standard Input -->
               <div v-if="field.component === 'input'" class="flex flex-col gap-2">
