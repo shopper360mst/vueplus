@@ -161,9 +161,9 @@ onMounted(() => {
             </div>
 
             <div class="w-full mt-12">
-              <div v-if="results.length > 0">
-                <div v-for="item in results" :key="item.id" class="mb-8">
-                  <div v-if="item.submit_code !== 'CVSTOFT'" class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
+              <div v-if="results.length > 0" class="flex flex-col gap-5">
+                <template v-for="item in results" :key="item.id">
+                  <div v-if="item.submit_code !== 'CVSTOFT'" class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <div class="w-full flex flex-col mb-4">
                       <div class="flex justify-between items-center">
                         <p class="text-xs md:text-sm font-mono text-gray-500">
@@ -175,9 +175,7 @@ onMounted(() => {
                         {{ getEntryRejectionMessage(item.invalid_sub_reason) }}
                       </div>
                     </div>
-
                     <AppTimeline :item="item" :locale="locale" />
-
                     <div class="mt-6 flex justify-end">
                       <a v-if="item.delivery_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details"
                         :href="item.delivery_assign === 'SMX' ? `https://spx.com.my/track?${item.delivery_details}` : `https://gdexpress.com/tracking/?consignmentno=${item.delivery_details}`"
@@ -188,10 +186,10 @@ onMounted(() => {
                       </a>
                     </div>
                   </div>
-                </div>
+                </template>
               </div>
 
-              <div v-else-if="noResults" class="bg-gray-50 rounded-xl p-10 text-center border border-dashed border-gray-300">
+              <div v-else-if="noResults" class="bg-white rounded-xl p-10 text-center border border-dashed border-gray-300">
                 <p class="text-gray-500">{{ t('check_status.no_results') }}</p>
               </div>
             </div>
