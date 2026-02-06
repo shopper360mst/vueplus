@@ -208,6 +208,11 @@ const selectProduct = (id, event) => {
       formData.products.push(id)
     }
   } else {
+    if (formData.products.length <= 1) {
+      event.target.checked = true
+      uiStore.showToast(t('form.min_redemption'))
+      return
+    }
     formData.products = formData.products.filter((i) => i !== id)
   }
 }

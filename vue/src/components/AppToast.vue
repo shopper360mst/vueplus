@@ -25,7 +25,7 @@ onUnmounted(() => {
 
 <template>
   <Transition name="fade">
-    <div v-if="uiStore.toast.isOpen" class="toast-overlay fixed inset-0 z-50 flex items-center justify-center bg-black/50" @click.self="uiStore.hideToast">
+    <div v-if="uiStore.toast.isOpen" class="toast-overlay fixed inset-0 z-[100] flex items-center justify-center bg-black/50" @click.self="uiStore.hideToast">
       <Transition name="scale">
         <div v-if="uiStore.toast.isOpen" :class="['toast-dialog bg-white rounded-lg shadow-xl max-w-sm w-full mx-4', uiStore.toast.classes]">
           <div class="px-4 py-3 text-center">
