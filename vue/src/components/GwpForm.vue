@@ -95,17 +95,30 @@ watch(mappedTitle, (newTitle) => {
 })
 
 const updateFormImage = () => {
-  if (channel.value === 'SHM' || isSHMVariant.value) {
-    const regionMatch = channel.value.match(/_(WM|EM)/)
-    const region = regionMatch ? regionMatch[1].toLowerCase() : ''
-    const currentLocale = locale.value.toLowerCase()
+  const regionMatch = channel.value.match(/_(WM|EM)/)
+  const region = regionMatch ? regionMatch[1].toLowerCase() : ''
+  const currentLocale = locale.value.toLowerCase()
 
+  if (channel.value === 'SHM' || isSHMVariant.value) {
     for (let idx = 1; idx <= 3; idx++) {
       if (isSHMVariant.value) {
-        formImages[idx] = `${bURL}/build/images/form_shm_${region}_${currentLocale}_${idx}.png?v=2`
+        formImages[idx] = new URL(`../assets/images/form_shm_${region}_${currentLocale}_${idx}.png`, import.meta.url).href
       } else {
-        formImages[idx] = `${bURL}/build/images/form_shm_${currentLocale}_${idx}.png?v=2`
+        formImages[idx] = new URL(`../assets/images/form_shm_${currentLocale}_${idx}.png`, import.meta.url).href
       }
+    }
+  } else {
+    // Handle other channels
+    let base = channel.value.toLowerCase()
+    if (base === 's99') base = '99sm'
+    if (base === 'cvs') base = 'cvstoft'
+    
+    try {
+      formImages[1] = new URL(`../assets/images/form_${base}_${currentLocale}.png`, import.meta.url).href
+      formImages[2] = ''
+      formImages[3] = ''
+    } catch (e) {
+      formImages[1] = ''
     }
   }
 }
@@ -214,19 +227,21 @@ onUnmounted(() => {
         <!-- <h1 class="text-white font-bold text-lg uppercase tracking-wider">{{ mappedTitle }}</h1> -->
         <button class="absolute right-4 text-white text-2xl hover:text-gray-300 transition-colors" @click="handleFormClose">&times;</button>
       </div>
-      <div class="bg-primary flex flex-col gap-4 overflow-y-auto custom-scrollbar">
-        <div v-if="channel === 'SHM' || isSHMVariant" class="relative group mb-6 overflow-hidden border border-white/20">
+      <div class="bg-primary overflow-y-auto custom-scrollbar">
+        <div v-if="formImages[currentProductIndex]" class="relative group mb-6 overflow-hidden border border-white/20">
           <img :src="formImages[currentProductIndex]" class="w-full h-auto transition-opacity duration-300" :class="{'opacity-0': !imagesLoaded[currentProductIndex]}" @load="imagesLoaded[currentProductIndex] = true" alt="Product" />
           
-          <button @click="carouselPrev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-          </button>
-          <button @click="carouselNext" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-          </button>
+          <template v-if="formImages[2]">
+            <button @click="carouselPrev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+            </button>
+            <button @click="carouselNext" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </button>
+          </template>
         </div>
         
-        <form @submit.prevent="handleSubmit" autocomplete="off" class="flex flex-col gap-4 px-5">          
+        <form @submit.prevent="handleSubmit" autocomplete="off" class="flex flex-col gap-4 p-5">          
           <div class="flex flex-col gap-4">
             <template v-for="field in currentStructure.form_group" :key="field.name">
               <!-- Standard Input -->

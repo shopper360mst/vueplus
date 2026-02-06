@@ -99,11 +99,19 @@ const updateFormImage = () => {
   const region = regionMatch ? regionMatch[1].toLowerCase() : ''
   const currentLocale = locale.value.toLowerCase()
   
+  let base = channel.value
   if (region) {
-    const base = channel.value.replace(`_${region.toUpperCase()}`, '').toLowerCase()
-    formImage.value = `${bURL}/build/images/form_${base}_${region}_${currentLocale}.png?v=2`
+    base = channel.value.replace(`_${region.toUpperCase()}`, '')
+  }
+  
+  base = base.toLowerCase()
+  if (base === 'cvs') base = 'cvstoft'
+  if (base === 's99') base = '99sm'
+
+  if (region) {
+    formImage.value = new URL(`../assets/images/form_${base}_${region}_${currentLocale}.png`, import.meta.url).href
   } else {
-    formImage.value = `${bURL}/build/images/form_${channel.value.toLowerCase()}_${currentLocale}.png?v=2`
+    formImage.value = new URL(`../assets/images/form_${base}_${currentLocale}.png`, import.meta.url).href
   }
 }
 
@@ -175,12 +183,12 @@ onUnmounted(() => {
         <h1 class="text-white font-bold text-lg uppercase tracking-wider">{{ mappedTitle }}</h1>
         <button class="absolute right-4 text-white text-2xl hover:text-gray-300 transition-colors" @click="handleFormClose">&times;</button>
       </div>
-      <div class="bg-primary flex flex-col gap-4 overflow-y-auto custom-scrollbar">
-        <div class="relative group mb-6 overflow-hidden border border-white/20">
+      <div class="bg-primary overflow-y-auto custom-scrollbar">
+        <div v-if="formImage" class="relative group overflow-hidden border border-white/20">
           <img :src="formImage" class="w-full h-auto" alt="Banner" />
         </div>
         
-        <form @submit.prevent="handleSubmit" autocomplete="off" class="flex flex-col gap-4 px-5">          
+        <form @submit.prevent="handleSubmit" autocomplete="off" class="flex flex-col gap-4 p-5">          
           <div class="flex flex-col gap-4">
             <template v-for="field in currentStructure.form_group" :key="field.name">
               <!-- Standard Input -->
