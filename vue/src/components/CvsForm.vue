@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useBaseForm } from '../composables/useBaseForm'
 import { useUIStore } from '../stores/ui'
 import cvsStructure from '../data/cvs-structure.json'
 
 const uiStore = useUIStore()
+const route = useRoute()
+const router = useRouter()
 
 const {
   formData,
@@ -135,13 +138,23 @@ watch(showReceiptGuide, (val) => {
   }
 })
 
-const handleHashChange = () => {
-  const hash = window.location.hash
-  if (hash.startsWith('#CVS')) {
-    uiStore.openCvsForm(hash.substring(1))
-    window.location.hash = ''
+const cvsTriggers = ['CVSTOFT', 'MONT', 'TONT', 'S99', 'CVS', 'TOFT']
+
+const handlePathDetection = () => {
+  const channelParam = route.params.channel
+  if (channelParam) {
+    const upperChannel = channelParam.toUpperCase()
+    const baseSegment = upperChannel.split('_')[0]
+    if (cvsTriggers.includes(baseSegment)) {
+      uiStore.openCvsForm(upperChannel)
+      router.replace({ name: 'home', params: { locale: route.params.locale } })
+    }
   }
 }
+
+watch(() => route.path, () => {
+  handlePathDetection()
+}, { immediate: true })
 
 const handleFormClose = () => {
   uiStore.closeCvsForm()
@@ -166,12 +179,9 @@ const handleSubmit = async () => {
 }
 
 onMounted(() => {
-  window.addEventListener('hashchange', handleHashChange)
-  handleHashChange()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('hashchange', handleHashChange)
   document.body.classList.remove('overflow-hidden')
 })
 </script>

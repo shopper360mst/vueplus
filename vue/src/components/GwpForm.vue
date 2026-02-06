@@ -1,10 +1,13 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useBaseForm } from '../composables/useBaseForm'
 import { useUIStore } from '../stores/ui'
 import gwpStructure from '../data/gwp-structure.json'
 
 const uiStore = useUIStore()
+const route = useRoute()
+const router = useRouter()
 
 const {
   formData,
@@ -156,13 +159,20 @@ watch(showReceiptGuide, (val) => {
   }
 })
 
-const handleHashChange = () => {
-  const hash = window.location.hash
-  if (hash.startsWith('#SHM')) {
-    uiStore.openGwpForm(hash.substring(1))
-    window.location.hash = ''
+const handlePathDetection = () => {
+  const channelParam = route.params.channel
+  if (channelParam) {
+    const upperChannel = channelParam.toUpperCase()
+    if (upperChannel.startsWith('SHM')) {
+      uiStore.openGwpForm(upperChannel)
+      router.replace({ name: 'home', params: { locale: route.params.locale } })
+    }
   }
 }
+
+watch(() => route.path, () => {
+  handlePathDetection()
+}, { immediate: true })
 
 const startCarouselAutoplay = () => {
   if (!carouselAutoplayTimer.value) {
@@ -229,12 +239,9 @@ const handleSubmit = async () => {
 }
 
 onMounted(() => {
-  window.addEventListener('hashchange', handleHashChange)
-  handleHashChange()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('hashchange', handleHashChange)
   document.body.classList.remove('overflow-hidden')
   stopCarouselAutoplay()
 })
