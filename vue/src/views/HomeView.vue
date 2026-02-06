@@ -8,7 +8,7 @@ const { t, locale } = useI18n()
 
 useSEO('seo.home_title', 'seo.home_description')
 // Opens GWP form for a specific channel and product
-// uiStore.openCvsForm('MONT', 1);
+uiStore.openGwpForm('SHM_WM', 1);
 
 </script>
 

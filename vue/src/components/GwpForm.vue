@@ -3,6 +3,7 @@ import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBaseForm } from '../composables/useBaseForm'
 import { useUIStore } from '../stores/ui'
+import FormDispatcher from './form/FormDispatcher.vue'
 import gwpStructure from '../data/gwp-structure.json'
 
 const uiStore = useUIStore()
@@ -315,59 +316,14 @@ onUnmounted(() => {
             </div>
 
             <template v-for="field in currentStructure.form_group" :key="field.name">
-              <!-- Standard Input -->
-              <div v-if="field.component === 'input'" class="flex flex-col gap-2">
-                <div class="flex items-center gap-1.5 mb-2">
-                  <label class="text-white text-xs font-semibold uppercase tracking-wider">{{ field.label }}</label>
-                  <button v-if="field.helper" type="button" @click="showReceiptGuide = true" class="text-yellow-500 hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                      <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-                <input v-model="formData[field.alpine_model]" :type="field.type" :placeholder="field.placeholder" :disabled="field.disabled" :maxlength="field.maxlength" class="p-2.5 rounded bg-white text-black focus:ring-2 focus:ring-yellow-500 outline-none" :required="field.required" />
-              </div>
-
-              <!-- Mobile Prefix -->
-              <div v-else-if="field.component === 'mobile-prefix'" class="flex flex-col gap-2">
-                <label class="text-white text-xs font-semibold mb-2 uppercase tracking-wider">{{ field.label }}</label>
-                <div class="flex gap-2">
-                  <select v-model="formData[field.prefix_alpine_model]" class="p-2.5 rounded bg-white text-black w-24 outline-none">
-                    <option v-for="opt in field.options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                  </select>
-                  <input v-model="formData[field.alpine_model]" type="tel" :placeholder="field.placeholder" :maxlength="field.maxlength" class="p-2.5 rounded bg-white text-black grow outline-none" :required="field.required" />
-                </div>
-              </div>
-
-              <!-- NRIC / Passport -->
-              <div v-else-if="field.component === 'nricppt'" class="flex flex-col gap-2">
-                <div class="flex items-center gap-1.5 mb-2">
-                  <label class="text-white text-xs font-semibold uppercase tracking-wider">{{ field.label }}</label>
-                  <button v-if="field.helper" type="button" @click="showReceiptGuide = true" class="text-yellow-500 hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                      <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="flex gap-2">
-                  <select v-model="formData[field.prefix_alpine_model]" class="p-2.5 rounded bg-white text-black w-32 outline-none">
-                    <option v-for="opt in field.options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                  </select>
-                  <input v-model="formData[field.alpine_model]" type="text" :placeholder="formData[field.prefix_alpine_model] === 'NRIC' ? field.options[0].placeholder : field.options[1].placeholder" class="p-2.5 rounded bg-white text-black grow outline-none" :required="field.required" />
-                </div>
-              </div>
-
-              <!-- File Upload -->
-              <div v-else-if="field.component === 'file-upload'" class="flex flex-col gap-2">
-                <label class="text-white text-xs font-semibold mb-2 uppercase tracking-wider">{{ field.label }}</label>
-                <div class="relative">
-                  <input type="file" @change="handleFileChange" accept="image/*" class="block w-full text-xs text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-bold file:bg-yellow-500 file:text-white hover:file:bg-yellow-600 file:cursor-pointer" :required="field.required && !fileUploaded" />
-                  <p v-if="fileUploaded" class="text-yellow-400 text-[10px] mt-1 font-medium bg-black/20 p-1.5 rounded truncate">Selected: {{ uploadReceiptValue }}</p>
-                </div>
-              </div>
-
-              <!-- Hidden -->
-              <input v-else-if="field.component === 'hidden'" type="hidden" v-model="formData[field.alpine_model]" />
+              <FormDispatcher
+                :field="field"
+                :form-data="formData"
+                :file-uploaded="fileUploaded"
+                :upload-receipt-value="uploadReceiptValue"
+                @file-change="handleFileChange"
+                @show-helper="showReceiptGuide = true"
+              />
             </template>
           </div>
 
@@ -376,50 +332,23 @@ onUnmounted(() => {
             <p class="text-white/80 text-xs text-center mb-6 leading-relaxed">{{ currentStructure.translations.delivery_subtitle }}</p>
             <div class="flex flex-col gap-4">
               <template v-for="field in currentStructure.delivery_group" :key="field.name">
-                <div v-if="field.component === 'input' && !['city', 'state'].includes(field.alpine_model)" class="flex flex-col">
-                  <label class="text-white text-xs font-semibold mb-2 uppercase tracking-wider" v-html="field.label"></label>
-                  <input v-model="formData[field.alpine_model]" :type="field.type" :placeholder="field.placeholder" :disabled="field.disabled" :maxlength="field.maxlength" class="p-2.5 rounded bg-white text-black outline-none" :required="field.required" />
-                </div>
-
-                <div v-else-if="field.component === 'mobile-prefix'" class="flex flex-col">
-                  <label class="text-white text-xs font-semibold mb-2 uppercase tracking-wider" v-html="field.label"></label>
-                  <div class="flex gap-2">
-                    <select v-model="formData[field.prefix_alpine_model]" class="p-2.5 rounded bg-white text-black w-24 outline-none">
-                      <option v-for="opt in field.options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
-                    </select>
-                    <input v-model="formData[field.alpine_model]" type="tel" :placeholder="field.placeholder" :maxlength="field.maxlength" class="p-2.5 rounded bg-white text-black grow outline-none" :required="field.required" />
-                  </div>
-                </div>
-
-                <div v-else-if="field.component === 'adv-select'" class="flex flex-col relative">
-                  <label class="text-white text-xs font-semibold mb-2 uppercase tracking-wider">{{ field.label }}</label>
-                  <input v-model="formData[field.alpine_model]" type="text" :placeholder="field.placeholder" :maxlength="field.maxlength" class="p-2.5 rounded bg-white text-black outline-none" :required="field.required" />
-                  
-                  <div v-if="showPostcodeDropdown" class="absolute z-10 w-full mt-1 top-full bg-white rounded shadow-xl border border-gray-200 overflow-hidden max-h-48 overflow-y-auto">
-                    <div v-for="item in filteredPostcodes" :key="item.postcode + item.city" @click="selectPostcode(item)" class="p-3 hover:bg-gray-100 cursor-pointer text-sm border-b last:border-0 border-gray-100 flex justify-between">
-                      <span class="font-bold text-primary">{{ item.postcode }}</span>
-                      <span class="text-gray-600">{{ item.city }}, {{ item.state }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-else-if="['city', 'state'].includes(field.alpine_model)" class="flex flex-col">
-                  <label class="text-white text-xs font-semibold mb-2 uppercase tracking-wider">{{ field.label }}</label>
-                  <input v-model="formData[field.alpine_model]" type="text" readonly class="p-2.5 rounded bg-white/20 text-white cursor-not-allowed outline-none" />
-                </div>
+                <FormDispatcher
+                  :field="field"
+                  :form-data="formData"
+                  :show-postcode-dropdown="showPostcodeDropdown"
+                  :filtered-postcodes="filteredPostcodes"
+                  @select-postcode="selectPostcode"
+                />
               </template>
             </div>
           </div>
 
           <div class="flex flex-col gap-4 py-4">
             <template v-for="field in currentStructure.checkbox_group" :key="field.name">
-              <div v-if="field.component === 'label'" class="text-white text-xs font-bold uppercase tracking-wider mb-2">
-                {{ field.label }}
-              </div>
-              <div v-else-if="field.component === 'checkbox'" class="flex items-start gap-3">
-                <input v-model="formData[field.name]" type="checkbox" :id="'gwp_' + field.name" class="mt-1 w-5 h-5 rounded border-white/30 bg-white/10 text-yellow-500 focus:ring-yellow-500" :required="field.required" />
-                <label :for="'gwp_' + field.name" class="text-white text-xs leading-relaxed select-none" v-html="field.label"></label>
-              </div>
+              <FormDispatcher
+                :field="field"
+                :form-data="formData"
+              />
             </template>
           </div>
 
