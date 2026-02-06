@@ -1,0 +1,209 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useUIStore } from '../stores/ui'
+import NavBar from '../components/NavBar.vue'
+import AppFooter from '../components/AppFooter.vue'
+import AppTimeline from '../components/AppTimeline.vue'
+import AppToast from '../components/AppToast.vue'
+import AppPopup from '../components/AppPopup.vue'
+import AppGate from '../components/AppGate.vue'
+import MobileInput from '../components/form/MobileInput.vue'
+
+const { t, locale } = useI18n()
+const uiStore = useUIStore()
+
+const results = ref([])
+const noResults = ref(false)
+
+const form = ref({
+  mobile_prefix: '60',
+  mobile_number: ''
+})
+
+const form_fields = ref([
+  {
+    form_group: [
+      {
+        name: 'mobile_no',
+        label: 'form.mobile_number',
+        placeholder: 'form.mobile_placeholder',
+        options: [{ label: '+60', value: '60' }, { label: '+65', value: '65' }]
+      }
+    ]
+  }
+])
+
+// Sample Data from chkstatus.alpine.js
+const sampleData = [
+  {
+    id: 1,
+    channel: 'CONVENIENCE STORE',
+    submit_code: 'SHM',
+    product_category: 'LUGGAGE_SHM',
+    submitted_date: '30/09/2024',
+    sub_status: 'REJECTED',
+    invalid_sub_reason: 'UNCLEAR IMAGE/NOT A RECEIPT/INCOMPLETE RECEIPT',
+    s_validate_date: '30/09/2024',
+    delivery_status: '',
+    delivery_details: '',
+    delivery_date: ''
+  },
+  {
+    id: 2,
+    channel: 'SUPERMARKET',
+    submit_code: 'SHM',
+    product_category: 'RUMMY_SHM',
+    submitted_date: '01/10/2024',
+    sub_status: 'APPROVED',
+    s_validate_date: '01/10/2024',
+    delivery_status: 'PROCESSING',
+    delivery_details: 'DHL Express',
+    delivery_date: '',
+    delivery_assign: 'GDEX'
+  },
+  {
+    id: 3,
+    channel: 'HYPERMARKET',
+    submit_code: 'SHM',
+    product_category: 'GRILL_SHM',
+    submitted_date: '29/09/2024',
+    sub_status: 'DELIVERED',
+    s_validate_date: '30/09/2024',
+    delivery_status: 'OUT FOR DELIVERY',
+    delivery_details: 'MY88888888888',
+    delivery_date: '05/10/2024',
+    delivery_assign: 'SMX'
+  }
+]
+
+const handleProcessForm = async () => {
+  const prefix = form.value.mobile_prefix
+  const number = form.value.mobile_number
+
+  let invalidMY = false
+  let invalidSG = false
+
+  if (prefix === '60') {
+    if (number[0] !== '1' || number.length < 8) {
+      invalidMY = true
+    }
+  } else if (prefix === '65' && number.length !== 8) {
+    invalidSG = true
+  }
+
+  if (invalidMY) {
+    uiStore.showToast(t('form.invalid_my_phone'), 'bg-red-500 text-white')
+    return
+  }
+  if (invalidSG) {
+    uiStore.showToast(t('form.invalid_sg_phone'), 'bg-red-500 text-white')
+    return
+  }
+
+  // Simulate API Call
+  setTimeout(() => {
+    results.value = sampleData
+    noResults.value = results.value.length === 0
+  }, 500)
+}
+
+const getLocalizedProductName = (key) => {
+  return t(`${key}`)
+}
+
+const getEntryRejectionMessage = (reason) => {
+  if (!reason) return ''
+  return t(`${reason}`)
+}
+
+onMounted(() => {
+  results.value = sampleData
+})
+</script>
+
+<template>
+  <div class="bg-tertiary w-full min-h-screen flex flex-col">
+    <!-- ALL COMMON COMPONENTS -->
+    <AppToast />
+    <AppPopup />
+    <!-- Loader logic can be added to uiStore if needed -->
+    
+    <div class="flex-grow flex flex-col items-center py-20">
+      <section class="flex flex-col items-center w-full max-w-4xl px-4">
+        <div class="bg-secondary rounded-xl w-full py-10 px-6 shadow-2xl">
+          <div class="flex flex-col items-center gap-4">
+            <img class="w-48 mb-6" src="@/assets/images/carlsberg_logo.png" alt="Carlsberg Logo" />
+            <p class="w-full font-sans text-center mb-8 text-white">{{ t('check_status.desc') }}</p>
+            
+            <div class="w-full max-w-3xl flex flex-col items-center">
+              <form class="w-full flex flex-col items-center gap-4" @submit.prevent="handleProcessForm">
+                  <div v-for="(group, gIdx) in form_fields" :key="gIdx" class="w-full">
+                    <div v-for="(field, fIdx) in group.form_group" :key="fIdx" class="mb-6">
+                      <MobileInput 
+                        v-model:modelValue="form.mobile_number"
+                        v-model:prefixValue="form.mobile_prefix"
+                        :label="t(field.label)"
+                        :placeholder="t(field.placeholder)"
+                        :options="field.options"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <button type="submit" 
+                    :class="['bg-primary text-white py-3 px-8 rounded-full shadow-lg transition-transform active:scale-95 mx-auto block w-[165px]', 
+                    locale === 'en' ? '' : 'font-sans']"
+                  >
+                    {{ t('check_status.button') }}
+                  </button>
+              </form>
+            </div>
+
+            <div class="w-full mt-12">
+              <div v-if="results.length > 0">
+                <div v-for="item in results" :key="item.id" class="mb-8">
+                  <div v-if="item.submit_code !== 'CVSTOFT'" class="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
+                    <div class="w-full flex flex-col mb-4">
+                      <div class="flex justify-between items-center">
+                        <p class="text-xs md:text-sm font-mono text-gray-500">
+                          {{ t('check_status.submission_id') }}: CNY{{ String(item.id).padStart(4, '0') }}
+                        </p>
+                        <h5 class="text-lg font-bold text-primary">{{ getLocalizedProductName(item.product_category) }}</h5>
+                      </div>
+                      <div v-if="item.sub_status === 'REJECTED'" class="mt-2 p-3 bg-red-50 border border-red-100 rounded text-red-600 text-sm">
+                        {{ getEntryRejectionMessage(item.invalid_sub_reason) }}
+                      </div>
+                    </div>
+
+                    <AppTimeline :item="item" :locale="locale" />
+
+                    <div class="mt-6 flex justify-end">
+                      <a v-if="item.delivery_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details"
+                        :href="item.delivery_assign === 'SMX' ? `https://spx.com.my/track?${item.delivery_details}` : `https://gdexpress.com/tracking/?consignmentno=${item.delivery_details}`"
+                        target="_blank"
+                        class="bg-secondary text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-90 transition-colors border border-white"
+                      >
+                        {{ t('check_status.track_prize') }}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else-if="noResults" class="bg-gray-50 rounded-xl p-10 text-center border border-dashed border-gray-300">
+                <p class="text-gray-500">{{ t('check_status.no_results') }}</p>
+              </div>
+            </div>
+            
+            <span class="mt-12 text-sm text-white font-sans text-center" v-html="t('check_status.contact_desc')"></span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

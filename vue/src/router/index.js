@@ -30,6 +30,11 @@ const router = createRouter({
           component: () => import('../views/AboutView.vue'),
         },
         {
+          path: 'check-status',
+          name: 'check-status',
+          component: () => import('../views/CheckStatusView.vue'),
+        },
+        {
           path: ':channel',
           name: 'channel',
           component: HomeView,
