@@ -16,7 +16,9 @@
     "home_title": "VuePlus | 构建与扩展，无止境",
     "home_description": "面向现代应用的新一代开发基础设施。通过 VuePlus 快速行动、更早交付并在全球范围内扩展。",
     "about_title": "关于我们 | VuePlus",
-    "about_description": "详细了解 VuePlus 及其赋能开发者的使命。"
+    "about_description": "详细了解 VuePlus 及其赋能开发者的使命。",
+    "promotions_title": "促销活动 | VuePlus",
+    "promotions_description": "探索我们最新的促销活动和奖励。"
   },
   "home": {
     "title": "构建与扩展",
@@ -29,6 +31,19 @@
   },
   "about": {
     "title": "这是关于页面"
+  },
+  "promotions": {
+    "title": "专属促销活动",
+    "description": "探索我们最新的促销活动并兑换令人兴奋的奖励。选择您喜欢的渠道开始。",
+    "banner_title": "共创辉煌",
+    "banner_subtitle": "可能是世界上最好的奖励",
+    "redeem_now": "立即兑换",
+    "bar_cafe": "酒吧, 咖啡厅及餐厅",
+    "cafe_court": "咖啡店及美食中心",
+    "shm-wm": "[西马]<BR>超级市场, 霸级市场及电商",
+    "shm-em": "[东马]<BR>超级市场, 霸级市场及电商",
+    "99sm": "99 Speedmart",
+    "cvs": "便利商店及迷你市场"
   },
   "toast": {
     "success": "成功",

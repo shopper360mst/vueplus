@@ -35,6 +35,11 @@ const router = createRouter({
           component: () => import('../views/CheckStatusView.vue'),
         },
         {
+          path: 'promotions',
+          name: 'promotions',
+          component: () => import('../views/PromotionView.vue'),
+        },
+        {
           path: ':channel',
           name: 'channel',
           component: HomeView,

@@ -16,7 +16,9 @@
     "home_title": "VuePlus | Build and Scale Without Limits",
     "home_description": "The next generation of developer infrastructure for modern applications. Move fast, ship faster, and scale globally with VuePlus.",
     "about_title": "About Us | VuePlus",
-    "about_description": "Learn more about VuePlus and our mission to empower developers."
+    "about_description": "Learn more about VuePlus and our mission to empower developers.",
+    "promotions_title": "Promotions | VuePlus",
+    "promotions_description": "Explore our latest promotions and rewards."
   },
   "home": {
     "title": "BUILD AND SCALE",
@@ -29,6 +31,19 @@
   },
   "about": {
     "title": "This is an about page"
+  },
+  "promotions": {
+    "title": "Exclusive Promotions",
+    "description": "Discover our latest promotions and redeem exciting rewards. Choose your preferred channel to get started.",
+    "banner_title": "Celebrating Success",
+    "banner_subtitle": "Probably the best rewards in the world",
+    "redeem_now": "Redeem Now",
+    "bar_cafe": "Bar, Café & Restaurant",
+    "cafe_court": "Coffee Shop & Food Court",
+    "shm-wm": "[West Malaysia]<BR>Supermarket, Hypermarket <BR>& E-Commerce",
+    "shm-em": "[East Malaysia]<BR>Supermarket, Hypermarket <BR>& E-Commerce",
+    "99sm": "99 Speedmart",
+    "cvs": "Convenience Store & <BR>Mini Market"
   },
   "toast": {
     "success": "Success",
@@ -160,8 +175,8 @@
   "campaign_selector": "SELECT A CAMPAIGN",
   "bar_cafe": "Bar, Café & Restaurant",
   "cafe_court": "Coffee Shop & Food Court",
-  "shm-wm": "[West Malaysia]<BR>Supermarket, Hypermarket <BR>& E-Commerce",
-  "shm-em": "[East Malaysia]<BR>Supermarket, Hypermarket <BR>& E-Commerce",
+  "shm-wm": "[West Malaysia]<BR>Supermarket, Hypermarket & E-Commerce",
+  "shm-em": "[East Malaysia]<BR>Supermarket, Hypermarket & E-Commerce",
   "99sm": "99 Speedmart",
   "cvs": "Convenience Store & <BR>Mini Market",
   "view_party": "Viewing Party",
