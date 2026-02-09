@@ -38,42 +38,66 @@ const form_fields = ref([
 const sampleData = [
   {
     id: 1,
-    channel: 'CONVENIENCE STORE',
+    channel: 'CHANNEL NAME HERE',
     submit_code: 'SHM',
-    product_category: 'LUGGAGE_SHM',
-    submitted_date: '30/09/2024',
+    submit_type: 'MONT',
+    submitted_date: '30th Sept 2024',
     sub_status: 'REJECTED',
     invalid_sub_reason: 'UNCLEAR IMAGE/NOT A RECEIPT/INCOMPLETE RECEIPT',
-    s_validate_date: '30/09/2024',
+    limit_reached: null,
+    instore_redeem: null,
+    s_validate_date: '30th Sept 2024',
+    r_status: '',
+    locked_date: '',
+    r_checked_date: '',
+    r_approved_date: '',
+    winner_status: '',
+    product_ref: null,
     delivery_status: '',
     delivery_details: '',
-    delivery_date: ''
+    delivered_date: ''
   },
   {
     id: 2,
-    channel: 'SUPERMARKET',
+    channel: 'CHANNEL NAME HERE',
     submit_code: 'SHM',
-    product_category: 'RUMMY_SHM',
-    submitted_date: '01/10/2024',
+    submit_type: 'MONT',
+    submitted_date: '30th Sept 2024',
     sub_status: 'APPROVED',
-    s_validate_date: '01/10/2024',
+    invalid_sub_reason: null,
+    limit_reached: null,
+    instore_redeem: null,
+    s_validate_date: '1st Oct 2024',
+    r_status: 'APPROVED',
+    r_checked_date: '2nd Oct 2024',
+    r_approved_date: '2nd Oct 2024',
+    winner_status: '',
+    product_ref: 12345,
     delivery_status: 'PROCESSING',
     delivery_details: 'DHL Express',
-    delivery_date: '',
-    delivery_assign: 'GDEX'
+    delivered_date: '',
+    locked_date: '3rd Oct 2024'
   },
   {
     id: 3,
-    channel: 'HYPERMARKET',
+    channel: 'CHANNEL NAME HERE',
     submit_code: 'SHM',
-    product_category: 'GRILL_SHM',
-    submitted_date: '29/09/2024',
-    sub_status: 'DELIVERED',
-    s_validate_date: '30/09/2024',
+    submit_type: 'MONT',
+    submitted_date: '29th Sept 2024',
+    sub_status: 'APPROVED',
+    invalid_sub_reason: null,
+    limit_reached: null,
+    instore_redeem: null,
+    s_validate_date: '30th Sept 2024',
+    r_status: 'APPROVED',
+    r_checked_date: '1st Oct 2024',
+    r_approved_date: '1st Oct 2024',
+    winner_status: '',
+    product_ref: 1,
     delivery_status: 'OUT FOR DELIVERY',
     delivery_details: 'MY88888888888',
-    delivery_date: '05/10/2024',
-    delivery_assign: 'SMX'
+    delivered_date: '5th Oct 2024',
+    locked_date: '2nd Oct 2024'
   }
 ]
 
@@ -169,15 +193,11 @@ onMounted(() => {
                         <p class="text-xs md:text-sm font-mono text-gray-500">
                           {{ t('check_status.submission_id') }}: CNY{{ String(item.id).padStart(4, '0') }}
                         </p>
-                        <h5 class="text-lg font-bold text-primary">{{ getLocalizedProductName(item.product_category) }}</h5>
-                      </div>
-                      <div v-if="item.sub_status === 'REJECTED'" class="mt-2 p-3 bg-red-50 border border-red-100 rounded text-red-600 text-sm">
-                        {{ getEntryRejectionMessage(item.invalid_sub_reason) }}
                       </div>
                     </div>
                     <AppTimeline :item="item" :locale="locale" />
                     <div class="mt-6 flex justify-end">
-                      <a v-if="item.delivery_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details"
+                      <a v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details"
                         :href="item.delivery_assign === 'SMX' ? `https://spx.com.my/track?${item.delivery_details}` : `https://gdexpress.com/tracking/?consignmentno=${item.delivery_details}`"
                         target="_blank"
                         class="bg-secondary text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-90 transition-colors border border-white"

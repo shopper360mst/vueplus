@@ -11,8 +11,10 @@ const props = defineProps({
       submitted_date: 'DD/MM/YYYY',
       s_validate_date: '',
       delivered_date: '',
+      delivery_date: '',
       delivery_status: '',
       delivery_details: '',
+      invalid_sub_reason: '',
       reject_reason: '',
       product_ref: ''
     })
@@ -22,7 +24,8 @@ const props = defineProps({
 // Helper to split multi-line strings for SVG tspans
 const getRejectionLine = (reason, lineIndex) => {
   if (!reason) return ''
-  const lines = reason.split('\n')
+  // Use / as delimiter for multi-line rejection reasons
+  const lines = String(reason).split('/')
   return lines[lineIndex] || ''
 }
 
@@ -118,20 +121,20 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
                 <tspan x="440" y="235" font-weight="bold">{{ t('timeline_processing_status_not_eligible') }}</tspan>
                 <tspan x="440" y="255">{{ t('timeline_processing_unfortunately') }}</tspan>
                 <tspan x="440" y="275">{{ t('timeline_processing_criteria') }}</tspan>
-                <tspan x="440" y="295">{{ getRejectionLine(item.reject_reason, 0) }}</tspan>
-                <tspan x="440" y="315">{{ getRejectionLine(item.reject_reason, 1) }}</tspan>
-                <tspan x="440" y="335">{{ getRejectionLine(item.reject_reason, 2) }}</tspan>
-                <tspan x="440" y="355">{{ getRejectionLine(item.reject_reason, 3) }}</tspan>
+                <tspan x="440" y="295">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 0) }}</tspan>
+                <tspan x="440" y="315">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 1) }}</tspan>
+                <tspan x="440" y="335">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 2) }}</tspan>
+                <tspan x="440" y="355">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 3) }}</tspan>
               </text> 
             </g>
           </g>
           <g id="FlexCol_3">
             <g id="Indicator_Widget4">
               <!-- Stage 3: On the Way -->
-              <g id="Default_4" v-if="(!(item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details) && item.sub_status !== 'REJECTED') || item.sub_status === 'PROCESSING'">
+              <g id="Default_4" v-if="(!((item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details) && item.sub_status !== 'REJECTED') || item.sub_status === 'PROCESSING'">
                 <circle id="Ellipse 1_16" cx="883" cy="95" r="48.5" fill="#C8C8C8" stroke="#006937" stroke-width="3"/>
               </g>
-              <g id="Tick_4" v-if="item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details">
+              <g id="Tick_4" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
                 <circle id="Ellipse 1_17" cx="883" cy="95" r="48.5" fill="#006937" stroke="#006937" stroke-width="3"/>
                 <g id="Frame_16">
                   <path id="Vector_11" fill-rule="evenodd" clip-rule="evenodd" d="M905.872 74.1919C906.617 74.6884 907.134 75.4604 907.309 76.3381C907.485 77.2157 907.304 78.1272 906.808 78.8719L884.308 112.622C884.031 113.037 883.665 113.385 883.237 113.642C882.809 113.899 882.329 114.058 881.833 114.107C881.336 114.156 880.835 114.094 880.365 113.926C879.895 113.758 879.468 113.488 879.115 113.135L865.615 99.6349C865.019 98.9951 864.694 98.1489 864.71 97.2745C864.725 96.4002 865.079 95.566 865.698 94.9476C866.316 94.3292 867.15 93.975 868.025 93.9596C868.899 93.9442 869.745 94.2687 870.385 94.8649L880.973 105.453L901.192 75.1234C901.689 74.3794 902.462 73.8634 903.339 73.6887C904.217 73.514 905.128 73.695 905.872 74.1919Z" fill="white"/>
@@ -152,10 +155,10 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
             <g id="Caption_Widget4">
               <!-- Date -->
               <text id="Submission Date_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" font-weight="bold" letter-spacing="0em">
-                <tspan x="834" y="215" v-if="item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details">{{ t('timeline_date') }}: {{ item.delivered_date || 'DD/MM/YYYY' }}</tspan>
+                <tspan x="834" y="215" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">{{ t('timeline_date') }}: {{ item.delivered_date || item.delivery_date || 'DD/MM/YYYY' }}</tspan>
               </text>
               <!-- Status messages -->
-              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details">
+              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
                 <tspan x="834" y="235">{{ t('timeline_ontheway_your_gift').replace('#N/A', '#' + (item.product_ref ? String(item.product_ref).padStart(5, '0') : 'N/A')) }}</tspan>
                 <tspan x="834" y="255">{{ t('timeline_ontheway_on_way') }}</tspan>
                 <tspan x="834" y="275">{{ t('timeline_ontheway_track_below') }}</tspan>
@@ -265,19 +268,19 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
                 <tspan x="135" y="290" font-weight="bold">{{ t('timeline_processing_status_not_eligible') }}</tspan>
                 <tspan x="135" y="310">{{ t('timeline_processing_unfortunately') }}</tspan>
                 <tspan x="135" y="330">{{ t('timeline_processing_criteria') }}</tspan>
-                <tspan x="135" y="350">{{ getRejectionLine(item.reject_reason, 0) }}</tspan>
-                <tspan x="135" y="370">{{ getRejectionLine(item.reject_reason, 1) }}</tspan>
-                <tspan x="135" y="390">{{ getRejectionLine(item.reject_reason, 2) }}</tspan>
-                <tspan x="135" y="410">{{ getRejectionLine(item.reject_reason, 3) }}</tspan>
+                <tspan x="135" y="350">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 0) }}</tspan>
+                <tspan x="135" y="370">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 1) }}</tspan>
+                <tspan x="135" y="390">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 2) }}</tspan>
+                <tspan x="135" y="410">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 3) }}</tspan>
               </text>
             </g>
           </g>
           <g id="FlexCol_3">
             <g id="Indicator_Widget4">
-              <g id="Default_4" v-if="(!(item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details) && item.sub_status !== 'REJECTED') || item.sub_status === 'PROCESSING'">
+              <g id="Default_4" v-if="(!((item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details) && item.sub_status !== 'REJECTED') || item.sub_status === 'PROCESSING'">
                 <circle id="Ellipse 1_16" cx="75" cy="450" r="39" fill="#C8C8C8" stroke="#006937" stroke-width="2"/>
               </g>
-              <g id="Tick_4" v-if="item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details">
+              <g id="Tick_4" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
                 <circle id="Ellipse 1_17" cx="75" cy="450" r="39" fill="#006937" stroke="#006937" stroke-width="2"/>
                 <g id="Frame_16">
                   <path id="Vector_11" fill-rule="evenodd" clip-rule="evenodd" d="M88.248 436.628C88.7445 436.959 89.0891 437.474 89.2061 438.059C89.3231 438.644 89.2029 439.252 88.872 439.748L73.872 462.248C73.6873 462.525 73.4434 462.757 73.1581 462.928C72.8728 463.099 72.553 463.205 72.2219 463.238C71.8908 463.271 71.5565 463.229 71.2432 463.117C70.9299 463.005 70.6453 462.825 70.41 462.59L61.41 453.59C61.0126 453.163 60.7962 452.016C60.8168 451.434 61.0529 450.877 61.4651 450.465C61.8774 450.053 62.4335 449.817 63.0164 449.806C63.5993 449.796 64.1635 450.013 64.59 450.41L71.649 457.469L85.128 437.249C85.4595 436.753 85.9744 436.409 86.5594 436.293C87.1445 436.176 87.7519 436.297 88.248 436.628Z" fill="white"/>
@@ -297,9 +300,9 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
                 <tspan x="135" y="430">{{ t('timeline_stage_on_the_way') }}</tspan>
               </text>
               <text id="Submission Date_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="18" font-weight="bold" letter-spacing="0em">
-                <tspan x="135" y="450" v-if="item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details">{{ t('timeline_date') }}: {{ item.delivered_date || 'DD/MM/YYYY' }}</tspan>
+                <tspan x="135" y="450" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">{{ t('timeline_date') }}: {{ item.delivered_date || item.delivery_date || 'DD/MM/YYYY' }}</tspan>
               </text>
-              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.delivered_date && item.delivery_status === 'OUT FOR DELIVERY' && item.delivery_details">
+              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
                 <tspan x="135" y="470">{{ t('timeline_ontheway_your_gift').replace('#N/A', '#' + (item.product_ref ? String(item.product_ref).padStart(5, '0') : 'N/A')) }} {{ t('timeline_ontheway_on_way') }}</tspan>
                 <tspan x="135" y="490">{{ t('timeline_ontheway_track_below') }}</tspan>
                 <tspan x="135" y="510">{{ t('timeline_ontheway_tracking_number') }}</tspan>

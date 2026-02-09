@@ -128,6 +128,7 @@
     "button": "查询状态",
     "submission_id": "提交编号",
     "track_prize": "追踪奖品",
+    "product_ref": "参考编号",
     "no_results": "未找到该手机号码的相关记录。",
     "contact_desc": "如需进一步协助，请通过 <a href='mailto:support@carlsberg.my' class='underline'>support@carlsberg.my</a> 与我们联系"
   },

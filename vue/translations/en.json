@@ -128,6 +128,7 @@
     "button": "Check Status",
     "submission_id": "Submission ID",
     "track_prize": "Track Prize",
+    "product_ref": "Reference ID",
     "no_results": "No results found for this mobile number.",
     "contact_desc": "For further assistance, please contact us at <a href='mailto:support@carlsberg.my' class='underline'>support@carlsberg.my</a>"
   },
