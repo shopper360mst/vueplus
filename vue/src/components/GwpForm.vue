@@ -253,7 +253,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-black/70 flex justify-center items-start px-4">
+  <div v-if="isOpen" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-black/70 flex justify-center items-start">
     <div class="relative w-full max-w-2xl bg-primary shadow-2xl flex flex-col max-h-[100vh]">
       <div class="bg-primary h-12 flex-shrink-0 flex items-center justify-center relative">
         <!-- <h1 class="text-white font-bold text-lg uppercase tracking-wider">{{ mappedTitle }}</h1> -->
