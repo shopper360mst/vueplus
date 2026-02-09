@@ -254,14 +254,14 @@ onUnmounted(() => {
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-black/70 flex justify-center items-start px-4">
-    <div class="relative w-full max-w-2xl bg-primary shadow-2xl border border-white/10 flex flex-col max-h-[100vh]">
-      <div class="bg-primary h-12 flex-shrink-0 flex items-center justify-center relative border-b border-white/10">
+    <div class="relative w-full max-w-2xl bg-primary shadow-2xl flex flex-col max-h-[100vh]">
+      <div class="bg-primary h-12 flex-shrink-0 flex items-center justify-center relative">
         <!-- <h1 class="text-white font-bold text-lg uppercase tracking-wider">{{ mappedTitle }}</h1> -->
         <button class="absolute right-4 text-white text-2xl hover:text-gray-300 transition-colors" @click="handleFormClose">&times;</button>
       </div>
       <div class="bg-primary overflow-y-auto custom-scrollbar">
-        <div v-if="formImages[currentProductIndex]" class="relative group mb-6 overflow-hidden border border-white/20">
-          <img :src="formImages[currentProductIndex]" class="w-full h-auto transition-opacity duration-300" :class="{'opacity-0': !imagesLoaded[currentProductIndex]}" @load="imagesLoaded[currentProductIndex] = true" alt="Product" />
+        <div v-if="formImages[currentProductIndex]" class="relative group mb-6 overflow-hidden">
+          <img :src="formImages[currentProductIndex]" class="w-full h-auto transition-opacity duration-300 ps-2" :class="{'opacity-0': !imagesLoaded[currentProductIndex]}" @load="imagesLoaded[currentProductIndex] = true" alt="Product" />
           
           <template v-if="formImages[2]">
             <button @click="carouselPrev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all">
@@ -357,7 +357,7 @@ onUnmounted(() => {
           </div>
 
           <div class="bg-primary pt-2 pb-8 flex justify-center mt-auto">
-            <button type="submit" :disabled="isSubmitting" class="btn-cta w-full max-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm">
+            <button type="submit" :disabled="isSubmitting" class="btn-cta w-full max-w-[240px] min-h-[4.5vh] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm">
               <span v-if="isSubmitting">{{ t('form.submitting') }}...</span>
               <span v-else>{{ t('form.submit') }}</span>
             </button>
