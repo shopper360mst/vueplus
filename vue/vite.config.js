@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => {
   return {
     base: base,
     plugins: [
-      vue(),
       tailwindcss(),
+      vue(),
     ],
     resolve: {
       alias: {

@@ -29,7 +29,7 @@ onUnmounted(() => {
       <Transition name="scale">
         <div v-if="uiStore.toast.isOpen" :class="['toast-dialog bg-white rounded-lg shadow-xl max-w-sm w-full mx-4', uiStore.toast.classes]">
           <div class="px-4 py-3 text-center">
-            <p :class="['p-5 text-gray-800', locale === 'ch' ? 'font-ch' : 'font-black']">{{ uiStore.toast.message }}</p>
+            <p :class="['p-5 text-gray-800', locale === 'ch' ? 'font-ch' : 'font-ny-black']">{{ uiStore.toast.message }}</p>
             <button class="btn-primary-alt rounded-xl w-full" @click="uiStore.hideToast">
               {{ t('common.ok') }}
             </button>

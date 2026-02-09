@@ -89,12 +89,12 @@ useSEO('seo.home_title', 'seo.home_description')
         <div
           class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 items-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500"
         >
-          <div class="text-2xl font-black italic tracking-tighter">BREX</div>
-          <div class="text-2xl font-black tracking-widest">MERCURY</div>
-          <div class="text-2xl font-black">Ramp</div>
-          <div class="text-2xl font-black uppercase">Flex</div>
-          <div class="text-2xl font-black tracking-tight">Best Egg</div>
-          <div class="text-2xl font-black italic">Affirm</div>
+          <div class="text-2xl font-ny-black italic tracking-tighter">BREX</div>
+          <div class="text-2xl font-ny-black tracking-widest">MERCURY</div>
+          <div class="text-2xl font-ny-black">Ramp</div>
+          <div class="text-2xl font-ny-black uppercase">Flex</div>
+          <div class="text-2xl font-ny-black tracking-tight">Best Egg</div>
+          <div class="text-2xl font-ny-black italic">Affirm</div>
         </div>
       </div>
     </section>
