@@ -33,13 +33,13 @@ useSEO('seo.home_title', 'seo.home_description')
             <div class="flex flex-col sm:flex-row gap-4 py-3">
               <button
                 @click="uiStore.showToast(t('home.closed'), 'bg-white')"
-                :class="['bg-black dark:bg-white text-white dark:text-black px-10 py-4 rounded-full text-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
+                :class="['btn-primary-alt rounded-full text-lg', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
               >
                 {{ t('home.signup') }}
               </button>
               <button
                 @click="uiStore.openPopup('ty')"
-                :class="['bg-transparent border-2 border-white text-black dark:text-white px-10 py-4 rounded-full text-lg hover:border-gray transition-all active:scale-95', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
+                :class="['btn-primary-alt bg-transparent border-white rounded-full text-lg', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
               >
                 {{ t('home.documentation') }}
               </button>

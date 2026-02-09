@@ -57,10 +57,10 @@ const handleSubmit = () => {
               </div>
 
               <div class="flex gap-4 mt-8">
-                <button type="submit" class="bg-white text-primary font-bold py-3 px-6 rounded-xl grow hover:bg-gray-100 transition-colors">
+                <button type="submit" class="btn-cta grow">
                   {{ t('common.submit') }}
                 </button>
-                <button type="button" class="bg-transparent border border-white text-white font-bold py-3 px-6 rounded-xl grow hover:bg-white/10 transition-colors" @click="uiStore.closeContestForm">
+                <button type="button" class="btn-primary-alt rounded-xl grow" @click="uiStore.closeContestForm">
                   {{ t('common.cancel') }}
                 </button>
               </div>

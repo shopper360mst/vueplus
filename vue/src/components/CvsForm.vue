@@ -238,7 +238,7 @@ onUnmounted(() => {
           </div>
 
           <div class="bg-primary pt-2 pb-8 flex justify-center mt-auto">
-            <button type="submit" :disabled="isSubmitting" class="w-full max-w-[240px] bg-yellow-500 hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg shadow-lg transition-all active:scale-95 uppercase tracking-wider text-sm">
+            <button type="submit" :disabled="isSubmitting" class="btn-cta w-full max-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider text-sm">
               <span v-if="isSubmitting">{{ t('form.submitting') }}...</span>
               <span v-else>{{ t('form.submit') }}</span>
             </button>

@@ -173,7 +173,7 @@ onMounted(() => {
                   </div>
                   
                   <button type="submit" 
-                    :class="['bg-primary text-white py-3 px-8 rounded-full shadow-lg transition-transform active:scale-95 mx-auto block w-[165px]', 
+                    :class="['btn-cta mx-auto block w-[165px]', 
                     locale === 'en' ? '' : 'font-sans']"
                   >
                     {{ t('check_status.button') }}
@@ -197,7 +197,7 @@ onMounted(() => {
                       <a v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details"
                         :href="item.delivery_assign === 'SMX' ? `https://spx.com.my/track?${item.delivery_details}` : `https://gdexpress.com/tracking/?consignmentno=${item.delivery_details}`"
                         target="_blank"
-                        class="bg-secondary text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-opacity-90 transition-colors border border-white"
+                        class="btn-primary-alt rounded-full text-sm font-bold border border-white"
                       >
                         {{ t('check_status.track_prize') }}
                       </a>

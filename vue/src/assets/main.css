@@ -77,3 +77,68 @@
   .debug { border-color: #ec4899; }
   .debug::after { content: '4XL'; background: #ec4899; }
 }
+
+/* Button Styles */
+.btn-primary-alt {
+    background-color: #006937;
+    border: 2px solid #006937;
+    color: #ffffff;
+    padding: 12px 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    &:hover, &:active {
+        background-color: #ffffff;
+        color: #006937;
+        border: 2px solid #006937;
+    }
+}
+
+.btn-rounded {
+    background-color: #006937; 
+    color: #ffffff; 
+    border: none;
+    border-radius: 999px; 
+    padding: 12px 32px;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    &:hover {
+        background-color: #005a2f; /* Slightly darker variant */
+    }
+}
+
+.form-button {
+    height: 42px;
+    background-color: #ffffff;
+    border: 1px solid #888888;
+    border-radius: 10px;
+    padding: 0 10px;
+    font-size: 16px;
+    transition: border-color 0.2s ease-in-out;
+    &:focus, &:hover {
+        border-color: #006937;
+        box-shadow: 0 0 0 2px rgba(0, 105, 55, 0.1);
+    }
+}
+
+.btn-cta {
+    background-color: #e7cd9b;
+    color: #c81c22;
+    border: 3px solid #c81c22;
+    border-radius: 12px;
+    padding: 4px 20px;
+    min-height: 30px;
+    font-size: 17px;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+    &:hover, &:active {
+        background-color: #c81c22;
+        border-color: #e7cd9b;
+        color: #ffffff;
+    }
+}
