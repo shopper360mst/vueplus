@@ -10,7 +10,7 @@ useSEO('seo.about_title', 'seo.about_description')
 <template>
   <section
     aria-label="about page"
-    class="flex flex-col items-center justify-center min-h-[calc(100vh-60px)]"
+    class="flex flex-col items-center justify-center min-h-[calc(100vh-60px)] bg-white"
   >
     <h1>{{ t('about.title') }}</h1>
   </section>

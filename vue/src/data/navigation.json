@@ -1,7 +1,5 @@
 [
   { "id": "promotions", "path": "promotions" },
   { "id": "winners", "path": "winners" },
-  { "id": "blog", "path": "blog" },
-  { "id": "company", "path": "company" },
   { "id": "check_status", "path": "check-status" }
 ]

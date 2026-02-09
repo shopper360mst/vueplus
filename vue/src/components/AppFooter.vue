@@ -89,8 +89,8 @@ const tcUrl = computed(() => {
       </div>
     </div>
 
-    <!-- DESKTOP LINKS (shown from md up) -->
-    <div data-nosnippet class="container hidden md:flex flex-col justify-start">
+    <!-- DESKTOP LINKS (shown from md up) container -->
+    <div data-nosnippet class="w-full px-6  hidden md:flex flex-col justify-start">
         <div 
           class="flex py-2 flex-row items-center justify-start gap-3"
           :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"

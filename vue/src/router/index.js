@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import AboutView from '../views/AboutView.vue'
+import CheckStatusView from '../views/CheckStatusView.vue'
+import PromotionView from '../views/PromotionView.vue'
+
 import i18n from '../i18n'
 
 const campaignCode = import.meta.env.VITE_CAMPAIGN_CODE || 'cny'
@@ -27,17 +31,22 @@ const router = createRouter({
         {
           path: 'about',
           name: 'about',
-          component: () => import('../views/AboutView.vue'),
+          component: AboutView,
+        },
+        {
+          path: 'winners',
+          name: 'winners',
+          component: HomeView,
         },
         {
           path: 'check-status',
           name: 'check-status',
-          component: () => import('../views/CheckStatusView.vue'),
+          component: CheckStatusView,
         },
         {
           path: 'promotions',
           name: 'promotions',
-          component: () => import('../views/PromotionView.vue'),
+          component: PromotionView,
         },
         {
           path: ':channel',

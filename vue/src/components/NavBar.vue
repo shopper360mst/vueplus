@@ -33,6 +33,10 @@ const navLinks = computed(() => navigation.map(link => ({
   name: t(`nav.${link.id}`),
   path: `/${campaignCode}/${currentLocale.value}/${link.path}`
 })))
+
+const isLinkActive = (link) => {
+  return route.path === link.path || route.name === link.id
+}
 </script>
 
 <template>
@@ -55,7 +59,11 @@ const navLinks = computed(() => navigation.map(link => ({
               v-for="link in navLinks"
               :key="link.id"
               :to="link.path"
-              :class="['font-semibold text-white hover:text-tertiary transition-colors', locale === 'ch' ? 'text-[15px]' : 'text-[13px]']"
+              :class="[
+                'font-semibold transition-colors',
+                isLinkActive(link) ? 'text-tertiary' : 'text-white hover:text-tertiary',
+                locale === 'ch' ? 'text-[15px]' : 'text-[13px]'
+              ]"
             >
               {{ link.name }}
             </RouterLink>
@@ -124,7 +132,11 @@ const navLinks = computed(() => navigation.map(link => ({
           :key="link.id"
           :to="link.path"
           @click="isMenuOpen = false"
-          :class="['font-medium text-white hover:text-tertiary transition-colors', locale === 'ch' ? 'text-[22px]' : 'text-xl']"
+          :class="[
+            'font-medium transition-colors',
+            isLinkActive(link) ? 'text-tertiary' : 'text-white hover:text-tertiary',
+            locale === 'ch' ? 'text-[22px]' : 'text-xl'
+          ]"
         >
           {{ link.name }}
         </RouterLink>
