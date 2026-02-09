@@ -1,13 +1,10 @@
 import { ref, reactive, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useUIStore } from '../stores/ui'
-import { getCsrfToken } from '../utils/csrf'
+import { postTo } from '../utils/api'
 import postalData from '../data/postal-data.json'
 
 export function useBaseForm(config = {}) {
   const { t, locale } = useI18n()
-  const uiStore = useUIStore()
-  const bURL = window.location.origin
 
   const isSubmitting = ref(false)
   const fileUploaded = ref(false)
@@ -191,15 +188,7 @@ export function useBaseForm(config = {}) {
         payload.append('upload_receipt', uploadFiles.value)
       }
 
-      const response = await fetch(`${bURL}/endpoint/submit`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': getCsrfToken() || ''
-        },
-        body: payload
-      })
-
-      const result = await response.json()
+      const result = await postTo('/endpoint/submit', payload)
       return result
     } catch (error) {
       console.error('Submission error:', error)
@@ -223,7 +212,6 @@ export function useBaseForm(config = {}) {
     selectPostcode,
     baseSubmit,
     t,
-    locale,
-    bURL
+    locale
   }
 }

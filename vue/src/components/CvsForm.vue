@@ -22,8 +22,7 @@ const {
   selectPostcode,
   baseSubmit,
   t,
-  locale,
-  bURL
+  locale
 } = useBaseForm({
   formCode: 'CVSTOFT'
 })
@@ -48,7 +47,7 @@ const receiptGuideImage = computed(() => {
   
   try {
     return new URL(`../assets/images/receipt/${baseChannel}/receipt_1.png`, import.meta.url).href
-  } catch (e) {
+  } catch {
     return new URL(`../assets/images/receipt/CVSTOFT/receipt_1.png`, import.meta.url).href
   }
 })
@@ -174,7 +173,7 @@ const handleSubmit = async () => {
     } else if (result) {
       alert(result.message || t('form.server_error'))
     }
-  } catch (error) {
+  } catch {
     alert(t('form.server_error'))
   }
 }

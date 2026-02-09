@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUIStore } from '../stores/ui'
+import { postTo } from '../utils/api'
 import AppTimeline from '../components/AppTimeline.vue'
 import AppToast from '../components/AppToast.vue'
 import AppPopup from '../components/AppPopup.vue'
@@ -122,20 +123,19 @@ const handleProcessForm = async () => {
     return
   }
 
-  // Simulate API Call
-  setTimeout(() => {
-    results.value = sampleData
-    noResults.value = results.value.length === 0
-  }, 500)
-}
-
-const getLocalizedProductName = (key) => {
-  return t(`${key}`)
-}
-
-const getEntryRejectionMessage = (reason) => {
-  if (!reason) return ''
-  return t(`${reason}`)
+  try {
+    const result = await postTo('/endpoint/check', {
+      mobile_no: prefix + number
+    })
+    
+    if (result && result.data) {
+      results.value = result.data
+      noResults.value = results.value.length === 0
+    }
+  } catch (error) {
+    console.error('Check status error:', error)
+    uiStore.showToast(t('error.connection_failed'), 'bg-red-500 text-white')
+  }
 }
 
 onMounted(() => {

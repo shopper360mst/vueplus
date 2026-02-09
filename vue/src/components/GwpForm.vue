@@ -22,8 +22,7 @@ const {
   selectPostcode,
   baseSubmit,
   t,
-  locale,
-  bURL
+  locale
 } = useBaseForm({
   formCode: 'GWP',
   initialData: {
@@ -49,7 +48,7 @@ const receiptGuideImage = computed(() => {
   }
   try {
     return new URL(`../assets/images/receipt/${baseChannel}/receipt_1.png`, import.meta.url).href
-  } catch (e) {
+  } catch {
     return new URL(`../assets/images/receipt/SHM/receipt_1.png`, import.meta.url).href
   }
 })
@@ -123,7 +122,7 @@ const updateFormImage = () => {
       formImages[1] = new URL(`../assets/images/form_${base}_${currentLocale}.png`, import.meta.url).href
       formImages[2] = ''
       formImages[3] = ''
-    } catch (e) {
+    } catch {
       formImages[1] = ''
     }
   }
@@ -198,8 +197,7 @@ const carouselPrev = () => {
   currentProductIndex.value = currentProductIndex.value === 1 ? 3 : currentProductIndex.value - 1
 }
 
-const isProductAvailable = (id
-) => {
+const isProductAvailable = () => {
   return true
 }
 
@@ -240,7 +238,7 @@ const handleSubmit = async () => {
     } else if (result) {
       alert(result.message || t('form.server_error'))
     }
-  } catch (error) {
+  } catch {
     alert(t('form.server_error'))
   }
 }
@@ -288,7 +286,7 @@ onUnmounted(() => {
                   <label
                     class="product-checkbox-label flex items-center gap-3 p-4 rounded-lg transition-all"
                     :class="
-                      !isProductAvailable(i)
+                      !isProductAvailable()
                         ? 'bg-gray-400 opacity-50 grayscale cursor-not-allowed'
                         : formData.products.includes(i)
                           ? 'bg-carlsberg-green ring-2 ring-secondary cursor-pointer'
@@ -300,10 +298,10 @@ onUnmounted(() => {
                       name="product_selection"
                       :value="i"
                       class="form-checkbox h-5 w-5 text-secondary flex-shrink-0"
-                      :class="!isProductAvailable(i) ? 'cursor-not-allowed' : 'cursor-pointer'"
+                      :class="!isProductAvailable() ? 'cursor-not-allowed' : 'cursor-pointer'"
                       :checked="formData.products.includes(i)"
-                      :disabled="!isProductAvailable(i)"
-                      @change="isProductAvailable(i) && selectProduct(i, $event)"
+                      :disabled="!isProductAvailable()"
+                      @change="isProductAvailable() && selectProduct(i, $event)"
                     />
                     <img
                       :src="getPlacementImage(i)"
@@ -311,7 +309,7 @@ onUnmounted(() => {
                       class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-md flex-shrink-0"
                     />
                     <span class="text-white font-semibold text-sm md:text-base flex-1">
-                      <span v-if="!isProductAvailable(i)">{{
+                      <span v-if="!isProductAvailable()">{{
                         locale === "ch" ? "已全数兑换 - " : "FULLY REDEEMED - "
                       }}</span>
                       <span>{{ i === 1 ? t("form.luggage") : i === 2 ? t("form.rummy") : t("form.grill") }}</span>
