@@ -2,12 +2,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useUIStore } from '../stores/ui'
-import NavBar from '../components/NavBar.vue'
-import AppFooter from '../components/AppFooter.vue'
 import AppTimeline from '../components/AppTimeline.vue'
 import AppToast from '../components/AppToast.vue'
 import AppPopup from '../components/AppPopup.vue'
-import AppGate from '../components/AppGate.vue'
 import MobileInput from '../components/form/MobileInput.vue'
 
 const { t, locale } = useI18n()
