@@ -107,7 +107,7 @@ const openForm = (promo) => {
             v-for="promo in promotionButtons"
             :key="promo.id"
             @click="openForm(promo)"
-            class="btn-primary-alt w-72 min-h-[100px] rounded-3xl font-black uppercase tracking-wider text-center"
+            class="btn-primary-alt w-full min-h-[100px] rounded-3xl font-black uppercase tracking-wider text-center"
             v-html="t(`promotions.${promo.id}`)"
           >
           </button>
