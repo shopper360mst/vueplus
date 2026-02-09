@@ -198,7 +198,8 @@ const carouselPrev = () => {
   currentProductIndex.value = currentProductIndex.value === 1 ? 3 : currentProductIndex.value - 1
 }
 
-const isProductAvailable = (id) => {
+const isProductAvailable = (id
+) => {
   return true
 }
 
@@ -255,7 +256,7 @@ onUnmounted(() => {
 
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-black/70 flex justify-center items-start px-4">
-    <div class="relative w-full max-w-2xl bg-primary shadow-2xl my-8 border border-white/10 flex flex-col max-h-[100vh]">
+    <div class="relative w-full max-w-2xl bg-primary shadow-2xl border border-white/10 flex flex-col max-h-[100vh]">
       <div class="bg-primary h-12 flex-shrink-0 flex items-center justify-center relative border-b border-white/10">
         <!-- <h1 class="text-white font-bold text-lg uppercase tracking-wider">{{ mappedTitle }}</h1> -->
         <button class="absolute right-4 text-white text-2xl hover:text-gray-300 transition-colors" @click="handleFormClose">&times;</button>
