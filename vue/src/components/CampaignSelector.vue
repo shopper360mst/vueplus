@@ -1,7 +1,7 @@
 <script setup>
 import { useUIStore } from '../stores/ui'
 import { useI18n } from 'vue-i18n'
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import greenBg from '../assets/images/green_texture_bg.png'
 
 const uiStore = useUIStore()
@@ -12,13 +12,27 @@ const updateIsMobile = () => {
   isMobile.value = window.innerWidth < 768
 }
 
+const isOpen = computed(() => uiStore.campaignSelector.isOpen)
+
+watch(isOpen, (val) => {
+  if (val) {
+    document.body.classList.add('overflow-hidden')
+  } else {
+    document.body.classList.remove('overflow-hidden')
+  }
+})
+
 onMounted(() => {
   updateIsMobile()
   window.addEventListener('resize', updateIsMobile)
+  if (isOpen.value) {
+    document.body.classList.add('overflow-hidden')
+  }
 })
 
 onUnmounted(() => {
   window.removeEventListener('resize', updateIsMobile)
+  document.body.classList.remove('overflow-hidden')
 })
 
 const currentBg = computed(() => {
