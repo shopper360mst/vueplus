@@ -96,6 +96,21 @@ export const useUIStore = defineStore('ui', () => {
     cvsForm.value.isOpen = false
   }
 
+  // Campaign Selector State
+  const campaignSelector = ref({
+    isOpen: sessionStorage.getItem('app.campaignSelectorClosed') !== 'true',
+    campaignUrl: 'https://wos.carlsberg.com.my' // Default redirect URL for Button 2
+  })
+
+  const openCampaignSelector = (url = '') => {
+    campaignSelector.value = { isOpen: true, campaignUrl: url }
+  }
+
+  const closeCampaignSelector = () => {
+    campaignSelector.value.isOpen = false
+    sessionStorage.setItem('app.campaignSelectorClosed', 'true')
+  }
+
   return {
     toast,
     showToast,
@@ -113,6 +128,9 @@ export const useUIStore = defineStore('ui', () => {
     closeGwpForm,
     cvsForm,
     openCvsForm,
-    closeCvsForm
+    closeCvsForm,
+    campaignSelector,
+    openCampaignSelector,
+    closeCampaignSelector
   }
 })

@@ -11,6 +11,22 @@ import AppForm from './components/AppForm.vue'
 const { locale } = useI18n()
 import GwpForm from './components/GwpForm.vue'
 import CvsForm from './components/CvsForm.vue'
+import CampaignSelector from './components/CampaignSelector.vue'
+
+// Import campaign images
+import cnyD from './assets/images/cny-d.png'
+import cnyM from './assets/images/cny-m.png'
+import wosD from './assets/images/wos-d.png'
+import wosM from './assets/images/wos-m.png'
+
+const btn1 = {
+  desktop: cnyD,
+  mobile: cnyM
+}
+const btn2 = {
+  desktop: wosD,
+  mobile: wosM
+}
 </script>
 
 <template>
@@ -30,6 +46,10 @@ import CvsForm from './components/CvsForm.vue'
       <AppForm />
       <GwpForm />
       <CvsForm />
+      <CampaignSelector 
+        :btn1="btn1"
+        :btn2="btn2"
+      />
     </div>
 </template>
 
