@@ -1,4 +1,5 @@
 import DataHelper from "@shopper360mst/data_helper"
+import axios from 'axios'
 import { getCsrfToken } from './csrf'
 
 const connector = new DataHelper()
@@ -16,10 +17,10 @@ connector.setTimeout(10000)
  */
 export const get = async (endpoint, params = {}) => {
   const token = getCsrfToken()
-  connector.setHeaders({
+  const headers = {
     'Authorization': `Bearer ${token || ''}`
-  })
-  return connector.get(endpoint, params)
+  }
+  return connector.getWithParamFrom(endpoint, params, headers)
 }
 
 /**
@@ -31,15 +32,19 @@ export const get = async (endpoint, params = {}) => {
  */
 export const postTo = async (endpoint, payload, cmsId = null) => {
   const token = getCsrfToken()
-  if (token) {
-    alert(`CSRF Token Found: ${token.substring(0, 8)}...`)
-  } else {
-    alert('CSRF Token NOT Found!')
+
+  const headers = {
+    'Authorization': `Bearer ${token || ''}`
   }
 
-  connector.setHeaders({
-    'Authorization': `Bearer ${token || ''}`
-  })
+  // If payload is FormData, we bypass DataHelper.postTo because it calls JSON.stringify(),
+  // which would break the FormData/File upload.
+  if (payload instanceof FormData) {
+    return axios.post(endpoint, payload, {
+      headers,
+      timeout: 10000
+    })
+  }
 
-  return connector.postTo(endpoint, payload, cmsId)
+  return connector.postTo(endpoint, payload, headers)
 }
