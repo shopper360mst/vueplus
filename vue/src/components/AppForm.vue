@@ -38,7 +38,7 @@ const handleSubmit = () => {
       <div class="relative min-h-full flex items-center justify-center w-full max-w-2xl mx-auto p-4">
         <div class="bg-primary rounded-xl shadow-2xl w-full overflow-hidden">
           <div class="bg-primary p-4 flex justify-end">
-            <button class="text-white font-bold text-xl" @click="uiStore.closeContestForm">X</button>
+            <button class="text-white font-ny-black text-xl" @click="uiStore.closeContestForm">X</button>
           </div>
           
           <div class="p-6">

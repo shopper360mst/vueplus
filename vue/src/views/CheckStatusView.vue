@@ -155,7 +155,7 @@ onMounted(() => {
         <div class="bg-secondary rounded-xl w-full py-10 px-6 shadow-2xl">
           <div class="flex flex-col items-center gap-4">
             <img class="w-48 mb-6" src="@/assets/images/carlsberg_logo.png" alt="Carlsberg Logo" />
-            <p class="w-full font-sans text-center mb-8 text-white">{{ t('check_status.desc') }}</p>
+            <p :class="['w-full text-center mb-8 text-white', locale === 'ch' ? 'font-normal' : 'font-ny-black']">{{ t('check_status.desc') }}</p>
             
             <div class="w-full max-w-3xl flex flex-col items-center">
               <form class="w-full flex flex-col items-center gap-4" @submit.prevent="handleProcessForm">
@@ -174,7 +174,7 @@ onMounted(() => {
                   
                   <button type="submit" 
                     :class="['btn-cta mx-auto block w-[165px]', 
-                    locale === 'en' ? '' : 'font-sans']"
+                    locale === 'ch' ? 'font-normal' : 'font-ny-black']"
                   >
                     {{ t('check_status.button') }}
                   </button>
@@ -197,7 +197,7 @@ onMounted(() => {
                       <a v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details"
                         :href="item.delivery_assign === 'SMX' ? `https://spx.com.my/track?${item.delivery_details}` : `https://gdexpress.com/tracking/?consignmentno=${item.delivery_details}`"
                         target="_blank"
-                        class="btn-primary-alt rounded-full text-sm font-bold border border-white"
+                        :class="['btn-primary-alt rounded-full text-sm border border-white', locale === 'ch' ? 'font-normal' : 'font-ny-black']"
                       >
                         {{ t('check_status.track_prize') }}
                       </a>
@@ -211,7 +211,7 @@ onMounted(() => {
               </div>
             </div>
             
-            <span class="mt-12 text-sm text-white font-sans text-center" v-html="t('check_status.contact_desc')"></span>
+            <span :class="['mt-12 text-sm text-white text-center', locale === 'ch' ? 'font-normal' : 'font-ny-black']" v-html="t('check_status.contact_desc')"></span>
           </div>
         </div>
       </section>

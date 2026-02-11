@@ -25,7 +25,7 @@ const handleFocus = () => {
 <template>
   <div v-if="field.component === 'input'" class="form-group mb-4">
     <label 
-      class="block text-white text-xs md:text-sm font-bold mb-2 mt-2" 
+      :class="['block text-white text-xs md:text-sm mb-2 mt-2', locale === 'ch' ? 'font-normal' : 'font-ny-black']" 
       :for="field.name" 
       v-html="field.label"
     ></label>

@@ -1,4 +1,5 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
 import BaseInput from './BaseInput.vue'
 import MobileInput from './MobileInput.vue'
 import NricInput from './NricInput.vue'
@@ -6,7 +7,7 @@ import FileUpload from './FileUpload.vue'
 import PostcodeInput from './PostcodeInput.vue'
 import BaseCheckbox from './BaseCheckbox.vue'
 
-const props = defineProps({
+defineProps({
   field: {
     type: Object,
     required: true
@@ -21,6 +22,7 @@ const props = defineProps({
   filteredPostcodes: Array
 })
 
+const { locale } = useI18n()
 const emit = defineEmits(['file-change', 'show-helper', 'select-postcode'])
 </script>
 
@@ -98,7 +100,7 @@ const emit = defineEmits(['file-change', 'show-helper', 'select-postcode'])
     />
 
     <!-- Label -->
-    <div v-else-if="field.component === 'label'" class="text-white text-xs font-bold uppercase tracking-wider mb-2">
+    <div v-else-if="field.component === 'label'" :class="['text-white text-xs uppercase tracking-wider mb-2', locale === 'ch' ? 'font-normal' : 'font-ny-black']">
       {{ field.label }}
     </div>
 

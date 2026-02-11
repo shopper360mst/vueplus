@@ -1,4 +1,6 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 defineProps({
   modelValue: [String, Number],
   prefixValue: [String, Number],
@@ -17,7 +19,7 @@ defineEmits(['update:modelValue', 'update:prefixValue'])
 
 <template>
   <div class="flex flex-col gap-2">
-    <label v-if="label" class="text-white text-xs font-semibold mb-2 uppercase tracking-wider" v-html="label"></label>
+    <label v-if="label" :class="['text-white text-xs mb-2 uppercase tracking-wider', locale === 'ch' ? 'font-normal' : 'font-ny-black']" v-html="label"></label>
     <div class="flex gap-2">
       <select 
         :value="prefixValue" 

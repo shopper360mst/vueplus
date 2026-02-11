@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const props = defineProps({
+defineProps({
   item: {
     type: Object,
     default: () => ({
@@ -56,14 +56,14 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
                 </g>
               </g>
             </g>
-            <text id="Submission" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="26" font-weight="bold" letter-spacing="0em">
+            <text id="Submission" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="26" letter-spacing="0em">
               <tspan x="46" y="190">{{ t('timeline_stage_submission') }}</tspan>
             </text>
             <g id="Caption_Widget1">
-              <text id="Submission Date" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" font-weight="bold" letter-spacing="0em">
+              <text id="Submission Date" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em">
                 <tspan x="46" y="215">{{ t('timeline_submission_date') }}: {{ item.submitted_date || 'DD/MM/YYYY' }}</tspan>
               </text>
-              <text id="TextStatus" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="15" letter-spacing="0em">
+              <text id="TextStatus" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="15" letter-spacing="0em">
                 <tspan x="46" y="235">{{ t('timeline_submission_received') }}</tspan>
                 <tspan x="46" y="255">{{ t('timeline_submission_validation_time') }}</tspan>
                 <tspan x="46" y="285">{{ t('timeline_submission_working_days') }}</tspan>
@@ -91,25 +91,25 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
                 </g>
               </g>
             </g>
-            <text id="Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="25" font-weight="bold" letter-spacing="0em">
+            <text id="Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="25" letter-spacing="0em">
               <tspan x="440" y="190">{{ t('timeline_stage_processing') }}</tspan>
             </text>
             <g id="Caption_Widget3">
-              <text id="Submission Date_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" font-weight="bold" letter-spacing="0em">
+              <text id="Submission Date_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em">
                 <tspan x="440" y="215" v-if="item.sub_status && item.sub_status !== 'PROCESSING' && item.s_validate_date">{{ t('timeline_date') }}: {{ item.s_validate_date || 'DD/MM/YYYY' }}</tspan>
               </text>
 
               <!-- Status for PROCESSING -->
-              <text id="TextStatus_Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'PROCESSING'">
-                <tspan x="440" y="215" font-weight="bold">{{ t('timeline_processing_status_in_progress') }}</tspan>
+              <text id="TextStatus_Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'PROCESSING'">
+                <tspan x="440" y="215">{{ t('timeline_processing_status_in_progress') }}</tspan>
                 <tspan x="440" y="235">{{ t('timeline_processing_entry_received') }}</tspan>
                 <tspan x="440" y="255">{{ t('timeline_processing_allow_7_days') }}</tspan>
                 <tspan x="440" y="275">{{ t('timeline_processing_allow_7_days_2') }}</tspan>
               </text>
 
               <!-- Status for APPROVED -->
-              <text id="TextStatus_Approved" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'APPROVED' || item.sub_status === 'DELIVERED'">
-                <tspan x="440" y="235" font-weight="bold">{{ t('timeline_processing_status_eligible') }}</tspan>
+              <text id="TextStatus_Approved" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'APPROVED' || item.sub_status === 'DELIVERED'">
+                <tspan x="440" y="235">{{ t('timeline_processing_status_eligible') }}</tspan>
                 <tspan x="440" y="255">{{ t('timeline_processing_congratulations') }}</tspan>
                 <tspan x="440" y="275">{{ t('timeline_processing_packing_gift_new') }}</tspan>
                 <tspan x="440" y="295">{{ t('timeline_processing_tracking_shared_new') }}</tspan>
@@ -117,8 +117,8 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
               </text>
 
               <!-- Status for REJECTED -->
-              <text id="TextStatus_Rejected" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'REJECTED'">
-                <tspan x="440" y="235" font-weight="bold">{{ t('timeline_processing_status_not_eligible') }}</tspan>
+              <text id="TextStatus_Rejected" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'REJECTED'">
+                <tspan x="440" y="235">{{ t('timeline_processing_status_not_eligible') }}</tspan>
                 <tspan x="440" y="255">{{ t('timeline_processing_unfortunately') }}</tspan>
                 <tspan x="440" y="275">{{ t('timeline_processing_criteria') }}</tspan>
                 <tspan x="440" y="295">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 0) }}</tspan>
@@ -149,16 +149,16 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
                 </g>
               </g>
             </g>
-            <text id="On the Way" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="25" font-weight="bold" letter-spacing="0em">
+            <text id="On the Way" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="25" letter-spacing="0em">
               <tspan x="834" y="189.65">{{ t('timeline_stage_on_the_way') }}</tspan>
             </text>
             <g id="Caption_Widget4">
               <!-- Date -->
-              <text id="Submission Date_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" font-weight="bold" letter-spacing="0em">
+              <text id="Submission Date_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em">
                 <tspan x="834" y="215" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">{{ t('timeline_date') }}: {{ item.delivered_date || item.delivery_date || 'DD/MM/YYYY' }}</tspan>
               </text>
               <!-- Status messages -->
-              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
+              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
                 <tspan x="834" y="235">{{ t('timeline_ontheway_your_gift').replace('#N/A', '#' + (item.product_ref ? String(item.product_ref).padStart(5, '0') : 'N/A')) }}</tspan>
                 <tspan x="834" y="255">{{ t('timeline_ontheway_on_way') }}</tspan>
                 <tspan x="834" y="275">{{ t('timeline_ontheway_track_below') }}</tspan>
@@ -205,13 +205,13 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
               </g>
             </g>
             <g id="Caption_Widget1">
-              <text id="Submission" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="22" font-weight="bold" letter-spacing="0em">
+              <text id="Submission" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="22" letter-spacing="0em">
                 <tspan x="135" y="76">{{ t('timeline_stage_submission') }}</tspan>
               </text>
-              <text id="Submission Date" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="18" font-weight="bold" letter-spacing="0em">
+              <text id="Submission Date" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="18" letter-spacing="0em">
                 <tspan x="135" y="96">{{ t('timeline_submission_date') }}: {{ item.submitted_date || 'DD/MM/YYYY' }}</tspan>
               </text>
-              <text id="TextStatus" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="18" letter-spacing="0em">
+              <text id="TextStatus" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="18" letter-spacing="0em">
                 <tspan x="135" y="116">{{ t('timeline_submission_received') }}</tspan>
                 <tspan x="135" y="136">{{ t('timeline_submission_validation_time') }}</tspan>
                 <tspan x="135" y="156">{{ t('timeline_submission_working_days') }}</tspan>
@@ -239,24 +239,24 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
               </g>
             </g>
             <g id="Caption_Widget3">
-              <text id="Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="22" font-weight="bold" letter-spacing="0em">
+              <text id="Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="22" letter-spacing="0em">
                 <tspan x="135" y="250">{{ t('timeline_stage_processing') }}</tspan>
               </text>
-              <text id="Submission Date_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="18" font-weight="bold" letter-spacing="0em">
+              <text id="Submission Date_6" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="18" letter-spacing="0em">
                 <tspan x="135" y="270" v-if="item.sub_status && item.sub_status !== 'PROCESSING' && item.s_validate_date">{{ t('timeline_date') }}: {{ item.s_validate_date || 'DD/MM/YYYY' }}</tspan>
               </text>
 
               <!-- Status for PROCESSING -->
-              <text id="TextStatus_Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'PROCESSING'">
-                <tspan x="135" y="270" font-weight="bold">{{ t('timeline_processing_status_in_progress') }}</tspan>
+              <text id="TextStatus_Processing" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'PROCESSING'">
+                <tspan x="135" y="270">{{ t('timeline_processing_status_in_progress') }}</tspan>
                 <tspan x="135" y="290">{{ t('timeline_processing_entry_received') }}</tspan>
                 <tspan x="135" y="310">{{ t('timeline_processing_allow_7_days') }}</tspan>
                 <tspan x="135" y="330">{{ t('timeline_processing_allow_7_days_2') }}</tspan>
               </text>
 
               <!-- Status for APPROVED -->
-              <text id="TextStatus_Approved" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'APPROVED' || item.sub_status === 'DELIVERED'">
-                <tspan x="135" y="290" font-weight="bold">{{ t('timeline_processing_status_eligible') }}</tspan>
+              <text id="TextStatus_Approved" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'APPROVED' || item.sub_status === 'DELIVERED'">
+                <tspan x="135" y="290">{{ t('timeline_processing_status_eligible') }}</tspan>
                 <tspan x="135" y="310">{{ t('timeline_processing_congratulations') }}</tspan>
                 <tspan x="135" y="330">{{ t('timeline_processing_packing_gift_new') }}</tspan>
                 <tspan x="135" y="350">{{ t('timeline_processing_tracking_shared_new') }}</tspan>
@@ -264,8 +264,8 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
               </text>
 
               <!-- Status for REJECTED -->
-              <text id="TextStatus_Rejected" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'REJECTED'">
-                <tspan x="135" y="290" font-weight="bold">{{ t('timeline_processing_status_not_eligible') }}</tspan>
+              <text id="TextStatus_Rejected" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="item.sub_status === 'REJECTED'">
+                <tspan x="135" y="290">{{ t('timeline_processing_status_not_eligible') }}</tspan>
                 <tspan x="135" y="310">{{ t('timeline_processing_unfortunately') }}</tspan>
                 <tspan x="135" y="330">{{ t('timeline_processing_criteria') }}</tspan>
                 <tspan x="135" y="350">{{ getRejectionLine(item.invalid_sub_reason || item.reject_reason, 0) }}</tspan>
@@ -296,13 +296,13 @@ const getDeliveryDetailsLine = (details, lineIndex) => {
               </g>
             </g>
             <g id="Caption_Widget4">
-              <text id="On the Way" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="22" font-weight="bold" letter-spacing="0em">
+              <text id="On the Way" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="22" letter-spacing="0em">
                 <tspan x="135" y="430">{{ t('timeline_stage_on_the_way') }}</tspan>
               </text>
-              <text id="Submission Date_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="18" font-weight="bold" letter-spacing="0em">
+              <text id="Submission Date_7" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="18" letter-spacing="0em">
                 <tspan x="135" y="450" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">{{ t('timeline_date') }}: {{ item.delivered_date || item.delivery_date || 'DD/MM/YYYY' }}</tspan>
               </text>
-              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplay" font-size="16" letter-spacing="0em" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
+              <text id="TextStatus_5" fill="black" xml:space="preserve" style="white-space: pre" font-family="NyDisplayBlack" font-size="16" letter-spacing="0em" v-if="(item.delivered_date || item.delivery_date) && (item.delivery_status === 'OUT FOR DELIVERY' || item.delivery_status === 'DELIVERED') && item.delivery_details">
                 <tspan x="135" y="470">{{ t('timeline_ontheway_your_gift').replace('#N/A', '#' + (item.product_ref ? String(item.product_ref).padStart(5, '0') : 'N/A')) }} {{ t('timeline_ontheway_on_way') }}</tspan>
                 <tspan x="135" y="490">{{ t('timeline_ontheway_track_below') }}</tspan>
                 <tspan x="135" y="510">{{ t('timeline_ontheway_tracking_number') }}</tspan>

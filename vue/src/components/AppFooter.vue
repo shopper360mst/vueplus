@@ -42,7 +42,7 @@ const tcUrl = computed(() => {
       gap-y-2 
       max-w-full
       "
-      :class="[locale === 'ch' ? 'font-ch text-[11px] font-normal' : 'text-[9px] font-bold']"
+      :class="[locale === 'ch' ? 'font-ch text-[11px] font-normal' : 'text-[9px] font-ny-black']"
     >
       <div aria-label="mobile links"  class="flex flex-row gap-3 items-center">
         <a :href="tcUrl" target="_blank" class="text-white underline uppercase text-center">
@@ -82,7 +82,7 @@ const tcUrl = computed(() => {
         </p>
       </div>
       <div class="flex justify-center text-white items-center"
-        :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[10px] font-bold']"
+        :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[10px] font-ny-black']"
       >
         {{ t('footer.disclaimer_2') }} 
         <img src="@/assets/svgs/disclaimer_new.svg" alt="Celebrate Responsibly" class="px-1 h-[10px] w-auto" />
@@ -93,7 +93,7 @@ const tcUrl = computed(() => {
     <div data-nosnippet class="w-full px-6  hidden md:flex flex-col justify-start">
         <div 
           class="flex py-2 flex-row items-center justify-start gap-3"
-          :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"
+          :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-ny-black']"
         >
             <div aria-label="desktop links" class="flex flex-row gap-3">
               <a :href="tcUrl" target="_blank" class="text-white underline uppercase">
@@ -130,12 +130,12 @@ const tcUrl = computed(() => {
         <div class="w-full flex-row justify-center items-center">
           <div 
             class="text-white w-auto"
-            :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"
+            :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-ny-black']"
           >
             {{ t('footer.faq_footer_1') }} {{ t('footer.faq_footer_2') }}
           </div>
           <div class="flex justify-start text-white"
-            :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-bold']"
+            :class="[locale === 'ch' ? 'font-ch text-[14px] font-normal' : 'text-[12px] font-ny-black']"
           >
             {{ t('footer.disclaimer_2') }} 
             <img src="@/assets/svgs/disclaimer_new.svg" alt="Celebrate Responsibly" class="px-1 h-[13px] w-auto" />

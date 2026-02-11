@@ -277,7 +277,7 @@ onUnmounted(() => {
           <div class="flex flex-col gap-4">
             <!-- Product selection component -->
             <div v-show="channel === 'SHM' || channel.startsWith('SHM_')" class="product-checkbox-group mt-4 mb-6">
-              <span class="text-white font-bold text-center mb-4 block text-left">
+              <span :class="['text-white text-center mb-4 block text-left', locale === 'ch' ? 'font-normal' : 'font-ny-black']">
                 {{ locale === "ch" ? "请选择您的兑换选项" : "Please select your redemption options:" }}
               </span>
 
@@ -308,7 +308,7 @@ onUnmounted(() => {
                       alt="Product"
                       class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-md flex-shrink-0"
                     />
-                    <span class="text-white font-semibold text-sm md:text-base flex-1">
+                    <span :class="['text-white text-sm md:text-base flex-1', locale === 'ch' ? 'font-normal' : 'font-ny-black']">
                       <span v-if="!isProductAvailable()">{{
                         locale === "ch" ? "已全数兑换 - " : "FULLY REDEEMED - "
                       }}</span>
@@ -332,7 +332,7 @@ onUnmounted(() => {
           </div>
 
           <div v-if="currentStructure.delivery_group && currentStructure.delivery_group.length > 0" class="border-white/30 border-2 rounded-lg p-5 bg-black/10">
-            <h3 class="text-white text-lg font-bold text-center mb-1">{{ currentStructure.translations.delivery_details }}</h3>
+            <h3 :class="['text-white text-lg text-center mb-1', locale === 'ch' ? 'font-normal' : 'font-ny-black']">{{ currentStructure.translations.delivery_details }}</h3>
             <p class="text-white/80 text-xs text-center mb-6 leading-relaxed">{{ currentStructure.translations.delivery_subtitle }}</p>
             <div class="flex flex-col gap-4">
               <template v-for="field in currentStructure.delivery_group" :key="field.name">
@@ -370,7 +370,7 @@ onUnmounted(() => {
     <div v-if="showReceiptGuide" class="fixed inset-0 z-[60] bg-black/90 flex flex-col items-center justify-center p-4" @click="showReceiptGuide = false">
       <div class="relative w-full max-w-lg bg-white rounded-lg overflow-hidden shadow-2xl" @click.stop>
         <div class="p-4 border-b flex justify-between items-center">
-          <h3 class="font-bold text-gray-800">Receipt Guide</h3>
+          <h3 class="font-ny-black text-gray-800">Receipt Guide</h3>
           <button @click="showReceiptGuide = false" class="text-gray-500 hover:text-black text-2xl leading-none">&times;</button>
         </div>
         <div class="p-4 max-h-[80vh] overflow-y-auto bg-gray-100 flex items-center justify-center">

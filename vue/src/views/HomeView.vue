@@ -20,7 +20,7 @@ useSEO('seo.home_title', 'seo.home_description')
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div class="lg:col-span-7">
             <h1
-              :class="['text-5xl lg:text-[80px] leading-[1.1] tracking-tight text-black dark:text-white mb-8', locale === 'ch' ? 'font-normal' : 'font-extrabold']"
+              :class="['text-5xl lg:text-[80px] leading-[1.1] tracking-tight text-black dark:text-white mb-8', locale === 'ch' ? 'font-normal' : 'font-ny-black']"
             >
               {{ t('home.title') }} <br />
               <span class="text-gray-400 dark:text-gray-600">{{ t('home.subtitle') }}</span>
@@ -33,13 +33,13 @@ useSEO('seo.home_title', 'seo.home_description')
             <div class="flex flex-col sm:flex-row gap-4 py-3">
               <button
                 @click="uiStore.showToast(t('home.closed'), 'bg-white')"
-                :class="['btn-primary-alt rounded-full text-lg', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
+                :class="['btn-primary-alt rounded-full text-lg', locale === 'ch' ? 'font-normal' : 'font-ny-black']"
               >
                 {{ t('home.signup') }}
               </button>
               <button
                 @click="uiStore.openPopup('ty')"
-                :class="['btn-primary-alt bg-transparent border-white rounded-full text-lg', locale === 'ch' ? 'font-bold' : 'font-extrabold']"
+                :class="['btn-primary-alt bg-transparent border-white rounded-full text-lg', locale === 'ch' ? 'font-normal' : 'font-ny-black']"
               >
                 {{ t('home.documentation') }}
               </button>

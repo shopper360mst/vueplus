@@ -1,4 +1,6 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 defineProps({
   modelValue: [String, Number],
   label: String,
@@ -20,7 +22,7 @@ defineEmits(['update:modelValue', 'show-helper'])
 <template>
   <div class="flex flex-col gap-2">
     <div v-if="label" class="flex items-center gap-1.5 mb-2">
-      <label class="text-white text-xs font-semibold uppercase tracking-wider" v-html="label"></label>
+      <label :class="['text-white text-xs uppercase tracking-wider', locale === 'ch' ? 'font-normal' : 'font-ny-black']" v-html="label"></label>
       <button 
         v-if="helper" 
         type="button" 

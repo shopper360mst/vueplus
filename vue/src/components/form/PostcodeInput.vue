@@ -1,4 +1,6 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 defineProps({
   modelValue: [String, Number],
   label: String,
@@ -17,7 +19,7 @@ defineEmits(['update:modelValue', 'select'])
 
 <template>
   <div class="flex flex-col relative">
-    <label v-if="label" class="text-white text-xs font-semibold mb-2 uppercase tracking-wider">{{ label }}</label>
+    <label v-if="label" :class="['text-white text-xs mb-2 uppercase tracking-wider', locale === 'ch' ? 'font-normal' : 'font-ny-black']">{{ label }}</label>
     <input 
       :value="modelValue" 
       @input="$emit('update:modelValue', $event.target.value)"
@@ -38,7 +40,7 @@ defineEmits(['update:modelValue', 'select'])
         @click="$emit('select', item)" 
         class="p-3 hover:bg-gray-100 cursor-pointer text-sm border-b last:border-0 border-gray-100 flex justify-between"
       >
-        <span class="font-bold text-primary">{{ item.postcode }}</span>
+        <span :class="['text-primary', locale === 'ch' ? 'font-normal' : 'font-ny-black']">{{ item.postcode }}</span>
         <span class="text-gray-600">{{ item.city }}, {{ item.state }}</span>
       </div>
     </div>

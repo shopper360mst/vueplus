@@ -212,7 +212,7 @@ onUnmounted(() => {
           </div>
 
           <div v-if="currentStructure.delivery_group && currentStructure.delivery_group.length > 0" class="border-white/30 border-2 rounded-lg p-5 bg-black/10">
-            <h3 class="text-white text-lg font-bold text-center mb-1">{{ currentStructure.translations.delivery_details }}</h3>
+            <h3 :class="['text-white text-lg text-center mb-1', locale === 'ch' ? 'font-normal' : 'font-ny-black']">{{ currentStructure.translations.delivery_details }}</h3>
             <p class="text-white/80 text-xs text-center mb-6 leading-relaxed">{{ currentStructure.translations.delivery_subtitle }}</p>
             <div class="flex flex-col gap-4">
               <template v-for="field in currentStructure.delivery_group" :key="field.name">
@@ -250,7 +250,7 @@ onUnmounted(() => {
     <div v-if="showReceiptGuide" class="fixed inset-0 z-[60] bg-black/90 flex flex-col items-center justify-center p-4" @click="showReceiptGuide = false">
       <div class="relative w-full max-w-lg bg-white rounded-lg overflow-hidden shadow-2xl" @click.stop>
         <div class="p-4 border-b flex justify-between items-center">
-          <h3 class="font-bold text-gray-800">Receipt Guide</h3>
+          <h3 class="font-ny-black text-gray-800">Receipt Guide</h3>
           <button @click="showReceiptGuide = false" class="text-gray-500 hover:text-black text-2xl leading-none">&times;</button>
         </div>
         <div class="p-4 max-h-[80vh] overflow-y-auto bg-gray-100 flex items-center justify-center">
