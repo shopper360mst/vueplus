@@ -71,13 +71,13 @@ onMounted(() => {
             
             <div class="flex flex-row w-full justify-center gap-8">
               <button 
-                class="btn-primary-alt border-white p-[1em] text-[14px] w-[38%] lg:text-[20px] lg:p-[0.6em] lg:w-[25%]"
+                class="border-white p-[1em] text-[14px] w-[38%] lg:text-[20px] lg:p-[0.6em] lg:w-[25%]"
                 @click="handleYesClick"
               >
                 {{ t('gate.yes') }}
               </button>
               <button 
-                class="btn-primary-alt border-white p-[1em] text-[14px] w-[38%] lg:text-[20px] lg:p-[0.6em] lg:w-[25%]"
+                class="border-white p-[1em] text-[14px] w-[38%] lg:text-[20px] lg:p-[0.6em] lg:w-[25%]"
                 @click="handleNoClick"
               >
                 {{ t('gate.no') }}
